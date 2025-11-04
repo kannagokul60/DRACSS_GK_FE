@@ -1,0 +1,171 @@
+/* ===== PAGE WRAPPER ===== */
+.drone-details-page {
+  background: none; /* no blue color */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  color: #1a1a1a;
+}
+
+/* ===== FULL-SCREEN CARD ===== */
+.drone-card {
+  position: relative;
+  background: #f8f8f8;
+  border-radius: 10px;
+  width: 100%;
+  height: auto; /* adjust height to content */
+  padding: 2rem 3rem;
+  overflow: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+/* ===== BACKGROUND DRONE IMAGE (smoke effect) ===== */
+.drone-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("https://droneentry.com/wp-content/uploads/2024/03/Agriculture-Spraying-Drone.png") center center no-repeat;
+  background-size: 55%;
+  opacity: 0.20;              /* smoky transparency */
+  filter: blur(1.5px);
+  z-index: 0;
+}
+
+/* ===== HEADER ===== */
+.drone-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.drone-card-header h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #0d2a4b;
+}
+
+.edit-icon {
+  font-size: 1.2rem;
+  color: #1976d2;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.edit-icon:hover {
+  color: #0b5394;
+}
+
+/* ===== MAIN CONTENT ===== */
+.drone-main-content {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2rem;
+}
+
+/* ===== DRONE INFO (line by line) ===== */
+.drone-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}
+
+.drone-info-grid div {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 4px;
+  gap: 10px;
+}
+
+.drone-info-grid strong {
+  color: #0d2a4b;
+  font-weight: 600;
+}
+
+/* ===== NEXT ICON ===== */
+.next-icon {
+  position: absolute;
+  right: -25px;
+  top: 45%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  color: #555;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  padding: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.next-icon:hover {
+  color: #1976d2;
+}
+
+/* ===== FLIGHT LOG SECTION ===== */
+.flight-log-section {
+  position: relative;
+  z-index: 1;
+}
+
+.flight-log-section h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #0d2a4b;
+}
+
+/* ===== TABLE ===== */
+.flight-log-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.flight-log-table th,
+.flight-log-table td {
+  padding: 10px 14px;
+  border: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.flight-log-table th {
+  background-color: #f1f5ff;
+  color: #0d2a4b;
+  font-weight: 600;
+}
+
+.flight-log-table tr:nth-child(even) {
+  background-color: #fafbff;
+}
+
+.flight-log-table tr:hover {
+  background-color: #f3f6ff;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .drone-card {
+    padding: 1.5rem;
+  }
+
+  .drone-info-grid div {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .next-icon {
+    display: none;
+  }
+}

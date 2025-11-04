@@ -1,0 +1,110 @@
+/* ===== PAGE WRAPPER ===== */
+.drone-page {
+  flex: 1;
+background: linear-gradient(135deg, #e3f2fd, #bbdefb 60%, #9fd1fa);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+  color: #0d2a4b;
+  padding: 2rem 1rem;
+  border-radius: 10px;
+  height: 100%; /* fills parent, avoids extra scroll */
+  width: 100%;
+  box-sizing: border-box;
+  overflow-y: auto; /* scroll only if content overflows */
+}
+
+
+/* ===== TITLE ===== */
+.drone-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+color: #5696ca;
+  text-align: center;
+  letter-spacing: 0.4px;
+}
+
+
+/* ===== DRONE CONTAINER ===== */
+.drone-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  max-width: 1000px;
+}
+
+/* ===== DRONE CARD ===== */
+.drone-cards {
+  position: relative;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.drone-cards:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* ===== CARD CONTENT ===== */
+.drone-card-content {
+  position: relative;
+}
+
+.icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #1565c0;
+  font-size: 1.5rem;
+  background: #e8f0ff;
+  padding: 6px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.icon:hover {
+  color: #0b4db3;
+  background: #dbe9ff;
+}
+
+/* ===== DRONE IMAGE ===== */
+.drone-img {
+  width: 100%;
+  height: 160px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+/* ===== DRONE INFO ===== */
+.drone-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0d2a4b;
+  margin-bottom: 0.5rem;
+}
+
+.drone-info p {
+  font-size: 0.95rem;
+  color: #333;
+  margin: 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .drone-container {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+
+  .drone-img {
+    height: 130px;
+  }
+}

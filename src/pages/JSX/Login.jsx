@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import droneBg from "../assets/drone_image.png";
-import "./Login.css";
+import droneBg from "../../assets/drone_image.png";
+import "../CSS/login.css";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -11,17 +11,12 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-
-    // simulate auth OR replace with real API
     localStorage.setItem("access", "sample-token");
     navigate("/dashboard");
   };
 
   return (
-    <div
-      className="login-container"
-      style={{ backgroundImage: `url(${droneBg})` }}
-    >
+    <div className="login-container" style={{ backgroundImage: `url(${droneBg})` }}>
       <div className="login-overlay"></div>
 
       <form onSubmit={handleSubmit} className="login-card">
@@ -51,8 +46,15 @@ export default function Login() {
         <button className="login-button" type="submit" disabled={loading}>
           {loading ? "Signing in..." : "Login"}
         </button>
+
         <p>
-          New user?<u>Create Your Account</u>
+          New user?{" "}
+          <u
+            onClick={() => navigate("/register")}
+            style={{ cursor: "pointer", color: "#ff6600" }}
+          >
+            Create Your Account
+          </u>
         </p>
       </form>
     </div>

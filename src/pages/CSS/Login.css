@@ -1,0 +1,151 @@
+/* Full container with drone background */
+.login-container {
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Subtle dark overlay on background */
+.login-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+/* Login card */
+.login-card {
+  position: relative;
+  z-index: 2;
+  background: rgba(20, 20, 30, 0.85);
+  padding: 2.5rem 3rem;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  width: 90%;
+  max-width: 380px;
+  color: #e9ecf1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  animation: fadeIn 0.8s ease;
+}
+
+/* Title */
+.login-title {
+  text-align: center;
+  color: #00bfff;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  text-shadow: 0 0 8px rgba(0, 191, 255, 0.6);
+}
+
+/* Label */
+.login-label {
+  font-size: 0.9rem;
+  margin-top: 0.6rem;
+  font-weight: 500;
+  color: #d0d6dc;
+}
+
+/* Input fields */
+.login-input {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #2c3e50;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  outline: none;
+}
+
+.login-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.login-input:focus {
+  border-color: #00bfff;
+  box-shadow: 0 0 8px rgba(0, 191, 255, 0.4);
+}
+
+/* Buttons */
+.login-button {
+  margin-top: 1rem;
+  padding: 0.7rem;
+  background: linear-gradient(135deg, #00bfff, #0077ff);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.login-button:hover {
+  background: linear-gradient(135deg, #1ecfff, #1090ff);
+  box-shadow: 0 0 12px rgba(0, 191, 255, 0.5);
+}
+
+.login-button:disabled {
+  background: #3b3b3b;
+  cursor: not-allowed;
+}
+
+/* Links */
+.login-card p {
+  text-align: center;
+  margin: 0.6rem 0;
+  font-size: 0.85rem;
+}
+
+.login-card u {
+  color: #00bfff;
+  cursor: pointer;
+}
+
+.login-card u:hover {
+  text-decoration: underline;
+  color: #1ecfff;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .login-card {
+    padding: 2rem;
+    width: 90%;
+    border-radius: 10px;
+  }
+
+  .login-title {
+    font-size: 1.5rem;
+  }
+
+  .login-input {
+    font-size: 0.9rem;
+  }
+
+  .login-button {
+    font-size: 0.95rem;
+  }
+}

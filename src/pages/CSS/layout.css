@@ -1,0 +1,54 @@
+/* ===== LAYOUT CONTAINER ===== */
+.layout-container {
+  min-height: 100vh;
+  background: #f9fcff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== HEADER ===== */
+.layout-header {
+  width: 98%;
+  margin: 1rem auto;
+  background: #ffffffd9;
+  backdrop-filter: blur(8px);
+  padding: 0.8rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 14px;
+  border: 1px solid #e0ebff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== TITLE ===== */
+.layout-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #004aad; /* Calm professional blue */
+  letter-spacing: 0.3px;
+}
+
+/* ===== LOGOUT BUTTON ===== */
+.layout-logout-btn {
+  background: linear-gradient(135deg, #2196f3, #64b5f6);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(33, 150, 243, 0.2);
+}
+
+.layout-logout-btn:hover {
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  transform: scale(1.05);
+}
+
+/* ===== MAIN CONTENT ===== */
+.layout-content {
+  flex: 1;
+  padding: 1.5rem;
+}

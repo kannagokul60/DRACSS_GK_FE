@@ -1,0 +1,186 @@
+/* ===== DASHBOARD WRAPPER ===== */
+.dash-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #f2f7ff, #e8f1ff 70%, #f9fcff);
+  font-family: "Poppins", sans-serif;
+  color: #1a2a4b;
+  height: 100%;           /* fills parent container */
+  overflow-y: auto;       /* scroll only when needed */
+  box-sizing: border-box; /* avoids layout overflow */
+  padding: 10rem 5rem;
+    border-radius: 10px;
+
+}
+
+
+/* ===== HEADER ===== */
+.dash-header {
+  width: 98%;
+  margin: 1rem auto; /* slight gap from window edges */
+  background: #ffffffcc;
+  backdrop-filter: blur(8px);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #d6e6ff;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 1rem;
+  z-index: 10;
+}
+
+/* ===== BRAND ===== */
+.brand {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1256b4;
+  letter-spacing: 0.5px;
+}
+
+/* ===== LOGOUT BUTTON ===== */
+.btn-logout {
+  background: linear-gradient(135deg, #1e88e5, #64b5f6);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+  background: linear-gradient(135deg, #1565c0, #64b5f6);
+  transform: scale(1.05);
+}
+
+/* ===== MAIN ===== */
+.dash-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* center vertically */
+  padding: 1rem 2rem;
+  overflow: hidden;
+}
+
+/* ===== TILE GRID ===== */
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem 2rem; /* reduced spacing */
+  justify-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* ===== TILE CARD ===== */
+.tile {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(33, 150, 243, 0.08);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 350px;
+  height: 160px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.tile:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 24px rgba(33, 150, 243, 0.15);
+  background: #f9fcff;
+}
+
+/* ===== ICON IMAGE ===== */
+.tile-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90px;
+}
+
+.tile-image img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  opacity: 0.9;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.tile:hover .tile-image img {
+  transform: scale(1.15);
+  opacity: 1;
+}
+
+/* ===== TITLE ===== */
+.tile-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #0d3058;
+  margin-top: 1rem;
+  letter-spacing: 0.4px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s ease;
+}
+
+.tile:hover .tile-title {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== LIGHT SWEEP EFFECT ===== */
+.tile::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(66, 165, 245, 0.12), transparent);
+  transition: all 0.6s ease;
+}
+
+.tile:hover::before {
+  left: 100%;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .tile-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .tile-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+  .tile {
+    max-width: 90%;
+    height: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand {
+    font-size: 1.4rem;
+  }
+  .btn-logout {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
