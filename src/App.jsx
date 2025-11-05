@@ -5,6 +5,9 @@ import Dashboard from "./pages/JSX/Client/Dashboard";
 import DroneDetails from "./pages/JSX/Client/DroneDetails";
 import ViewDrone from "./pages/JSX/Client/ViewDrone";
 import Layout from "./pages/JSX/Layout";
+import DroneRegistration from "./pages/JSX/Client/DroneRegistration";
+import KnowledgeBase from "./pages/JSX/Client/KnowledgeBase";
+
 import "./App.css";
 
 export default function App() {
@@ -19,8 +22,9 @@ export default function App() {
         <Route element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/drone-details" element={<DroneDetails />} />
-        <Route path="/view-drone/:droneName" element={<ViewDrone />} />
-
+          <Route path="/view-drone/:droneName" element={<ViewDrone />} />
+          <Route path="/drone-registration" element={<DroneRegistration />} />
+          <Route path="/knowledge-base" element={<KnowledgeBase />} />
         </Route>
       ) : (
         <Route path="*" element={<Navigate to="/" />} />

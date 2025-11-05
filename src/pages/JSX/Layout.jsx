@@ -13,7 +13,9 @@ export default function Layout() {
   return (
     <div className="layout-container">
       <header className="layout-header">
-        <h1 className="layout-title">Dashboard</h1>
+        <h1 className="layout-title" onClick={() => navigate("/dashboard")}>
+          DRACSS
+        </h1>
         <button className="layout-logout-btn" onClick={logout}>
           Logout
         </button>

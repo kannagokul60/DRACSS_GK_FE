@@ -1,66 +1,90 @@
 /* ===== PAGE WRAPPER ===== */
 .drone-details-page {
-  background: none; /* no blue color */
+  background: none;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 0;
+  padding: 0.2rem 1rem;
   margin: 0;
   font-family: "Poppins", sans-serif;
   color: #1a1a1a;
-}
-
-/* ===== FULL-SCREEN CARD ===== */
-.drone-card {
   position: relative;
-  background: #f8f8f8;
-  border-radius: 10px;
-  width: 100%;
-  height: auto; /* adjust height to content */
-  padding: 2rem 3rem;
-  overflow: auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  height: auto;
+  overflow: visible; /* page scrolls, not card */
+  transition: none;
 }
 
-
-
-
-/* ===== BACKGROUND DRONE IMAGE (smoke effect) ===== */
-.drone-card::before {
-  content: "";
+/* Breadcrumb inside card */
+.drone-details-page .drone-breadcrumb-wrapper {
   position: absolute;
-  inset: 0;
-  background: url("https://droneentry.com/wp-content/uploads/2024/03/Agriculture-Spraying-Drone.png") center center no-repeat;
-  background-size: 55%;
-  opacity: 0.20;              /* smoky transparency */
-  filter: blur(1.5px);
-  z-index: 0;
+  top: 1rem; /* space from top */
+  left: 1rem; /* space from left */
+  font-size: 0.95rem;
+  z-index: 10; /* stay above other elements */
+
 }
 
-/* ===== HEADER ===== */
+/* Drone Card Header */
 .drone-card-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* center the title */
   align-items: center;
-  margin-bottom: 1.5rem;
   position: relative;
-  z-index: 1;
+  margin-bottom: 2rem;
 }
 
-.drone-card-header h2 {
+.drone-title {
   font-size: 1.6rem;
   font-weight: 600;
   color: #0d2a4b;
+  text-align: center;
+  margin: 0 auto; /* center */
 }
 
+/* Edit icon stays on right */
 .edit-icon {
-  font-size: 1.2rem;
-  color: #1976d2;
+  position: absolute;
+  right: 0;
+  font-size: 1rem;
+  color: #1565c0;
   cursor: pointer;
-  transition: color 0.3s;
+  transition: color 0.3s ease;
 }
 .edit-icon:hover {
-  color: #0b5394;
+  color: #77a9f3;
+}
+
+.drone-card-view {
+  position: relative;
+  background: #f8f8f8;
+  border-radius: 10px;
+  width: calc(100% - 1rem);
+  margin: 0 1rem;
+  padding: 2.5rem 3rem;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease; /* Only shadow transitions */
+}
+
+.drone-card-view:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow on hover */
+  transform: none; /* No scale/move */
+}
+
+/* ==== Embedded Background Drone Image ==== */
+.drone-bg-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60%;
+  max-width: 800px;
+  height: auto;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  opacity: 0.15;
+  filter: blur(1.2px);
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
 
 /* ===== MAIN CONTENT ===== */
@@ -154,10 +178,99 @@
   background-color: #f3f6ff;
 }
 
+/* ===== NAVIGATION ICONS ===== */
+.nav-icons {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transform: translateY(-50%);
+  pointer-events: none;
+  padding: 0 5px;
+}
+
+.nav-icons.both {
+  justify-content: space-between;
+}
+.nav-icons.only-right {
+  justify-content: flex-end;
+}
+.nav-icons.only-left {
+  justify-content: flex-start;
+}
+
+.nav-icon {
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #1976d2;
+  background: #fff;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  pointer-events: auto;
+  margin: 0 -30px;
+}
+
+.nav-icon:hover {
+  transform: scale(1.15);
+  color: #0b5394;
+  background: #eef6ff;
+}
+
+/* ===== BACK BUTTON ===== */
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  color: black;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button svg {
+  font-size: 1.1rem;
+}
+
+.back-button:hover {
+  transform: translateY(-4px);
+  color: #555;
+}
+
+.back-button:active {
+  transform: translateY(0);
+}
+
 /* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .drone-card {
+    padding: 2rem;
+  }
+
+  .drone-bg-image {
+    width: 70%;
+  }
+}
+
 @media (max-width: 768px) {
   .drone-card {
     padding: 1.5rem;
+  }
+
+  .drone-title {
+    font-size: 1.3rem;
   }
 
   .drone-info-grid div {
@@ -165,7 +278,41 @@
     gap: 4px;
   }
 
+  .drone-bg-image {
+    width: 90%;
+    opacity: 0.1;
+  }
+
   .next-icon {
     display: none;
+  }
+
+  .nav-icon {
+    margin: 0 -15px;
+  }
+
+  .drone-breadcrumb-wrapper {
+    top: 2rem;
+    left: 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .drone-card {
+    padding: 1rem;
+  }
+
+  .drone-title {
+    font-size: 1.1rem;
+  }
+
+  .drone-info-grid {
+    font-size: 0.9rem;
+  }
+
+  .drone-bg-image {
+    width: 100%;
+    opacity: 0.08;
   }
 }

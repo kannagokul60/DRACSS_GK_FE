@@ -1,0 +1,109 @@
+/* ===== PAGE WRAPPER ===== */
+.kb-page {
+  padding: 2rem;
+  font-family: "Poppins", sans-serif;
+  height: 100%;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb 60%, #9fd1fa);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* soft shadow */
+  position: relative; /* so breadcrumbs can be positioned absolutely */
+}
+
+/* ===== BREADCRUMB WRAPPER ===== */
+.kb-page  .drone-breadcrumb-wrapper {
+  position: absolute;
+  top: 1rem; /* space from top */
+  left: 1rem; /* space from left */
+  font-size: 0.95rem;
+  z-index: 10; /* stay above other elements */
+}
+
+
+/* ===== PAGE TITLE ===== */
+.kb-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #0d2a4b;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* ===== GRID LAYOUT ===== */
+.kb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ===== CARD ===== */
+.kb-card {
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: #fff; /* clean background */
+  display: flex;
+  flex-direction: column;
+  padding: 1rem; /* space inside the card */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.kb-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+.kb-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.kb-image-wrapper {
+  width: 100%;
+  aspect-ratio: 16/9; /* wide drone look */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  margin-bottom: 0.8rem; /* space between image and title */
+  border-radius: 8px;
+}
+
+.kb-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* fits image inside wrapper */
+}
+
+/* ===== TITLE ===== */
+.kb-card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #0d2a4b;
+  text-align: center;
+  margin: 0;
+  padding: 0.5rem 0; /* space above and below title */
+}
+
+/* ===== MORE DETAILS ===== */
+.kb-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 0.5rem;
+  color: #1976d2;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.kb-more:hover {
+  color: #0b5394;
+  transform: translateX(3px); /* subtle movement on hover */
+}
+
+.kb-more-icon {
+  font-size: 0.9rem;
+}

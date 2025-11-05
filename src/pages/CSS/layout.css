@@ -29,6 +29,11 @@
   letter-spacing: 0.3px;
 }
 
+.layout-title:hover {
+  color: #7babee;
+  cursor: pointer;
+}
+
 /* ===== LOGOUT BUTTON ===== */
 .layout-logout-btn {
   background: linear-gradient(135deg, #2196f3, #64b5f6);

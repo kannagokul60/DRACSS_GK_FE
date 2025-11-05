@@ -3,6 +3,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+    font-family:'Times New Roman', Times, serif;
+
 }
 
 html, body {
@@ -12,4 +14,6 @@ html, body {
   font-family: "Poppins", sans-serif;
   background: #f9fcff;
   color: #0d2a4b;
+    font-family:'Times New Roman', Times, serif;
+
 }

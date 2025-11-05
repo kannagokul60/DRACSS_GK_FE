@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "../../CSS/dronedetails.css";
 import drone1 from "../../../assets/drone_image.png";
 import drone2 from "../../../assets/drone_image.png";
+import BreadCrumbs from "../BreadCrumbs";
 
 export default function DroneDetails() {
   const navigate = useNavigate();
@@ -24,35 +25,40 @@ export default function DroneDetails() {
   };
 
   return (
-    <div className="drone-page">
-      <div className="drone-header">
-        <h2 className="drone-title">Drone Details</h2>
-      </div>
+   <div className="drone-page">
+  {/* Breadcrumb - top left */}
+  <div className="drone-breadcrumb-wrapper">
+    <BreadCrumbs title="Drone Details" />
+  </div>
 
-      <div className="drone-container">
-        {drones.map((drone, i) => (
-          <div
-            className="drone-cards"
-            key={i}
-            onClick={() => handleDroneClick(drone.name)}
-          >
-            <FaShare className="icon" title="View Drone" />
+  <div className="drone-header">
+    <h2 className="drone-title">Drone Details</h2>
+  </div>
 
-            <div className="drone-card-content">
-              <img src={drone.image} alt={drone.name} className="drone-img" />
-              <div className="drone-info">
-                <h3>{drone.name}</h3>
-                <p>
-                  Purchase Date: <strong>{drone.purchaseDate}</strong>
-                </p>
-                <p>
-                  Count: <strong>{drone.count} pcs</strong>
-                </p>
-              </div>
-            </div>
+  <div className="drone-container">
+    {drones.map((drone, i) => (
+      <div
+        className="drone-cards"
+        key={i}
+        onClick={() => handleDroneClick(drone.name)}
+      >
+        <FaShare className="icon" title="View Drone" />
+        <div className="drone-card-content">
+          <img src={drone.image} alt={drone.name} className="drone-img" />
+          <div className="drone-info">
+            <h3>{drone.name}</h3>
+            <p>
+              Purchase Date: <strong>{drone.purchaseDate}</strong>
+            </p>
+            <p>
+              Count: <strong>{drone.count} pcs</strong>
+            </p>
           </div>
-        ))}
+        </div>
       </div>
-    </div>
+    ))}
+  </div>
+</div>
+
   );
 }

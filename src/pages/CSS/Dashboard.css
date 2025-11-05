@@ -3,17 +3,14 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #f2f7ff, #e8f1ff 70%, #f9fcff);
-  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb 60%, #9fd1fa);
   color: #1a2a4b;
-  height: 100%;           /* fills parent container */
-  overflow-y: auto;       /* scroll only when needed */
+  height: 100%; /* fills parent container */
+  overflow-y: auto; /* scroll only when needed */
   box-sizing: border-box; /* avoids layout overflow */
   padding: 10rem 5rem;
-    border-radius: 10px;
-
+  border-radius: 10px;
 }
-
 
 /* ===== HEADER ===== */
 .dash-header {
@@ -149,7 +146,12 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(66, 165, 245, 0.12), transparent);
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(66, 165, 245, 0.12),
+    transparent
+  );
   transition: all 0.6s ease;
 }
 

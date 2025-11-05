@@ -1,0 +1,204 @@
+/* ===== PAGE CONTAINER ===== */
+.drone-reg-page {
+  position: relative; /* allows breadcrumb absolute positioning */
+  padding: 3rem 2rem 2rem 2rem; /* top padding increased for breadcrumb space */
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb 60%, #9fd1fa);
+  border-radius: 10px;
+  font-family: "Times New Roman", Times, serif;
+  height: 100%; /* ensures full page height */
+  box-sizing: border-box;
+}
+
+/* ===== BREADCRUMB WRAPPER ===== */
+.drone-reg-page .drone-breadcrumb-wrapper {
+  position: absolute;
+  top: -0.1rem; /* slightly lower from top */
+  left: 0.1rem;
+  font-size: 0.95rem;
+}
+
+/* ===== HEADER ===== */
+.drone-reg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Adjust on small screens */
+  margin-bottom: 25px;
+  gap: 15px;
+}
+
+.drone-reg-header h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #222;
+  margin: 0;
+}
+
+/* ===== BUTTON ===== */
+.register-btn {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.register-btn:hover {
+  background: #5f5f5f;
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* ===== DRONE CARDS GRID ===== */
+.drone-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+/* ===== CARD ===== */
+.drone-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.drone-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.drone-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.drone-card-header h3 {
+  font-size: 1.2rem;
+  color: #222;
+}
+
+/* ===== STATUS BADGES ===== */
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.status-badge.approved {
+  background: #e6f7e6;
+  color: #2e7d32;
+}
+
+.status-badge.pending {
+  background: #fff8e1;
+  color: #f57c00;
+}
+
+.status-badge.rejected {
+  background-color: #ffe3e3;
+  color: #d9534f;
+}
+
+/* ===== ICON COLORS ===== */
+.status-icon {
+  font-size: 1rem;
+}
+
+.status-icon.approved {
+  color: #2e7d32;
+}
+
+.status-icon.pending {
+  color: #f57c00;
+}
+
+.status-icon.rejected {
+  color: #d9534f;
+}
+
+/* ===== CARD BODY ===== */
+.drone-card-body p {
+  margin: 6px 0;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+/* ===== RESPONSIVENESS ===== */
+
+/* Small Tablets (max-width: 768px) */
+@media (max-width: 768px) {
+  .drone-reg-page {
+    padding: 20px;
+  }
+
+  .drone-reg-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .drone-reg-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .register-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .drone-card {
+    padding: 16px;
+  }
+
+  .drone-card-header h3 {
+    font-size: 1rem;
+  }
+
+  .drone-card-body p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .drone-reg-page {
+    padding: 15px;
+  }
+
+  .drone-reg-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .register-btn {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+
+  .drone-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .drone-card {
+    padding: 14px;
+  }
+
+  .status-badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+}

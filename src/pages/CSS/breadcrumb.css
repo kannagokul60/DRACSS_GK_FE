@@ -1,0 +1,63 @@
+.back-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 25px;
+  background: none;
+  border-radius: 8px;
+  border: none;
+  margin-bottom: 20px;
+}
+
+.back-btn {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: #000;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.breadcrumb {
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.breadcrumb-segment {
+  color: #0078ff;
+  text-transform: capitalize;
+}
+
+.breadcrumb-segment:last-child {
+  color: #222;
+  font-weight: 600;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .back-header {
+    padding: 10px 15px;
+    gap: 8px;
+  }
+
+  .breadcrumb {
+    font-size: 0.9rem;
+  }
+
+  .back-btn {
+    width: 32px;
+    height: 32px;
+  }
+}
