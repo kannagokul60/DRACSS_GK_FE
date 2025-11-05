@@ -1,9 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "./pages/JSX/login";
+import Login from "./pages/JSX/Login";
 import Register from "./pages/JSX/Register";
-import Dashboard from "./pages/JSX/Dashboard";
-import DroneDetails from "./pages/JSX/DroneDetails";
-import ViewDrone from "./pages/JSX/ViewDrone";
+import Dashboard from "./pages/JSX/Client/Dashboard";
+import DroneDetails from "./pages/JSX/Client/DroneDetails";
+import ViewDrone from "./pages/JSX/Client/ViewDrone";
 import Layout from "./pages/JSX/Layout";
 import "./App.css";
 

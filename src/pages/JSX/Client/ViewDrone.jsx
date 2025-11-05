@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaEdit, FaChevronRight, FaArrowLeft } from "react-icons/fa";
-import "../CSS/viewdrone.css";
+import "../../CSS/viewdrone.css";
 
 const ViewDrone = () => {
   const { droneName } = useParams();

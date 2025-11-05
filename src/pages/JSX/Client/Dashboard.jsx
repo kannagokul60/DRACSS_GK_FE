@@ -2,13 +2,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 // Import all images from assets
-import clientImg from "../../assets/community.png";
-import droneImg from "../../assets/drone.png";
-import knowledgeImg from "../../assets/description.png";
-import storeImg from "../../assets/shopping-cart.png";
-import supportImg from "../../assets/call.png";
-import profileImg from "../../assets/profile.png";
-import "../CSS/dashboard.css";
+import clientImg from "../../../assets/community.png";
+import droneImg from "../../../assets/drone.png";
+import knowledgeImg from "../../../assets/Knowledge_base.svg";
+import storeImg from "../../../assets/shopping-cart.png";
+import supportImg from "../../../assets/call.png";
+import profileImg from "../../../assets/profile.png";
+import "../../CSS/dashboard.css";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -19,8 +19,8 @@ export default function Dashboard() {
   };
 
   const tiles = [
-    { title: "Client Details", image: clientImg },
-    { title: "Drone Details", image: droneImg, path: "/drone-details" },
+    { title: "Drone Registration", image: clientImg },
+    { title: "My Drones", image: droneImg, path: "/drone-details" },
     { title: "Knowledge Base", image: knowledgeImg },
     { title: "Aero360 Store", image: storeImg },
     { title: "Support Request", image: supportImg },
