@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 // Import all images from assets
-import clientImg from "../../../assets/registration.svg";
+import clientImg from "../../../assets/community.png";
 import droneImg from "../../../assets/drone.png";
 import knowledgeImg from "../../../assets/Knowledge_base.svg";
 import storeImg from "../../../assets/shopping-cart.png";
@@ -19,9 +19,9 @@ export default function Dashboard() {
   };
 
   const tiles = [
-  { title: "Drone Registration", image: clientImg, path: "/client/drone-registration" },
-    { title: "My Drones", image: droneImg, path: "/client/drone-details" },
-  { title: "Knowledge Base", image: knowledgeImg, path: "/client/knowledge-base" },
+  { title: "Clients", image: clientImg, path: "/bd/client-list" },
+    { title: "Drone Details", image: droneImg, path: "/bd/drone-details" },
+  { title: "Knowledge Base", image: knowledgeImg, path: "/bd/knowledge-base" },
     { title: "Aero360 Store", image: storeImg },
 { title: "Support Request", image: supportImg, path: "/client/support" },
 { title: "Profile Details", image: profileImg, path: "/client/profile-details" },

@@ -1,0 +1,234 @@
+.kb-main-page.light-theme {
+  background: #f8fafc;
+  color: #1e293b;
+  font-family: 'Times New Roman', Times, serif;
+  overflow-x: hidden;
+}
+
+/* HERO */
+.hero-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 80px 10%;
+  background: linear-gradient(120deg, #ffffff 0%, #e6f0ff 100%);
+  border-radius: 20px;
+  margin: 40px auto;
+  box-shadow: 0 10px 40px rgba(37, 99, 235, 0.1);
+}
+.hero-content {
+  max-width: 45%;
+}
+.hero-title {
+  font-size: 3rem;
+  color: #1e3a8a;
+  font-weight: 700;
+}
+.hero-subtitle {
+  font-size: 1.1rem;
+  color: #334155;
+  margin-top: 10px;
+}
+.hero-btn {
+  background: #0d5bb4;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  margin-top: 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.hero-btn:hover {
+  background: #6795ca;
+}
+.hero-image-wrapper {
+  position: relative;
+  width: 45%;
+  aspect-ratio: 16 / 9; /* 👈 responsive fix */
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+
+.hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.hero-image.active {
+  opacity: 1;
+}
+
+
+/* ABOUT */
+.about-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 80px 10%;
+  gap: 40px;
+}
+.about-text h2 {
+  color: #1e3a8a;
+  margin-bottom: 10px;
+}
+.about-text p {
+  color: #475569;
+  line-height: 1.7;
+}
+.about-image {
+  max-width: 450px;
+  border-radius: 14px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* HOW IT WORKS */
+.how-it-works {
+  padding: 80px 10%;
+  text-align: center;
+}
+.how-it-works h2 {
+  color: #1e3a8a;
+  margin-bottom: 40px;
+}
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+}
+.step-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+  transition: all 0.3s ease;
+}
+.step-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+}
+.step-icon {
+  font-size: 2rem;
+  color: #0d5bb4;
+  margin-bottom: 10px;
+}
+
+/* MANUAL SECTION */
+.manual-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 80px 10%;
+  gap: 40px;
+}
+.manual-content h2 {
+  color: #1e3a8a;
+}
+.manual-content p {
+  color: #475569;
+}
+.download-btn {
+  background: #0d5bb4;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+.download-btn:hover {
+  background: #547caa;
+}
+.manual-video iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* CONTROLS */
+.controls-section {
+  padding: 80px 10%;
+  text-align: center;
+}
+.controls-section h2 {
+  color: #1e3a8a;
+  margin-bottom: 30px;
+}
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 20px;
+}
+.control-card {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  padding: 15px;
+  transition: 0.3s;
+}
+.control-card:hover {
+  background: #eff6ff;
+  transform: scale(1.05);
+}
+
+/* CONFIGURATION */
+.config-section {
+  padding: 80px 10%;
+  text-align: center;
+}
+.config-section h2 {
+  color: #1e3a8a;
+  margin-bottom: 30px;
+}
+.config-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+.config-card {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+.config-card:hover {
+  background: #eff6ff;
+  transform: translateY(-5px);
+}
+.config-card h4 {
+  color: #0d5bb4;
+  margin-bottom: 8px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .hero-section,
+  .about-section,
+  .manual-section {
+    flex-direction: column;
+    text-align: center;
+  }
+  .hero-content,
+  .about-text {
+    max-width: 100%;
+  }
+  .hero-image,
+  .about-image {
+    width: 100%;
+  }
+}

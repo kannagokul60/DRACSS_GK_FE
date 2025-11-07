@@ -1,0 +1,153 @@
+
+
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, #e8f1ff, #f1f0f0);
+  height: 100%;
+  font-family: 'Times New Roman', Times, serif;
+  border-radius: 10px;
+  padding: 20px;
+
+}
+
+/* Breadcrumb alignment */
+.profile-breadcrumb-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start; /* 👈 aligns to left */
+  padding-left: 10px; /* adjust for spacing if needed */
+}
+
+.profile-card {
+  background: #fff;
+  width: 90%;
+  max-width: 700px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  transition: 0.3s;
+    margin-top: -60px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.8rem;
+  color: #0d5bb4;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between icon and text */
+  background: none;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #dbeafe;
+}
+
+.tab-buttons button {
+  background: none;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.tab-buttons button.active {
+  color: #0d5bb4;
+  border-bottom: 3px solid #0d5bb4;
+}
+
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-section label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 10px;
+}
+
+.form-section input,
+.form-section textarea {
+  margin-top: 5px;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.form-section input:focus,
+.form-section textarea:focus {
+  border-color: #0d5bb4;
+  box-shadow: 0 0 0 2px rgba(13, 91, 180, 0.15);
+}
+
+textarea {
+  resize: none;
+  min-height: 70px;
+}
+
+.save-btn {
+  background: #0d5bb4;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.save-btn:hover {
+  background: #6491c4;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .profile-card {
+    padding: 20px;
+  }
+
+  .tab-buttons {
+    flex-direction: column;
+    border-bottom: none;
+  }
+
+  .tab-buttons button {
+    border: 1px solid #dbeafe;
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+}

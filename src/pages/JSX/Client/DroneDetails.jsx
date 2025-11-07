@@ -21,7 +21,7 @@ export default function DroneDetails() {
   ];
 
   const handleDroneClick = (droneName) => {
-    navigate(`/view-drone/${droneName}`);
+    navigate(`/client/view-drone/${droneName}`);
   };
 
   return (

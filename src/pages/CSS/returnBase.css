@@ -1,0 +1,356 @@
+.returnbase-container {
+  font-family: 'Times New Roman', Times, serif;
+height: 100%;
+  background: linear-gradient(135deg, #e8f1ff, #f1f0f0);
+  padding: 60px 30px 40px;
+  position: relative;
+  border-radius: 10px;
+}
+
+/* ===== BREADCRUMB WRAPPER ===== */
+.return-breadcrumb-wrapper {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 10;
+}
+
+/* ===== HEADER ===== */
+.returnbase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.returnbase-header h2 {
+  color: #1a237e;
+  font-weight: 600;
+  margin: 0;
+}
+
+.returnbase-add-btn {
+  background: #1976d2;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.3s ease;
+}
+
+.returnbase-add-btn:hover {
+  background: #64aaf0;
+}
+
+/* ===== CARD GRID ===== */
+.returnbase-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+}
+
+.returnbase-no-data {
+  text-align: center;
+  color: #777;
+  margin-top: 40px;
+}
+
+/* ===== CARD STYLE ===== */
+.returnbase-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  padding: 18px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.returnbase-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* ===== CARD HEADER ===== */
+.returnbase-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.returnbase-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.returnbase-card-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  color: black;
+}
+
+
+.returnbase-status-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.returnbase-status-badge.pending {
+  background: #ffecb3;
+  color: #f57f17;
+}
+
+.returnbase-status-badge.in-progress,
+.returnbase-status-badge.in {
+  background: #bbdefb;
+  color: #0d47a1;
+}
+
+
+.returnbase-status-badge.shipped {
+  background: #c8e6c9;
+  color: #1b5e20;
+}
+
+/* ===== CARD BODY ===== */
+.returnbase-card-body p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.returnbase-serial-link {
+  color: #1a237e;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.3s;
+}
+
+.returnbase-serial-link:hover {
+  color: #3949ab;
+}
+
+/* ===== ISSUE DESCRIPTION ===== */
+.returnbase-description {
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 10px;
+  color: #444;
+}
+
+/* ===== POPUP OVERLAY ===== */
+.returnbase-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(17, 17, 17, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* ===== POPUP CONTAINER ===== */
+.returnbase-popup {
+  background: white;
+  width: 500px;
+  max-height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ===== POPUP HEADER ===== */
+.returnbase-popup-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  color: black;
+  padding: 24px 20px;
+  position: relative;
+}
+
+.returnbase-popup-header h3 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.returnbase-close-btn {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  background: none;
+  border: none;
+  color:black;
+  font-size: 22px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.returnbase-close-btn:hover {
+  color: #ffb300;
+}
+
+/* ===== FORM ===== */
+.returnbase-popup form {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.returnbase-popup form::-webkit-scrollbar {
+  width: 8px;
+}
+.returnbase-popup form::-webkit-scrollbar-thumb {
+  background: #c5cae9;
+  border-radius: 6px;
+}
+
+.returnbase-popup form label {
+  font-weight: 600;
+  margin-top: 12px;
+  color: #333;
+}
+
+.returnbase-popup form input,
+.returnbase-popup form textarea {
+  margin-top: 6px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+  font-family: "Poppins", sans-serif;
+}
+
+.returnbase-popup form input:focus,
+.returnbase-popup form textarea:focus {
+  border-color: gray;
+  outline: none;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.returnbase-popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.returnbase-submit-btn,
+.returnbase-cancel-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.returnbase-submit-btn {
+  background: #1976d2;
+  color: white;
+}
+
+.returnbase-submit-btn:hover {
+  background: #5ea6ee;
+}
+
+.returnbase-cancel-btn {
+  background: rgb(202, 201, 201);
+  color: #333;
+}
+
+.returnbase-cancel-btn:hover {
+  background: #afafaf;
+}
+/* Container for the action area inside each card */
+.returnbase-actions {
+  display: flex;
+  justify-content: flex-end; /* aligns content to right */
+  align-items: center;
+  margin-top: 10px;
+  width: 100%;
+}
+
+/* The info text (after shipping) */
+.returnbase-info-text {
+  color: #004085;
+  font-weight: 500;
+  background: #e2e3e5;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  text-align: right; /* aligns text to right */
+  margin-top: 10px;
+  width: auto; /* keep it compact */
+}
+
+/* Ship button style */
+.returnbase-action-btn.ship {
+  background: #5e9ada;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+  margin-left: auto; /* pushes button to right */
+}
+
+.returnbase-action-btn.ship:hover {
+  background: #0056b3;
+}
+
+
+
+/* ===== ANIMATION ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 700px) {
+  .returnbase-popup {
+    width: 90%;
+  }
+
+  .returnbase-add-btn {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  .returnbase-card {
+    padding: 15px;
+  }
+}

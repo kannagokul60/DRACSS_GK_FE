@@ -25,11 +25,11 @@ const ViewDrone = () => {
     currentIndex < drones.length - 1 ? drones[currentIndex + 1] : null;
 
   const handleNextClick = () => {
-    if (nextDrone) navigate(`/view-drone/${nextDrone}`);
+    if (nextDrone) navigate(`/client/view-drone/${nextDrone}`);
   };
 
   const handlePrevClick = () => {
-    if (prevDrone) navigate(`/view-drone/${prevDrone}`);
+    if (prevDrone) navigate(`/client/view-drone/${prevDrone}`);
   };
 
   return (
