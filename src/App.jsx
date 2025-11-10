@@ -21,6 +21,10 @@ import ClientList from "./pages/JSX/BDTeam/ClientList";
 import ClientDetails from "./pages/JSX/BDTeam/ClientDroneList";
 
 import "./App.css";
+import BDDroneDetails from "./pages/JSX/BDTeam/BDDroneDetails";
+import BDDroneProfile from "./pages/JSX/BDTeam/BDDroneProfile";
+import BDKnowledgeBase from "./pages/JSX/BDTeam/KnowledgeBase";
+import BDViewKnowledge from "./pages/JSX/BDTeam/ViewKnowledge";
 
 export default function App() {
   const isLoggedIn = !!localStorage.getItem("access");
@@ -31,35 +35,37 @@ export default function App() {
       <Route path="/register" element={<Register />} />
 
       {isLoggedIn ? (
-  <>
-    {/* CLIENT ROUTES */}
-    <Route path="/client" element={<Layout />}>
-      <Route path="dashboard" element={<Dashboard />} />
-      <Route path="drone-details" element={<DroneDetails />} />
-      <Route path="view-drone/:droneName" element={<ViewDrone />} />
-      <Route path="drone-registration" element={<DroneRegistration />} />
-      <Route path="knowledge-base" element={<KnowledgeBase />} />
-      <Route path="knowledge/bhumi" element={<ViewKnowledge />} />
-      <Route path="profile-details" element={<ProfileDetails />} />
-      <Route path="support" element={<SupportPage />} />
-      <Route path="online-support" element={<OnlineSupport />} />
-      <Route path="onsite-support" element={<OnsiteSupport />} />
-      <Route path="return-to-base" element={<ReturnToBase />} />
-    </Route>
+        <>
+          {/* CLIENT ROUTES */}
+          <Route path="/client" element={<Layout />}>
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="drone-details" element={<DroneDetails />} />
+            <Route path="view-drone/:droneName" element={<ViewDrone />} />
+            <Route path="drone-registration" element={<DroneRegistration />} />
+            <Route path="knowledge-base" element={<KnowledgeBase />} />
+            <Route path="knowledge/bhumi" element={<ViewKnowledge />} />
+            <Route path="profile-details" element={<ProfileDetails />} />
+            <Route path="support" element={<SupportPage />} />
+            <Route path="online-support" element={<OnlineSupport />} />
+            <Route path="onsite-support" element={<OnsiteSupport />} />
+            <Route path="return-to-base" element={<ReturnToBase />} />
+          </Route>
 
-    {/* BD TEAM ROUTES */}
-    <Route path="/bd" element={<BDLayout />}>
-      <Route path="dashboard" element={<BDDashboard />} />
+          {/* BD TEAM ROUTES */}
+          <Route path="/bd" element={<BDLayout />}>
+            <Route path="dashboard" element={<BDDashboard />} />
             <Route path="client-list" element={<ClientList />} />
             <Route path="client-drone-list/:id" element={<ClientDetails />} />
+            <Route path="drone-details" element={<BDDroneDetails />} />
+            <Route path="drone-details/:id" element={<BDDroneProfile />} />
+            <Route path="knowledge-base" element={<BDKnowledgeBase />} />
+            <Route path="knowledge/bhumi" element={<BDViewKnowledge />} />
 
-    </Route>
-  </>
-) : (
-  <Route path="*" element={<Navigate to="/" />} />
-)}
-
-
+          </Route>
+        </>
+      ) : (
+        <Route path="*" element={<Navigate to="/" />} />
+      )}
     </Routes>
   );
 }

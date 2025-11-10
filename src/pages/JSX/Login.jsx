@@ -12,7 +12,7 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     localStorage.setItem("access", "sample-token");
-    navigate("/dashboard");
+    navigate("/client/dashboard");
   };
 
   return (

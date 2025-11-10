@@ -3,86 +3,105 @@ import { FaPlus, FaPaperclip, FaTimes } from "react-icons/fa";
 import "../../CSS/Client/DroneRegistrationForm.css";
 
 export default function DroneRegistrationForm({ drone, onClose, onSubmit, viewOnly }) {
-  // Form state
   const [formData, setFormData] = useState({
-    modelName: "",
-    type: "",
+    model_name: "",
+    drone_type: "",
     manufacturer: "",
-    uin: "",
-    droneSerial: "",
-    flightController: "",
-    remoteController: "",
-    batteryCharger: "",
-    battery1: "",
-    battery2: "",
-    attachment: "",
-    remarks: "",
+    uin_number: "",
+    drone_serial_number: "",
+    flight_controller_serial_number: "",
+    remote_controller: "",
+    battery_charger_serial_number: "",
+    battery_serial_number_1: "",
+    battery_serial_number_2: "",
+    attachment: null,
   });
 
-  // Prefill if drone exists
+  const [loading, setLoading] = useState(false);
+
+  // Prefill if drone is provided
   useEffect(() => {
     if (drone) {
       setFormData({
-        modelName: drone.modelName || "",
-        type: drone.type || "",
+        model_name: drone.model_name || "",
+        drone_type: drone.drone_type || "",
         manufacturer: drone.manufacturer || "",
-        uin: drone.uin || "",
-        droneSerial: drone.droneSerial || "",
-        flightController: drone.flightController || "",
-        remoteController: drone.remoteController || "",
-        batteryCharger: drone.batteryCharger || "",
-        battery1: drone.battery1 || "",
-        battery2: drone.battery2 || "",
-        attachment: drone.attachment || "",
-        remarks: drone.status === "Rejected" ? drone.remarks || "" : "",
-      });
-    } else {
-      setFormData({
-        modelName: "",
-        type: "",
-        manufacturer: "",
-        uin: "",
-        droneSerial: "",
-        flightController: "",
-        remoteController: "",
-        batteryCharger: "",
-        battery1: "",
-        battery2: "",
-        attachment: "",
-        remarks: "",
+        uin_number: drone.uin_number || "",
+        drone_serial_number: drone.drone_serial_number || "",
+        flight_controller_serial_number: drone.flight_controller_serial_number || "",
+        remote_controller: drone.remote_controller || "",
+        battery_charger_serial_number: drone.battery_charger_serial_number || "",
+        battery_serial_number_1: drone.battery_serial_number_1 || "",
+        battery_serial_number_2: drone.battery_serial_number_2 || "",
+        attachment: drone.attachment || null,
       });
     }
   }, [drone]);
 
-  // Handle input change
+  // Handle input change (normal + file)
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, files } = e.target;
+    if (files) {
+      setFormData((prev) => ({ ...prev, [name]: files[0] }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
-  // Submit
-  const handleSubmit = (e) => {
+  // Submit form
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (onSubmit) onSubmit(formData);
+    setLoading(true);
+
+    try {
+      const data = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== null && value !== "") {
+          data.append(key, value);
+        }
+      });
+
+      const response = await fetch("http://127.0.0.1:8000/api/drone_registration/", {
+        method: "POST",
+        body: data,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to register drone");
+      }
+
+      const result = await response.json();
+      console.log("✅ Drone Registered:", result);
+      alert("Drone registered successfully!");
+
+      if (onSubmit) onSubmit(result);
+      onClose();
+    } catch (error) {
+      console.error("❌ Error:", error);
+      alert("Error registering drone. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="drone-registration-wrapper">
       <div className="drone-registration-card">
         <div className="form-header">
-          <h2 className="form-title">{drone ? "Drone Details" : "Drone Registration"}</h2>
+          <h2 className="form-title">
+            {drone ? "Drone Details" : "Drone Registration"}
+          </h2>
           <FaTimes className="close-icon" onClick={onClose} title="Close" />
         </div>
 
         <form className="drone-form" onSubmit={handleSubmit}>
           <div className="form-grid">
-            {/** Form fields */}
             <div className="form-group">
               <label>Model Name</label>
               <input
                 type="text"
-                name="modelName"
-                value={formData.modelName}
+                name="model_name"
+                value={formData.model_name}
                 onChange={handleChange}
                 readOnly={viewOnly}
                 placeholder="Enter model name"
@@ -93,8 +112,8 @@ export default function DroneRegistrationForm({ drone, onClose, onSubmit, viewOn
               <label>Drone Type</label>
               <input
                 type="text"
-                name="type"
-                value={formData.type}
+                name="drone_type"
+                value={formData.drone_type}
                 onChange={handleChange}
                 readOnly={viewOnly}
                 placeholder="Enter drone type"
@@ -117,8 +136,8 @@ export default function DroneRegistrationForm({ drone, onClose, onSubmit, viewOn
               <label>UIN Number</label>
               <input
                 type="text"
-                name="uin"
-                value={formData.uin}
+                name="uin_number"
+                value={formData.uin_number}
                 onChange={handleChange}
                 readOnly={viewOnly}
                 placeholder="Enter UIN number"
@@ -129,8 +148,8 @@ export default function DroneRegistrationForm({ drone, onClose, onSubmit, viewOn
               <label>Drone Serial Number</label>
               <input
                 type="text"
-                name="droneSerial"
-                value={formData.droneSerial}
+                name="drone_serial_number"
+                value={formData.drone_serial_number}
                 onChange={handleChange}
                 readOnly={viewOnly}
                 placeholder="Enter serial number"
@@ -141,11 +160,11 @@ export default function DroneRegistrationForm({ drone, onClose, onSubmit, viewOn
               <label>Flight Controller Serial Number</label>
               <input
                 type="text"
-                name="flightController"
-                value={formData.flightController}
+                name="flight_controller_serial_number"
+                value={formData.flight_controller_serial_number}
                 onChange={handleChange}
                 readOnly={viewOnly}
-                placeholder="Enter controller serial"
+                placeholder="Enter flight controller serial"
               />
             </div>
 
@@ -153,8 +172,8 @@ export default function DroneRegistrationForm({ drone, onClose, onSubmit, viewOn
               <label>Remote Controller</label>
               <input
                 type="text"
-                name="remoteController"
-                value={formData.remoteController}
+                name="remote_controller"
+                value={formData.remote_controller}
                 onChange={handleChange}
                 readOnly={viewOnly}
                 placeholder="Enter remote controller"
@@ -165,8 +184,8 @@ export default function DroneRegistrationForm({ drone, onClose, onSubmit, viewOn
               <label>Battery Charger Serial Number</label>
               <input
                 type="text"
-                name="batteryCharger"
-                value={formData.batteryCharger}
+                name="battery_charger_serial_number"
+                value={formData.battery_charger_serial_number}
                 onChange={handleChange}
                 readOnly={viewOnly}
                 placeholder="Enter charger serial"
@@ -177,11 +196,11 @@ export default function DroneRegistrationForm({ drone, onClose, onSubmit, viewOn
               <label>Battery Serial Number 1</label>
               <input
                 type="text"
-                name="battery1"
-                value={formData.battery1}
+                name="battery_serial_number_1"
+                value={formData.battery_serial_number_1}
                 onChange={handleChange}
                 readOnly={viewOnly}
-                placeholder="Enter battery serial"
+                placeholder="Enter battery serial 1"
               />
             </div>
 
@@ -189,11 +208,11 @@ export default function DroneRegistrationForm({ drone, onClose, onSubmit, viewOn
               <label>Battery Serial Number 2</label>
               <input
                 type="text"
-                name="battery2"
-                value={formData.battery2}
+                name="battery_serial_number_2"
+                value={formData.battery_serial_number_2}
                 onChange={handleChange}
                 readOnly={viewOnly}
-                placeholder="Enter battery serial"
+                placeholder="Enter battery serial 2"
               />
             </div>
 
@@ -201,52 +220,27 @@ export default function DroneRegistrationForm({ drone, onClose, onSubmit, viewOn
               <label>Attachment</label>
               <div className="attach-field">
                 <input
-                  type="text"
+                  type="file"
                   name="attachment"
-                  value={formData.attachment}
+                  accept=".pdf,.jpg,.jpeg,.png"
                   onChange={handleChange}
-                  readOnly={viewOnly}
-                  placeholder="Attach document"
+                  disabled={viewOnly}
                 />
                 <FaPaperclip className="attach-icon" />
               </div>
             </div>
-
-            {drone?.status === "Rejected" && (
-              <div className="form-group">
-                <label>Rejection Remarks</label>
-                <textarea
-                  name="remarks"
-                  value={formData.remarks}
-                  onChange={handleChange}
-                  readOnly={viewOnly}
-                  placeholder="Why was this drone rejected?"
-                />
-              </div>
-            )}
           </div>
 
           {!viewOnly && (
             <div className="form-actions">
-             
-              <div>
-                <button type="submit" className="submit-btn">
-                  Submit
-                </button>
-                <button type="button" className="cancel-btn" onClick={onClose}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* {viewOnly && (
-            <div className="form-actions">
+              <button type="submit" className="submit-btn" disabled={loading}>
+                {loading ? "Submitting..." : "Submit"}
+              </button>
               <button type="button" className="cancel-btn" onClick={onClose}>
-                Close
+                Cancel
               </button>
             </div>
-          )} */}
+          )}
         </form>
       </div>
     </div>

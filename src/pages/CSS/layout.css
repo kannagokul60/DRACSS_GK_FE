@@ -57,3 +57,20 @@
   flex: 1;
   padding: 1.5rem;
 }
+
+
+.layout-right-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.layout-role-dropdown {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+}
+

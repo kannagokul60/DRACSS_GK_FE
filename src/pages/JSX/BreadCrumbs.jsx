@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
-import "../CSS/breadcrumb.css";
+import "../CSS/breadCrumb.css";
 
 export default function BreadCrumbs() {
   const navigate = useNavigate();

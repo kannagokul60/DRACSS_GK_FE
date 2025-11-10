@@ -1,5 +1,5 @@
 import React from "react";
-import "../../CSS/Client/knowledgeBase.css";
+import "../../CSS/BDTeam/knowledgeBase.css";
 import { FaArrowRight } from "react-icons/fa";
 import BreadCrumbs from "../BreadCrumbs";
 import { useNavigate } from "react-router-dom";
@@ -13,20 +13,20 @@ export default function KnowledgeBase() {
       title: "BHUMI DRONE GUIDE",
       image:
         "https://dronelife.com/wp-content/uploads/2022/12/Garuda-Aerospace-Agri-drone.png",
-      path: "/client/knowledge/bhumi",
+      path: "/bd/knowledge/bhumi",
     },
     {
       id: 2,
       title: "VAJRA DRONE MANUAL",
       image:
         "https://vaimanikaaerospace.com/wp-content/uploads/2025/05/ImageForArticle_699_17197995980611328.webp",
-      path: "/client/knowledge/vajra",
+      path: "/bd/knowledge/vajra",
     },
     {
       id: 3,
       title: "AGNI DRONE TIPS",
       image: "https://tropogo.com/blogs/images/blog/bg_spraying.png",
-      path: "/client/knowledge/agni",
+      path: "/bd/knowledge/agni",
     },
   ];
 

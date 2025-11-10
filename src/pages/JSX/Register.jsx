@@ -11,6 +11,8 @@ export default function Register() {
     employeeId: "",
     phone: "",
     designation: "",
+    address: "",
+    clientType: null,
     password: "",
     confirmPassword: "",
   });
@@ -21,21 +23,52 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match!");
+      alert("⚠️ Passwords do not match!");
       return;
     }
 
     setLoading(true);
-    // Replace this with API call
-    console.log("Registered Data:", form);
-    setTimeout(() => {
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/accounts/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: form.fullName,
+          email: form.email,
+          employee_id: form.employeeId,
+          phone: form.phone,
+          designation: form.designation,
+          address: form.address,
+          client_type: form.clientType, // can be null or a value
+          password: form.password,
+          confirm_password: form.confirmPassword,
+          is_active: true, // optional — depends on backend defaults
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert("✅ Account created successfully!");
+        console.log("Response:", data);
+        navigate("/login");
+      } else {
+        const errorData = await response.json();
+        console.error("Error:", errorData);
+        alert("❌ Registration failed! Check console for details.");
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+      alert("⚠️ Unable to connect to server. Please check your backend.");
+    } finally {
       setLoading(false);
-      navigate("/login");
-    }, 1000);
+    }
   };
 
   return (
@@ -57,6 +90,7 @@ export default function Register() {
               value={form.fullName}
               onChange={handleChange}
               placeholder="Enter full name"
+              required
             />
           </div>
 
@@ -68,6 +102,7 @@ export default function Register() {
               value={form.email}
               onChange={handleChange}
               placeholder="Enter email"
+              required
             />
           </div>
 
@@ -105,6 +140,17 @@ export default function Register() {
           </div>
 
           <div className="register-field">
+            <label>Address</label>
+            <input
+              type="text"
+              name="address"
+              value={form.address}
+              onChange={handleChange}
+              placeholder="Enter address"
+            />
+          </div>
+
+          <div className="register-field">
             <label>Password</label>
             <input
               type="password"
@@ -112,6 +158,7 @@ export default function Register() {
               value={form.password}
               onChange={handleChange}
               placeholder="Enter password"
+              required
             />
           </div>
 
@@ -123,6 +170,7 @@ export default function Register() {
               value={form.confirmPassword}
               onChange={handleChange}
               placeholder="Confirm password"
+              required
             />
           </div>
         </div>
@@ -132,7 +180,8 @@ export default function Register() {
         </button>
 
         <p className="register-link">
-          Already have an account? <u onClick={() => navigate("/login")}>Login</u>
+          Already have an account?{" "}
+          <u onClick={() => navigate("/login")}>Login</u>
         </p>
       </form>
     </div>
