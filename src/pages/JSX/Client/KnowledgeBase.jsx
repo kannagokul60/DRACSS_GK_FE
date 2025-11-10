@@ -1,5 +1,5 @@
 import React from "react";
-import "../../CSS/knowledgeBase.css";
+import "../../CSS/Client/knowledgeBase.css";
 import { FaArrowRight } from "react-icons/fa";
 import BreadCrumbs from "../BreadCrumbs";
 import { useNavigate } from "react-router-dom";

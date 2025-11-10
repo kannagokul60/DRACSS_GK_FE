@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FaPlus, FaPaperclip, FaTimes } from "react-icons/fa";
-import "../../CSS/DroneRegistrationForm.css";
+import "../../CSS/Client/DroneRegistrationForm.css";
 
 export default function DroneRegistrationForm({ drone, onClose, onSubmit, viewOnly }) {
   // Form state

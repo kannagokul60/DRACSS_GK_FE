@@ -1,7 +1,7 @@
 import React from "react";
 import { FaShare } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import "../../CSS/dronedetails.css";
+import "../../CSS/Client/dronedetails.css";
 import drone1 from "../../../assets/drone_image.png";
 import drone2 from "../../../assets/drone_image.png";
 import BreadCrumbs from "../BreadCrumbs";

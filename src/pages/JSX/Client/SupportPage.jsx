@@ -1,7 +1,7 @@
 import React from "react";
 import { FaHeadset, FaTools, FaUndo, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import "../../CSS/supportPage.css";
+import "../../CSS/Client/supportPage.css";
 import BreadCrumbs from "../BreadCrumbs";
 import returnImg from "../../../assets/return_base.png";
 

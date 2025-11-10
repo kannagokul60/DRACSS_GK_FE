@@ -6,7 +6,7 @@ import {
   FaChevronLeft,
   FaArrowLeft,
 } from "react-icons/fa";
-import "../../CSS/viewdrone.css";
+import "../../CSS/Client/viewdrone.css";
 import BreadCrumbs from "../BreadCrumbs";
 
 const ViewDrone = () => {

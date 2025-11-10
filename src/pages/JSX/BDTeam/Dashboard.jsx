@@ -8,7 +8,7 @@ import knowledgeImg from "../../../assets/Knowledge_base.svg";
 import storeImg from "../../../assets/shopping-cart.png";
 import supportImg from "../../../assets/call.png";
 import profileImg from "../../../assets/profile.png";
-import "../../CSS/dashboard.css";
+import "../../CSS/Client/dashboard.css";
 
 export default function Dashboard() {
   const navigate = useNavigate();

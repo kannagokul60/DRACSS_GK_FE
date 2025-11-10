@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../CSS/profiledetails.css";
+import "../../CSS/Client/profiledetails.css";
 import { FaUser, FaUniversity, FaSave, FaPhone, FaHome, FaMapMarkerAlt } from "react-icons/fa";
 import BreadCrumbs from "../BreadCrumbs";
 

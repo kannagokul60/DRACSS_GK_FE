@@ -6,7 +6,7 @@ import {
   FaClock,
   FaTimesCircle,
 } from "react-icons/fa";
-import "../../CSS/droneRegistration.css";
+import "../../CSS/Client/droneRegistration.css";
 import DroneRegistrationForm from "./DroneRegistrationForm";
 import BreadCrumbs from "../BreadCrumbs";
 

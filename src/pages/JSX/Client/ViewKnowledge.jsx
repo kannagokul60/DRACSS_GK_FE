@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../CSS/viewknowledge.css";
+import "../../CSS/Client/viewknowledge.css";
 import {
   FaPlay,
   FaDownload,

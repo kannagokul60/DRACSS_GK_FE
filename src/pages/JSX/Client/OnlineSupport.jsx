@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaPaperPlane, FaPhoneAlt, FaVideo, FaCommentDots } from "react-icons/fa";
-import "../../CSS/onlineSupport.css";
+import "../../CSS/Client/onlineSupport.css";
 import BreadCrumbs from "../BreadCrumbs";
 
 

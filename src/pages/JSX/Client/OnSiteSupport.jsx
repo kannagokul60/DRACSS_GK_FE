@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaPlus, FaCalendarAlt, FaTools, FaUser } from "react-icons/fa";
-import "../../CSS/OnSiteSupport.css";
+import "../../CSS/Client/OnSiteSupport.css";
 import BreadCrumbs from "../BreadCrumbs";
 
 export default function OnSiteSupport() {
