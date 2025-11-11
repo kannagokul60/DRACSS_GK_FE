@@ -25,6 +25,13 @@ import BDDroneDetails from "./pages/JSX/BDTeam/BDDroneDetails";
 import BDDroneProfile from "./pages/JSX/BDTeam/BDDroneProfile";
 import BDKnowledgeBase from "./pages/JSX/BDTeam/KnowledgeBase";
 import BDViewKnowledge from "./pages/JSX/BDTeam/ViewKnowledge";
+import PendingTasks from "./pages/JSX/BDTeam/PendingTasks";
+import Profile from "./pages/JSX/BDTeam/Profile";
+
+//Technical Team Imports
+import TechnicalLayout from "./pages/JSX/Layout";
+import TechiDashboard from "./pages/JSX/Technical/Dashboard";
+import TechnicalTasks from "./pages/JSX/Technical/TechnicalTasks";
 
 export default function App() {
   const isLoggedIn = !!localStorage.getItem("access");
@@ -60,6 +67,15 @@ export default function App() {
             <Route path="drone-details/:id" element={<BDDroneProfile />} />
             <Route path="knowledge-base" element={<BDKnowledgeBase />} />
             <Route path="knowledge/bhumi" element={<BDViewKnowledge />} />
+            <Route path="pending-tasks" element={<PendingTasks />} />
+            <Route path="profile-details" element={<Profile />} />
+
+          </Route>
+
+          {/* TECHNICAL TEAM ROUTES */}
+          <Route path="/technical" element={<TechnicalLayout />}>
+            <Route path="dashboard" element={<TechiDashboard />} />
+            <Route path="tasks" element={<TechnicalTasks role="technical" />} />
 
           </Route>
         </>

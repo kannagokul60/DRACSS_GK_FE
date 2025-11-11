@@ -21,6 +21,9 @@ export default function Layout() {
     } else if (newRole === "BD Team") {
       navigate("/bd/dashboard");
     }
+    else if (newRole === "Technical") {
+      navigate("/technical/dashboard");
+    }
   };
 
   const logout = () => {
@@ -44,6 +47,7 @@ export default function Layout() {
           >
             <option value="Client">Client</option>
             <option value="BD Team">BD Team</option>
+            <option value="Technical">Technical</option>
           </select>
 
           {/* Logout Button */}

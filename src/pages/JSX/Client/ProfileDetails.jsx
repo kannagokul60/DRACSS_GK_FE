@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import "../../CSS/Client/profiledetails.css";
-import { FaUser, FaUniversity, FaSave, FaPhone, FaHome, FaMapMarkerAlt } from "react-icons/fa";
+import {
+  FaUser,
+  FaUniversity,
+  FaSave,
+  FaPhone,
+  FaHome,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 import BreadCrumbs from "../BreadCrumbs";
-
 
 export default function ProfileDetails() {
   const [activeTab, setActiveTab] = useState("personal");
@@ -23,14 +29,19 @@ export default function ProfileDetails() {
 
   const handleSave = () => {
     alert("Profile details saved successfully ✅");
+    setIsEditing(false);
+  };
+  const handleCancel = () => {
+    setProfile({ ...originalProfile });
+    setIsEditing(false);
+    alert("Changes canceled ❌");
   };
 
   return (
-    
     <div className="profile-page">
-        <div className="profile-breadcrumb-wrapper">
-              <BreadCrumbs />
-            </div>
+      <div className="profile-breadcrumb-wrapper">
+        <BreadCrumbs />
+      </div>
       <div className="profile-card">
         <h2 className="profile-header">
           <FaUser /> My Profile
@@ -161,12 +172,11 @@ export default function ProfileDetails() {
               </label>
               <label>
                 Address(building,street)
-                 <textarea
+                <textarea
                   name="address"
                   value={profile.address}
                   onChange={handleChange}
                 ></textarea>
-               
               </label>
               <label>
                 Locality/Town
@@ -199,9 +209,14 @@ export default function ProfileDetails() {
           )}
         </div>
 
-        <button className="save-btn" onClick={handleSave}>
-          <FaSave /> Save Changes
-        </button>
+        <div className="profile-btn-group">
+          <button className="save-btn" onClick={handleSave}>
+            Save Changes
+          </button>
+          {/* <button className="cancel-btn" onClick={handleCancel}>
+            Cancel
+          </button> */}
+        </div>
       </div>
     </div>
   );

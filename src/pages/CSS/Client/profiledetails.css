@@ -112,27 +112,49 @@ textarea {
   min-height: 70px;
 }
 
+.profile-btn-group {
+  display: flex;
+  justify-content: flex-end; /* move buttons to right end */
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Save Button Style */
 .save-btn {
-  background: #0d5bb4;
+  background: linear-gradient(135deg, #1565c0, #42a5f5);
   color: white;
   border: none;
-  padding: 12px 20px;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: 0.3s;
-  width: 100%;
 }
 
 .save-btn:hover {
-  background: #6491c4;
+  transform: scale(1.03);
+  background: linear-gradient(135deg, #0d47a1, #64b5f6);
 }
+
+/* Cancel Button Style */
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+  border: none;
+}
+
+.cancel-btn:hover {
+  background-color: #bdbdbd;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .profile-btn-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+  }
+}
+
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {

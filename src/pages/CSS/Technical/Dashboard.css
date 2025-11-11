@@ -1,0 +1,304 @@
+/* ===== DASHBOARD WRAPPER ===== */
+.dash-wrap {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb 60%, #9fd1fa);
+  color: #1a2a4b;
+  height: 100%; /* fills parent container */
+  overflow-y: auto; /* scroll only when needed */
+  box-sizing: border-box; /* avoids layout overflow */
+  padding: 10rem 5rem;
+  border-radius: 10px;
+  position: relative;
+}
+
+/* .dash-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+  padding: 20px;
+} */
+
+/* ===== HEADER ===== */
+.dash-header {
+  width: 98%;
+  margin: 1rem auto; /* slight gap from window edges */
+  background: #ffffffcc;
+  backdrop-filter: blur(8px);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #d6e6ff;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 1rem;
+  z-index: 10;
+}
+
+/* ===== BRAND ===== */
+.brand {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1256b4;
+  letter-spacing: 0.5px;
+}
+
+/* ===== LOGOUT BUTTON ===== */
+.btn-logout {
+  background: linear-gradient(135deg, #1e88e5, #64b5f6);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+  background: linear-gradient(135deg, #1565c0, #64b5f6);
+  transform: scale(1.05);
+}
+
+/* ===== MAIN ===== */
+.dash-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* center vertically */
+  padding: 1rem 2rem;
+  overflow: hidden;
+}
+
+/* ===== TILE GRID ===== */
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem 2rem; /* reduced spacing */
+  justify-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* ===== TILE CARD ===== */
+.tile {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(33, 150, 243, 0.08);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 350px;
+  height: 160px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.tile:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 24px rgba(33, 150, 243, 0.15);
+  background: #f9fcff;
+}
+
+/* ===== ICON IMAGE ===== */
+.tile-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90px;
+}
+
+.tile-image img {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  opacity: 0.9;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.tile:hover .tile-image img {
+  transform: scale(1.15);
+  opacity: 1;
+}
+
+/* ===== TITLE ===== */
+.tile-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #0d3058;
+  margin-top: 1rem;
+  letter-spacing: 0.4px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s ease;
+}
+
+.tile:hover .tile-title {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== LIGHT SWEEP EFFECT ===== */
+.tile::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(66, 165, 245, 0.12),
+    transparent
+  );
+  transition: all 0.6s ease;
+}
+
+.tile:hover::before {
+  left: 100%;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .tile-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .tile-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+  .tile {
+    max-width: 90%;
+    height: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand {
+    font-size: 1.4rem;
+  }
+  .btn-logout {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* ===== STATUS TOGGLE CONTAINER ===== */
+.status-toggle-top {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #1565c0, #1e88e5);
+  padding: 10px 18px;
+  border-radius: 30px;
+  box-shadow: 0 4px 15px rgba(21, 101, 192, 0.3);
+  transition: all 0.3s ease;
+}
+
+.status-toggle-top:hover {
+  box-shadow: 0 6px 20px rgba(21, 101, 192, 0.4);
+}
+
+/* ===== STATUS TEXT ===== */
+.status-text {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.status-text.online {
+  color: #c8f7c5; /* light green glow text */
+  text-shadow: 0 0 8px rgba(76, 175, 80, 0.8);
+}
+
+.status-text.offline {
+  color: #ffcdd2; /* light red glow text */
+  text-shadow: 0 0 8px rgba(244, 67, 54, 0.8);
+}
+
+/* ===== SWITCH TOGGLE ===== */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 55px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* ===== SLIDER BACKGROUND ===== */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: linear-gradient(135deg, #ff5252, #e53935);
+  border-radius: 34px;
+  transition: all 0.4s ease;
+  box-shadow: inset 0 0 10px rgba(244, 67, 54, 0.5);
+}
+
+/* ===== SLIDER KNOB ===== */
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: all 0.4s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== ONLINE (GREEN) STATE ===== */
+input:checked + .slider {
+  background: linear-gradient(135deg, #00c853, #43a047);
+  box-shadow: inset 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+input:checked + .slider::before {
+  transform: translateX(27px);
+}
+
+/* ===== GLOW EFFECT ON ACTIVE STATE ===== */
+input:checked + .slider::after {
+  /* content: "✓"; */
+  position: absolute;
+  right: 7px;
+  top: 3px;
+  font-size: 16px;
+  color: white;
+  opacity: 0.9;
+}
+
+input:not(:checked) + .slider::after {
+  /* content: "✕"; */
+  position: absolute;
+  right: 7px;
+  top: 3px;
+  font-size: 16px;
+  color: white;
+  opacity: 0.9;
+}

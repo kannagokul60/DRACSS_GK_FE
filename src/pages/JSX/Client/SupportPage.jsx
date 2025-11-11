@@ -14,21 +14,21 @@ export default function SupportPage() {
       description:
         "Connect instantly with our expert team for troubleshooting, guidance, or drone software issues.",
       icon: <FaHeadset />,
-      color: "#4e89ff",
+      color: "#1a89d3ff",
     },
     {
       title: "On-Site Support",
       description:
         "Book a certified technician for on-site maintenance or hardware issues at your preferred location.",
       icon: <FaTools />,
-      color: "#28c76f",
+      color: "#1a89d3ff",
     },
     {
       title: "Return to Service",
       description:
         "Send your drone for professional servicing or part replacement and get it back in top shape.",
       image: returnImg,
-      color: "#ff9f43",
+      color: "#1a89d3ff",
     },
   ];
 
