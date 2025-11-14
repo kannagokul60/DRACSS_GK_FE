@@ -4,12 +4,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(135deg, #e8f1ff, #f1f0f0);
-  height: 100%;
+  background: #f7f7f7 !important;
+  height: 100% !important;
   font-family: 'Times New Roman', Times, serif;
   border-radius: 10px;
   padding: 20px;
-
+ transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) ;
 }
 
 /* Breadcrumb alignment */

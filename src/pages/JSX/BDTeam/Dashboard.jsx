@@ -9,6 +9,7 @@ import storeImg from "../../../assets/shopping-cart.png";
 import supportImg from "../../../assets/call.png";
 import profileImg from "../../../assets/profile.png";
 import pendingImg from "../../../assets/pending.png";
+import DroneApprove from  "../../../assets/apporrej.png";
 import "../../CSS/Client/dashboard.css";
 
 export default function Dashboard() {
@@ -22,6 +23,7 @@ export default function Dashboard() {
   const tiles = [
   { title: "Clients", image: clientImg, path: "/bd/client-list" },
     { title: "Drone Details", image: droneImg, path: "/bd/drone-details" },
+    { title: "Drone Approve", image: DroneApprove, path: "/bd/drone-approve" },
   { title: "Knowledge Base", image: knowledgeImg, path: "/bd/knowledge-base" },
     { title: "Aero360 Store", image: storeImg },
 { title: "Support Request", image: supportImg, path: "/client/support" },

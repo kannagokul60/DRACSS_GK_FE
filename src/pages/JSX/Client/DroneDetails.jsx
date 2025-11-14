@@ -5,6 +5,7 @@ import "../../CSS/Client/dronedetails.css";
 import drone1 from "../../../assets/drone_image.png";
 import drone2 from "../../../assets/drone_image.png";
 import BreadCrumbs from "../BreadCrumbs";
+import bhumi from "../../../assets/bhumi.png"
 
 export default function DroneDetails() {
   const navigate = useNavigate();
@@ -14,10 +15,10 @@ export default function DroneDetails() {
       name: "Bhumi V.1.0.1",
       purchaseDate: "2024-06-10",
       count: 3,
-      image: drone1,
+      image: bhumi,
     },
-    { name: "Vajra", purchaseDate: "2023-12-22", count: 2, image: drone2 },
-    { name: "Agni", purchaseDate: "2025-02-18", count: 1, image: drone2 },
+    { name: "Vajra", purchaseDate: "2023-12-22", count: 2, image:bhumi },
+    { name: "Agni", purchaseDate: "2025-02-18", count: 1, image: bhumi},
   ];
 
   const handleDroneClick = (droneName) => {

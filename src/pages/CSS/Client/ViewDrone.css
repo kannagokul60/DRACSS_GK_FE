@@ -1,318 +1,200 @@
-/* ===== PAGE WRAPPER ===== */
+/* ===== PAGE WRAPPER (NO CARD VIEW) ===== */
 .drone-details-page {
-  background: none;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 0.2rem 1rem;
-  margin: 0;
-  font-family: 'Times New Roman', Times, serif;
-  color: #1a1a1a;
-  position: relative;
-  height: auto;
-  overflow: visible; /* page scrolls, not card */
-  transition: none;
+  flex: 1;
+  background: #f7f7f7; 
+  font-family: "Times New Roman", Times, serif;
+  color: #0d2a4b;
+  padding: 2rem 3rem 2rem 3rem; /* top padding increased for breadcrumb space */
+  border-radius: 10px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative; /* ensures breadcrumb absolute position works */
+   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Breadcrumb inside card */
+/* Breadcrumb */
 .drone-details-page .drone-breadcrumb-wrapper {
   position: absolute;
-  top: 1rem; /* space from top */
-  left: 1rem; /* space from left */
-  font-size: 0.95rem;
-  z-index: 10; /* stay above other elements */
-
+  top: 0.6rem;
+  left: 0.1rem;
+  z-index: 10;
 }
 
-/* Drone Card Header */
-.drone-card-header {
-  display: flex;
-  justify-content: center; /* center the title */
-  align-items: center;
-  position: relative;
-  margin-bottom: 2rem;
-}
-
-.drone-title {
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #0d2a4b;
-  text-align: center;
-  margin: 0 auto; /* center */
-}
-
-/* Edit icon stays on right */
-.edit-icon {
-  position: absolute;
-  right: 0;
-  font-size: 1rem;
-  color: #1565c0;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-.edit-icon:hover {
-  color: #77a9f3;
-}
-
-.drone-card-view {
-  position: relative;
-  background: #f8f8f8;
-  border-radius: 10px;
-  width: calc(100% - 1rem);
-  margin: 0 1rem;
-  padding: 2.5rem 3rem;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease; /* Only shadow transitions */
-}
-
-.drone-card-view:hover {
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow on hover */
-  transform: none; /* No scale/move */
-}
-
-/* ==== Embedded Background Drone Image ==== */
+/* Background drone image */
 .drone-bg-image {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 60%;
-  max-width: 800px;
+  width: 65%;
   height: auto;
-  object-fit: contain;
+  opacity: 0.18;
   transform: translate(-50%, -50%);
-  opacity: 0.15;
-  filter: blur(1.2px);
-  z-index: 0;
+  filter: blur(1px);
   pointer-events: none;
-  overflow: hidden;
+  z-index: 0;
 }
 
-/* ===== MAIN CONTENT ===== */
-.drone-main-content {
-  position: relative;
-  z-index: 1;
+/* ==== HEADER ==== */
+.drone-card-header {
+  text-align: center;
   margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
-/* ===== DRONE INFO (line by line) ===== */
+.drone-title {
+  font-size: 2rem;
+  font-weight: 600;
+color: #0d47a1;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+
+.edit-icon {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  font-size: 1.2rem;
+  color: #1565c0;
+  cursor: pointer;
+}
+
+/* ==== MAIN INFO ==== */
+.drone-main-content {
+  z-index: 2;
+  position: relative;
+  margin-top: 1rem;
+}
+
 .drone-info-grid {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  font-size: 0.95rem;
-  margin-top: 1rem;
+  gap: 1.6rem;
+  font-size: 1rem;
 }
 
 .drone-info-grid div {
   display: flex;
   justify-content: space-between;
-  padding-bottom: 4px;
   gap: 10px;
 }
 
 .drone-info-grid strong {
   color: #0d2a4b;
-  font-weight: 600;
 }
 
-/* ===== NEXT ICON ===== */
-.next-icon {
+/* NAVIGATION ICONS */
+.nav-icons {
+  position: relative;
+  width: 100%;
+  margin: 2rem 0;
+  display: flex;
+  justify-content: space-between;
+  z-index: 3;
+}
+
+/* Wrapper that fills full width */
+.nav-arrows-wrapper {
+  position: relative;
+  width: 100%;
+  height: 0; 
+  z-index: 5;
+}
+
+/* Common arrow style */
+.nav-arrow {
   position: absolute;
-  right: -25px;
-  top: 45%;
+  top: 50%;
   transform: translateY(-50%);
-  font-size: 1.4rem;
-  color: #555;
+  font-size: 1.8rem;
   background: #fff;
   border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  padding: 5px;
+  padding: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
-}
-.next-icon:hover {
-  color: #1976d2;
+  color: #0b5394;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  transition: 0.2s ease;
 }
 
-/* ===== FLIGHT LOG SECTION ===== */
+/* Left arrow position */
+.nav-arrow.left {
+  left: -25px;   /* adjust as needed */
+}
+
+/* Right arrow position */
+.nav-arrow.right {
+  right: -25px;  /* adjust as needed */
+}
+
+.nav-arrow:hover {
+  transform: translateY(-50%) scale(1.15);
+  background: #eff6ff;
+}
+
+/* ==== FLIGHT LOG TABLE ==== */
 .flight-log-section {
+  margin-top: 2rem;
+  z-index: 2;
   position: relative;
-  z-index: 1;
 }
 
 .flight-log-section h3 {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: 1rem;
   color: #0d2a4b;
 }
 
-/* ===== TABLE ===== */
 .flight-log-table {
   width: 100%;
+  background: white;
   border-collapse: collapse;
-  background: #fff;
-  font-size: 0.95rem;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
 .flight-log-table th,
 .flight-log-table td {
-  padding: 10px 14px;
+  padding: 12px 16px;
   border: 1px solid #e0e0e0;
-  text-align: left;
 }
 
 .flight-log-table th {
-  background-color: #f1f5ff;
+  background: #e9f3ff;
   color: #0d2a4b;
-  font-weight: 600;
 }
 
 .flight-log-table tr:nth-child(even) {
-  background-color: #fafbff;
+  background: #f7fbff;
 }
 
 .flight-log-table tr:hover {
-  background-color: #f3f6ff;
+  background: #edf5ff;
 }
 
-/* ===== NAVIGATION ICONS ===== */
-.nav-icons {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transform: translateY(-50%);
-  pointer-events: none;
-  padding: 0 5px;
-}
-
-.nav-icons.both {
-  justify-content: space-between;
-}
-.nav-icons.only-right {
-  justify-content: flex-end;
-}
-.nav-icons.only-left {
-  justify-content: flex-start;
-}
-
-.nav-icon {
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: #1976d2;
-  background: #fff;
-  border-radius: 50%;
-  padding: 10px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-  pointer-events: auto;
-  margin: 0 -30px;
-}
-
-.nav-icon:hover {
-  transform: scale(1.15);
-  color: #0b5394;
-  background: #eef6ff;
-}
-
-/* ===== BACK BUTTON ===== */
-.header-left {
-  display: flex;
-  align-items: center;
-}
-
-.back-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: none;
-  color: black;
-  border: none;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.back-button svg {
-  font-size: 1.1rem;
-}
-
-.back-button:hover {
-  transform: translateY(-4px);
-  color: #555;
-}
-
-.back-button:active {
-  transform: translateY(0);
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 1024px) {
-  .drone-card {
-    padding: 2rem;
-  }
-
-  .drone-bg-image {
-    width: 70%;
-  }
-}
-
+/* RESPONSIVE */
 @media (max-width: 768px) {
-  .drone-card {
-    padding: 1.5rem;
+  .drone-info-grid div {
+    flex-direction: column;
+    text-align: left;
   }
 
   .drone-title {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
 
-  .drone-info-grid div {
-    flex-direction: column;
-    gap: 4px;
+  .nav-icon {
+    font-size: 1.4rem;
   }
 
   .drone-bg-image {
     width: 90%;
     opacity: 0.1;
-  }
-
-  .next-icon {
-    display: none;
-  }
-
-  .nav-icon {
-    margin: 0 -15px;
-  }
-
-  .drone-breadcrumb-wrapper {
-    top: 2rem;
-    left: 1rem;
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .drone-card {
-    padding: 1rem;
-  }
-
-  .drone-title {
-    font-size: 1.1rem;
-  }
-
-  .drone-info-grid {
-    font-size: 0.9rem;
-  }
-
-  .drone-bg-image {
-    width: 100%;
-    opacity: 0.08;
   }
 }

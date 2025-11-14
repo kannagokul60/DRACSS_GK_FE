@@ -3,10 +3,10 @@
   padding: 2rem;
   font-family: 'Times New Roman', Times, serif;
   height: 100%;
-  background: linear-gradient(135deg, #e8f1ff, #f1f0f0);
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* soft shadow */
-  position: relative; /* so breadcrumbs can be positioned absolutely */
+    background: #f7f7f7 !important;
+     border-radius: 10px;
+transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  position: relative; /* so breadcrumbs can be positioned absolutely */
 }
 
 /* ===== BREADCRUMB WRAPPER ===== */
@@ -23,7 +23,8 @@
 .kb-title {
   font-size: 2rem;
   font-weight: 600;
-  color: #0d2a4b;
+ color: #285b8f !important;
+    text-shadow: 0px 2px 4px rgba(59, 110, 151, 0.4) !important;
   margin-bottom: 2rem;
   text-align: center;
 }
@@ -77,7 +78,7 @@
   height: 0;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(8px);
-  color: #fff;
+  color: #105f94 !important;
   padding: 20px;
   border-radius: 0 0 20px 20px;
   display: flex;
@@ -96,9 +97,11 @@
 /* Overlay text */
 .kb-card-title {
   font-size: 1.3rem;
-  font-weight: 600;
-  margin-bottom: 10px;
+  font-weight: bolder !important;
+    margin-bottom: 10px;
   text-align: center;
+      text-shadow: 0px 2px 4px rgba(59, 110, 151, 0.4) !important;
+
 }
 
 .kb-more {
@@ -106,7 +109,9 @@
   align-items: center;
   gap: 8px;
   font-weight: 500;
-  color: #fff;
+  color: #105f94 !important;
+        text-shadow: 0px 2px 4px rgba(59, 110, 151, 0.4) !important;
+
 }
 
 .kb-more-icon {

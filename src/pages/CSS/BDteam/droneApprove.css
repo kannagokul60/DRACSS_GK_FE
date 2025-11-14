@@ -1,0 +1,257 @@
+/* ===== DRONE APPROVE PAGE ===== */
+.drone-approve-page {
+  background: #f7f7f7;
+  padding: 3rem;
+  border-radius: 14px;
+transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  font-family: "Poppins", sans-serif;
+  height: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.drone-approve-breadcrumb-wrapper {
+  position: absolute;
+  top: 1rem;
+  left: 10px;
+  z-index: 1;
+}
+
+/* ===== HEADER ===== */
+.drone-approve-header {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #0d47a1;
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+}
+
+/* ===== DRONE TABLE ===== */
+.drone-table {
+  width: 100%;
+  overflow-x: auto;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.drone-table table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+}
+
+.drone-table th,
+.drone-table td {
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.drone-table th {
+  background: #1565c0;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.drone-table td {
+  background-color: #fafafa;
+}
+
+.drone-table tr:hover td {
+  background-color: #e3f2fd;
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+.drone-table::-webkit-scrollbar {
+  height: 8px;
+}
+
+.drone-table::-webkit-scrollbar-thumb {
+  background: #90caf9;
+  border-radius: 4px;
+}
+
+.drone-table::-webkit-scrollbar-track {
+  background: #e3f2fd;
+}
+
+/* ===== BUTTONS ===== */
+.view-btn,
+.approve-btn,
+.reject-btn {
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+}
+
+.view-btn {
+  background-color: #42a5f5;
+  color: #fff;
+}
+
+.view-btn:hover {
+  background-color: #1e88e5;
+}
+
+.approve-btn {
+  background: #1565c0;
+  color: white;
+}
+
+.approve-btn:hover {
+  background: #0d47a1;
+}
+
+.reject-btn {
+  background-color: #ccc;
+  color: black;
+  margin-left: 8px;
+}
+
+.reject-btn:hover {
+  background-color: #b0bec5;
+}
+
+/* ===== POPUPS ===== */
+.remarks-popup,
+.assign-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+
+.popup-content h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #1565c0;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* ===== POPUP WRAPPER ===== */
+.assign-popup,
+.popup-content {
+  position: relative;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.assign-popup h3{
+    text-align: center;
+    color: #1565c0;
+    margin-bottom: 0.5rem !important;
+}
+
+/* ===== CLOSE BUTTON (TOP-RIGHT) ===== */
+.assign-popup .close-btn {
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.2s;
+}
+
+.assign-popup .close-btn:hover {
+  color: #d32f2f;
+}
+
+/* ===== POPUP HEADER ===== */
+.popup-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.popup-header h3 {
+  margin: 0;
+  color: #1565c0;
+  font-size: 1.4rem;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 992px) {
+  .drone-approve-page {
+    padding: 2rem;
+  }
+
+  .drone-approve-header {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .drone-approve-header {
+    font-size: 1.6rem;
+  }
+
+  .approve-btn,
+  .reject-btn,
+  .view-btn {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+  }
+
+  .assign-popup,
+  .popup-content {
+    width: 90%;
+  }
+
+  .drone-table table {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 480px) {
+  .drone-approve-page {
+    padding: 1.5rem;
+  }
+
+  .drone-approve-header {
+    font-size: 1.4rem;
+  }
+
+  .drone-table table {
+    min-width: 600px;
+  }
+
+  .drone-table th,
+  .drone-table td {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .approve-btn,
+  .reject-btn,
+  .view-btn {
+    padding: 5px 8px;
+    font-size: 0.8rem;
+  }
+}

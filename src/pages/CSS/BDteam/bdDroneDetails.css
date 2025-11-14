@@ -1,37 +1,47 @@
+/* ===== CONTAINER ===== */
 .bd-drone-container {
   padding: 40px;
   font-family: 'Times New Roman', Times, serif;
   height: 100%;
-  background: linear-gradient(135deg, #e8f1ff, #f1f0f0);
+  background: #f7f7f7;
   border-radius: 10px;
+  position: relative;
+   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* ===== BREADCRUMB ===== */
 .bd-drone-breadcrumb-wrapper {
   position: absolute;
-  top: 8rem;
-  left: 20px;
+  top: 1rem;
+  left: 10px;
   z-index: 1;
 }
 
+/* ===== HEADING ===== */
 .bd-drone-heading {
   text-align: center;
   font-size: 2rem;
-  color: #1a237e;
+  color: #20527a; /* clean deep blue */
   margin-bottom: 30px;
+  font-weight: 500 !important;
+  text-shadow: 0 2px 6px rgba(48, 121, 180, 0.4);
 }
 
+/* ===== GRID ===== */
 .bd-drone-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-  gap: 6rem;
+  gap: 3.5rem;
 }
 
+/* ===== CARD ===== */
 .bd-drone-card {
   position: relative;
   border-radius: 18px;
   overflow: hidden;
-  
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  background: #f1f1f1; /* Helps white images stay white */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.18);
   transition: transform 0.3s ease;
 }
 
@@ -39,18 +49,25 @@
   transform: translateY(-8px);
 }
 
+/* ===== IMAGE (White stays white — FIXED) ===== */
 .bd-drone-image {
   width: 100%;
   height: 330px;
   object-fit: cover;
   border-radius: 18px;
+
+  background: transparent !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+  isolation: isolate;
 }
 
+/* ===== INFO OVERLAY ===== */
 .bd-drone-info {
   position: absolute;
   bottom: 0;
   width: 100%;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(10px);
   color: #fff;
   padding: 20px 15px;
@@ -63,15 +80,15 @@
   transform: translateY(0);
 }
 
-/* Drone Name */
+/* ===== NAME ===== */
 .bd-drone-name {
   font-size: 1.4rem;
   font-weight: 600;
   margin-bottom: 12px;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
-/* Button */
+/* ===== BUTTON ===== */
 .bd-drone-btn {
   background: linear-gradient(135deg, #1565c0, #42a5f5);
   border: none;
@@ -89,10 +106,10 @@
   box-shadow: 0 4px 10px rgba(21, 101, 192, 0.3);
 }
 
-/* RESPONSIVE */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .bd-drone-heading {
-    font-size: 2rem;
+    font-size: 1.7rem;
   }
 
   .bd-drone-grid {
@@ -107,5 +124,3 @@
     text-align: center;
   }
 }
-
-

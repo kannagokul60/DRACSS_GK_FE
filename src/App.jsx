@@ -27,6 +27,7 @@ import BDKnowledgeBase from "./pages/JSX/BDTeam/KnowledgeBase";
 import BDViewKnowledge from "./pages/JSX/BDTeam/ViewKnowledge";
 import PendingTasks from "./pages/JSX/BDTeam/PendingTasks";
 import Profile from "./pages/JSX/BDTeam/Profile";
+import DroneApprove from "./pages/JSX/BDTeam/DroneApprove";
 
 //Technical Team Imports
 import TechnicalLayout from "./pages/JSX/Layout";
@@ -69,6 +70,8 @@ export default function App() {
             <Route path="knowledge/bhumi" element={<BDViewKnowledge />} />
             <Route path="pending-tasks" element={<PendingTasks />} />
             <Route path="profile-details" element={<Profile />} />
+            <Route path="/bd/drone-approve" element={<DroneApprove />} />
+
 
           </Route>
 

@@ -38,7 +38,7 @@ const ViewDrone = () => {
       <div className="drone-breadcrumb-wrapper">
         <BreadCrumbs title="View Drone" />
       </div>
-      <div className="drone-card-view">
+      
         {/* ==== Background Drone Image ==== */}
         <img
           src="https://droneentry.com/wp-content/uploads/2024/03/Agriculture-Spraying-Drone.png"
@@ -98,32 +98,25 @@ const ViewDrone = () => {
               </div>
             </div>
           </div>
+{/* ==== Navigation Arrows Left & Right ==== */}
+<div className="nav-arrows-wrapper">
+  {currentIndex > 0 && (
+    <FaChevronLeft
+      className="nav-arrow left"
+      title={`Previous Drone: ${prevDrone}`}
+      onClick={handlePrevClick}
+    />
+  )}
 
-          {/* ==== Navigation Arrows ==== */}
-          <div
-            className={`nav-icons ${
-              currentIndex === 0
-                ? "only-right"
-                : currentIndex === drones.length - 1
-                ? "only-left"
-                : "both"
-            }`}
-          >
-            {currentIndex > 0 && (
-              <FaChevronLeft
-                className="nav-icon left"
-                title={`Previous Drone: ${prevDrone}`}
-                onClick={handlePrevClick}
-              />
-            )}
-            {currentIndex < drones.length - 1 && (
-              <FaChevronRight
-                className="nav-icon right"
-                title={`Next Drone: ${nextDrone}`}
-                onClick={handleNextClick}
-              />
-            )}
-          </div>
+  {currentIndex < drones.length - 1 && (
+    <FaChevronRight
+      className="nav-arrow right"
+      title={`Next Drone: ${nextDrone}`}
+      onClick={handleNextClick}
+    />
+  )}
+</div>
+
         </div>
 
         {/* ==== Flight Log Section ==== */}
@@ -184,7 +177,7 @@ const ViewDrone = () => {
             </tbody>
           </table>
         </div>
-      </div>
+      
     </div>
   );
 };

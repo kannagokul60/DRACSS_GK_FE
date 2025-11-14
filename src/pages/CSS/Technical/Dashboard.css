@@ -2,8 +2,8 @@
 .dash-wrap {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #e3f2fd, #bbdefb 60%, #9fd1fa);
-  color: #1a2a4b;
+  background: linear-gradient(135deg, #8bb0ca, #c9e4f6 60%, #a9d2f0); 
+   color: #1a2a4b;
   height: 100%; /* fills parent container */
   overflow-y: auto; /* scroll only when needed */
   box-sizing: border-box; /* avoids layout overflow */

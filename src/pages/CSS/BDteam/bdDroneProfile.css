@@ -118,11 +118,12 @@
   margin: 0;
 }
 
-.close-btn {
+.client-popup .close-btn {
   background: none;
   border: none;
   font-size: 22px;
   cursor: pointer;
+  color: #1565c0 !important;
 }
 
 .close-btn:hover {

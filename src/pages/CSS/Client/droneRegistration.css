@@ -1,7 +1,7 @@
 /* ===== PAGE CONTAINER ===== */
 .drone-reg-page {
   flex: 1;
-  background: linear-gradient(135deg, #e3f2fd, #bbdefb 60%, #9fd1fa);
+  background: #f7f7f7; 
   font-family: "Times New Roman", Times, serif;
   color: #0d2a4b;
   padding: 1rem 2rem 2rem 2rem; /* top padding increased for breadcrumb space */
@@ -10,6 +10,8 @@
   width: 100%;
   box-sizing: border-box;
   position: relative; /* ensures breadcrumb absolute position works */
+   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* ===== BREADCRUMB WRAPPER ===== */
@@ -37,7 +39,8 @@
   margin: 0;
   font-size: 2rem;
   font-weight: 600;
-  color: #1a237e;
+  color: #285b8f;
+  text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4);
 }
 
 /* Align the button to the right */
@@ -51,10 +54,11 @@
   font-weight: 500;
   transition: all 0.3s ease;
   cursor: pointer;
+  margin-right: -2rem;
 }
 
 .register-btn:hover {
-  background: #5f5f5f;
+  background: #4e80a8;
   transform: scale(1.05);
   opacity: 0.9;
 }
