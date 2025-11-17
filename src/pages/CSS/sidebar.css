@@ -2,7 +2,7 @@
 .sidebar {
   width: 240px;
   background: #f7f7f7;
-  color: #1d6391;;
+  color: #0d5bb4;
   flex-shrink: 0;
   height: calc(100vh - 90px);
   position: fixed;
@@ -44,7 +44,7 @@
 .toggle-btn {
   background: transparent;
   border: none;
-  color: #1d6391;
+   color: #1e4e79;
   font-size: 22px;
   cursor: pointer;
   position: absolute;
@@ -59,7 +59,7 @@
 
 .sidebar-title {
   font-size: 20px;
-  color: #1d6391;
+  color: #1e4e79;
   font-weight: 600;
   text-shadow: 0 0 6px rgba(180, 210, 228, 0.6);
   margin: 0;
@@ -76,8 +76,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #1d6391;
-  text-decoration: none;
+  color: #1e4e79;
+    text-decoration: none;
   padding: 12px 20px;
   border-left: 3px solid transparent;
   border-radius: 6px;
@@ -92,16 +92,16 @@
 }
 
 .sidebar-link:hover {
-  background: linear-gradient(90deg, #2f587d, #4c9ac8);
+background: linear-gradient(90deg, #0d5bb4, #29568a);
   color: #fff;
-  border-left: 3px solid #5fa8d3;
+  border-left: 3px solid #2c9ee0;
    margin: 4px 8px;
 }
 
 .sidebar-link.active {
-  background: linear-gradient(90deg, #2f587d, #4c9ac8);
+background: linear-gradient(90deg, #0d5bb4,  #29568a);
   color: #fff;
-  border-left: 3px solid #3c6b97;
+  border-left: 3px solid #3a7cc9;
   box-shadow: inset 2px 0 8px rgba(60, 107, 151, 0.4);
   border-radius: 8px;
   margin: 4px 8px;
@@ -113,17 +113,32 @@
   padding: 12px 0; /* reduce side padding */
 }
 
-.sidebar.collapsed .sidebar-link.active {
+.sidebar.collapsed .sidebar-link:hover {
   margin: 10px;
   border-left: none;
-  background: linear-gradient(135deg, #345b82, #4e90c3);
-  box-shadow: 0 0 10px rgba(63, 131, 184, 0.6);
+background: linear-gradient(90deg, #0d5bb4,  #29568a);
+  box-shadow: 0 0 10px #247ee6;
   border-radius: 50%; /* round effect around icon */
   width: 45px;
   height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+}
+
+.sidebar.collapsed .sidebar-link.active {
+  margin: 10px;
+  border-left: none;
+background: linear-gradient(90deg, #0d5bb4,  #29568a);
+  box-shadow: 0 0 10px #247ee6;
+  border-radius: 50%; /* round effect around icon */
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 /* ===== RESPONSIVE (MOBILE & TABLET) ====== */

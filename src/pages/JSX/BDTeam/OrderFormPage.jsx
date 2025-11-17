@@ -59,16 +59,14 @@ const updateAccessory = (index, field, value) => {
 
 <div className="orderform-header-wrapper">
   <h2 className="orderform-header">Order Forms</h2>
-
   <button className="plus-btn orderform-plus-btn" onClick={openChecklist}>
     +
   </button>
 </div>
 
 
-      {/* ORDER FORM TABLE */}
    {/* ORDER FORM TABLE */}
-<div className="order-table-wrapper">
+<div className="order-table-wrapper">  
   <table>
     <thead>
       <tr>
@@ -101,7 +99,6 @@ const updateAccessory = (index, field, value) => {
     </tbody>
   </table>
 </div>
-
 
 
       {/* CHECKLIST POPUP (INSIDE SAME FILE) */}
