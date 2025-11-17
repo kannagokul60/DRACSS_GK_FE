@@ -33,6 +33,7 @@ import DroneApprove from "./pages/JSX/BDTeam/DroneApprove";
 import TechnicalLayout from "./pages/JSX/Layout";
 import TechiDashboard from "./pages/JSX/Technical/Dashboard";
 import TechnicalTasks from "./pages/JSX/Technical/TechnicalTasks";
+import OrderFormPage from "./pages/JSX/BDTeam/OrderFormPage";
 
 export default function App() {
   const isLoggedIn = !!localStorage.getItem("access");
@@ -60,20 +61,22 @@ export default function App() {
           </Route>
 
           {/* BD TEAM ROUTES */}
-          <Route path="/bd" element={<BDLayout />}>
-            <Route path="dashboard" element={<BDDashboard />} />
-            <Route path="client-list" element={<ClientList />} />
-            <Route path="client-drone-list/:id" element={<ClientDetails />} />
-            <Route path="drone-details" element={<BDDroneDetails />} />
-            <Route path="drone-details/:id" element={<BDDroneProfile />} />
-            <Route path="knowledge-base" element={<BDKnowledgeBase />} />
-            <Route path="knowledge/bhumi" element={<BDViewKnowledge />} />
-            <Route path="pending-tasks" element={<PendingTasks />} />
-            <Route path="profile-details" element={<Profile />} />
-            <Route path="/bd/drone-approve" element={<DroneApprove />} />
+<Route path="/bd" element={<BDLayout />}>
+  <Route path="dashboard" element={<BDDashboard />} />
+  <Route path="client-list" element={<ClientList />} />
+  <Route path="client-drone-list/:id" element={<ClientDetails />} />
+  <Route path="drone-details" element={<BDDroneDetails />} />
+  <Route path="drone-details/:id" element={<BDDroneProfile />} />
+  <Route path="knowledge-base" element={<BDKnowledgeBase />} />
+  <Route path="knowledge/bhumi" element={<BDViewKnowledge />} />
+  <Route path="pending-tasks" element={<PendingTasks />} />
+  <Route path="profile-details" element={<Profile />} />
 
+  {/* FIXED: REMOVE leading slash */}
+  <Route path="drone-approve" element={<DroneApprove />} />
+  <Route path="orderform" element={<OrderFormPage />} />
+</Route>
 
-          </Route>
 
           {/* TECHNICAL TEAM ROUTES */}
           <Route path="/technical" element={<TechnicalLayout />}>

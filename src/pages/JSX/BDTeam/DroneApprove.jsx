@@ -80,7 +80,7 @@ export default function DroneApprove() {
       <div className="drone-approve-breadcrumb-wrapper">
               <BreadCrumbs />
             </div>
-      <h2 className="drone-approve-header">Drone Approval Dashboard</h2>
+      <h2 className="drone-approve-header">Client Drone Request Approval</h2>
 
       <div className="drone-table">
         <table>

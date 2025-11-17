@@ -10,7 +10,8 @@ import supportImg from "../../../assets/call.png";
 import profileImg from "../../../assets/profile.png";
 import pendingImg from "../../../assets/pending.png";
 import DroneApprove from  "../../../assets/apporrej.png";
-import "../../CSS/Client/dashboard.css";
+import orderForm from "../../../assets/orderForm.png";
+import "../../CSS/BDteam/bdDashboard.css";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -23,6 +24,8 @@ export default function Dashboard() {
   const tiles = [
   { title: "Clients", image: clientImg, path: "/bd/client-list" },
     { title: "Drone Details", image: droneImg, path: "/bd/drone-details" },
+        { title: "Order Form", image: orderForm, path: "/bd/orderform" },
+
     { title: "Drone Approve", image: DroneApprove, path: "/bd/drone-approve" },
   { title: "Knowledge Base", image: knowledgeImg, path: "/bd/knowledge-base" },
     { title: "Aero360 Store", image: storeImg },
@@ -37,20 +40,20 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="dash-wrap">
-      <main className="dash-main">
-        <div className="tile-grid">
+    <div className="bd-dash-wrap">
+      <main className="bd-dash-main">
+        <div className="bd-tile-grid">
           {tiles.map((t, i) => (
             <div
               key={i}
-              className="tile"
+              className="bd-tile"
               onClick={() => handleTileClick(t.path)}
               style={{ cursor: t.path ? "pointer" : "default" }}
             >
-              <div className="tile-image">
+              <div className="bd-tile-image">
                 <img src={t.image} alt={t.title} />
               </div>
-              <div className="tile-title">{t.title}</div>
+              <div className="bd-tile-title">{t.title}</div>
             </div>
           ))}
         </div>

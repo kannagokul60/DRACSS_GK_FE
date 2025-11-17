@@ -32,9 +32,9 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="dash-wrap">
-      <main className="dash-main">
-        <div className="tile-grid">
+    <div className="client-dash-wrap">
+      <main className="client-dash-main">
+        <div className="client-tile-grid">
           {tiles.map((t, i) => (
             <div
               key={i}
@@ -42,10 +42,10 @@ export default function Dashboard() {
               onClick={() => handleTileClick(t.path)}
               style={{ cursor: t.path ? "pointer" : "default" }}
             >
-              <div className="tile-image">
+              <div className="client-tile-image">
                 <img src={t.image} alt={t.title} />
               </div>
-              <div className="tile-title">{t.title}</div>
+              <div className="client-tile-title">{t.title}</div>
             </div>
           ))}
         </div>

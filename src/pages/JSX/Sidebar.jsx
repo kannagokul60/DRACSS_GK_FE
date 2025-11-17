@@ -36,6 +36,8 @@ export default function Sidebar({ setIsSidebarCollapsed }) {
     "BD Team": [
       { name: "Dashboard", icon: <FaTachometerAlt />, path: `${basePath}/dashboard` },
       { name: "Client List", icon: <FaUsers />, path: `${basePath}/client-list` },
+         { name: "Drone Approval", icon: <FaTachometerAlt />, path: `${basePath}/drone-approve` },
+            { name: "Order Form", icon: <FaBook />, path: `${basePath}/orderform` },
       { name: "Drone Details", icon: <FaTachometerAlt />, path: `${basePath}/drone-details` },
       { name: "Knowledge Base", icon: <FaBook />, path: `${basePath}/knowledge-base` },
       { name: "Pending Tasks", icon: <FaTasks />, path: `${basePath}/pending-tasks` },
