@@ -295,6 +295,24 @@
   background: #0d47a1;
 }
 
+.readOnly-input {
+  width: 180px;
+  padding: 6px 10px;
+  border: 1px solid #d6d6d6;
+  border-radius: 6px;
+  color: #8b8989;         /* white text */
+  font-size: 14px;
+  outline: none;
+  cursor: not-allowed;    /* shows disabled style */
+}
+
+.readOnly-input:read-only {
+  background: #ffffff;
+  color: #8b8989;         /* white text */
+  border-color: #bcbfc2;
+}
+
+
 /* ============================================================
    RESPONSIVE STYLES
 ============================================================ */

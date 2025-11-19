@@ -107,6 +107,11 @@ export default function Sidebar({ setIsSidebarCollapsed }) {
         icon: <FaUser />,
         path: `${basePath}/profile-details`,
       },
+       {
+        name: "Drone Dispatch",
+        icon: <FaUser />,
+        path: `${basePath}/assigned-drones`,
+      },
     ],
     Pilot: [
       {

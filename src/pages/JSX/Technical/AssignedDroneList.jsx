@@ -1,156 +1,179 @@
 import React, { useEffect, useState } from "react";
-import "../../CSS/Technical/assignedDroneList.css"
+import "../../CSS/Technical/assignedDroneList.css";
+import { format } from "date-fns";
 
 export default function AssignedDroneList() {
-  const [assignedList, setAssignedList] = useState([]);
-  const [details, setDetails] = useState(null); // When this is filled → show checklist
+  const [orders, setOrders] = useState([]);
+  const [viewOrder, setViewOrder] = useState(null);
+  const [backendItems, setBackendItems] = useState([]);
 
-  // Load Assigned Drones
+  // Fetch BD Orders
   useEffect(() => {
-    const data = [
-      { id: 101, drone_name: "X12 Agri Drone", qty: 1, date: "18 Nov 2025" },
-      { id: 102, drone_name: "AERO S8", qty: 2, date: "18 Nov 2025" },
-    ];
-    setAssignedList(data);
+    fetch("http://127.0.0.1:8000/api/orders/")
+      .then((res) => res.json())
+      .then((data) => setOrders(data))
+      .catch((err) => console.error("Failed to load orders:", err));
   }, []);
 
-  // Handle "View Details"
-  const openChecklist = (itemId) => {
-    // Replace this with API call for particular item details
-
-    setDetails({
-      drone_name: "X12 Agri Drone",
-      qty: 1,
-      checklist: {
-        standard: [
-          { name: "Propeller Set (1 CW; 1 CCW)", qty: 3, remark: "", checked: true },
-          { name: "Batteries Set (2 Nos.)", qty: 1, remark: "", checked: true },
-          { name: "GPS System", qty: 1, remark: "", checked: true },
-        ],
-        payload: [
-          { name: "10 Litre Pesticide Tank", qty: 1, remark: "", checked: true },
-          { name: "Camera for Video Feed", qty: 1, remark: "", checked: false },
-        ],
-      },
-    });
-  };
-
-  // Close the checklist and return to table
-  const closeChecklist = () => {
-    setDetails(null);
-  };
+  // Fetch Template Items (same as OrderFormPage)
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/checklist-items/")
+      .then((res) => res.json())
+      .then((data) => {
+        data.sort((a, b) => a.sort_order - b.sort_order);
+        setBackendItems(data);
+      })
+      .catch((err) => console.error("Failed to load template items:", err));
+  }, []);
 
   return (
-    <div className="assigned-wrap">
+    <div className="assigned-page">
+      <h2 className="assigned-header">Drone Dispatch</h2>
 
-      {/* ============================
-          SHOW TABLE IF NO DETAILS
-      ============================== */}
-      {!details && (
-        <>
-          <h2 className="assigned-title">New Drones Assigned for Assembly</h2>
+      {/* TABLE LIST */}
+      <div className="assigned-table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Order ID</th>
+              <th>Client</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
 
-          <table className="assigned-table">
-            <thead>
-              <tr>
-                <th>Assigned ID</th>
-                <th>Drone Name</th>
-                <th>Quantity</th>
-                <th>Assigned Date</th>
-                <th>View Details</th>
+          <tbody>
+            {orders.map((o, i) => (
+              <tr key={o.id}>
+                <td>{i + 1}</td>
+                <td>{o.order_number}</td>
+                <td>{o.customer_name}</td>
+                <td>{format(new Date(o.order_date), "dd-MM-yyyy")}</td>
+                <td className={`status ${o.status.toLowerCase()}`}>
+                  {o.status}
+                </td>
+                <td>
+                  <button className="view-btn" onClick={() => setViewOrder(o)}>
+                    View
+                  </button>
+                </td>
               </tr>
-            </thead>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-            <tbody>
-              {assignedList.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
-                  <td>{item.drone_name}</td>
-                  <td>{item.qty}</td>
-                  <td>{item.date}</td>
-                  <td>
-                    <button className="view-btn" onClick={() => openChecklist(item.id)}>
-                      View Details
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
+      {/* VIEW POPUP */}
+      {viewOrder && (
+        <div className="popup-bg">
+          <div className="popup-box big-box">
+            <h3 className="popup-title-centered">Order Delivery Details</h3>
+
+            {/* ===== QTY INFERENCE LOGIC ===== */}
+            {(() => {
+              const backendDroneQty = viewOrder.drone_qty;
+              let inferredDroneQty = backendDroneQty;
+
+              if (inferredDroneQty == null) {
+                try {
+                  const templateMap = {};
+                  backendItems.forEach((t) => {
+                    templateMap[t.description] = Number(t.default_quantity) || 1;
+                  });
+
+                  const ratios = viewOrder.items
+                    .map((it) => {
+                      const def = templateMap[it.description];
+                      if (!def) return null;
+                      const ratio = (Number(it.quantity_ordered) || 0) / def;
+                      return Number.isFinite(ratio) ? ratio : null;
+                    })
+                    .filter((r) => r != null && r > 0);
+
+                  if (ratios.length) {
+                    const allEqual = ratios.every(
+                      (r) => Math.abs(r - ratios[0]) < 1e-6
+                    );
+                    if (allEqual) inferredDroneQty = Math.round(ratios[0]);
+                  }
+                } catch (e) {
+                  inferredDroneQty = undefined;
+                }
+              }
+
+              return (
+                <div className="popup-input-row">
+                  <div className="input-group">
+                    <label>Customer Name</label>
+                    <input
+                      type="text"
+                      className="top-input"
+                      value={viewOrder.customer_name}
+                      readOnly
+                    />
+                  </div>
+
+                  <div className="input-group">
+                    <label>Drone Model</label>
+                    <input
+                      type="text"
+                      className="top-input"
+                      value={viewOrder.drone_model || viewOrder.drone_name || ""}
+                      readOnly
+                    />
+                  </div>
+
+                  <div className="input-group">
+                    <label>No. of Drones</label>
+                    <input
+                      type="text"
+                      className="top-input"
+                      value={inferredDroneQty ?? "-"}
+                      readOnly
+                    />
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* ===== GROUPED ITEMS ===== */}
+            {Object.values(
+              viewOrder.items.reduce((acc, it) => {
+                const key = it.category || "Other";
+                if (!acc[key]) acc[key] = { title: key, items: [] };
+                acc[key].items.push(it);
+                return acc;
+              }, {})
+            ).map((group, index) => (
+              <div className="section" key={index}>
+                <h4>{group.title}</h4>
+
+                {group.items.map((it, idx) => (
+                  <div className="form-row" key={idx}>
+                    <div className="item-name">{it.description}</div>
+                    <div className="item-qty">Qty: {it.quantity_ordered}</div>
+
+                    <input
+                      type="text"
+                      className="readOnly-input"
+                      value={it.remarks || "Nil"}
+                      readOnly
+                    />
+                  </div>
+                ))}
+              </div>
+            ))}
+
+            <div className="popup-actions">
+              <button className="cancel-btn" onClick={() => setViewOrder(null)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       )}
-
-      {/* ============================
-          SHOW DELIVERY CHECKLIST FORM
-      ============================== */}
-     {details && (
-  <div className="delivery-popup-overlay">
- <div className="delivery-popup">
-
-  {/* BACK BUTTON (TOP-LEFT) */}
-  <button className="delivery-back-btn" onClick={closeChecklist}>
-    ← Back
-  </button>
-
-  {/* TITLE */}
-  <h3 className="delivery-title">Delivery Checklist Form</h3>
-
-  {/* TOP INPUTS */}
-  <div className="delivery-input-row">
-    <div className="delivery-input-group">
-      <label>Drone Name</label>
-      <input type="text" value={details.drone_name} disabled />
-    </div>
-
-    <div className="delivery-input-group">
-      <label>No. of Drones</label>
-      <input type="number" value={details.qty} disabled />
-    </div>
-  </div>
-
-  {/* --- STANDARD KIT --- */}
-  <div className="delivery-section">
-    <h4>Standard Kit</h4>
-
-    {details.checklist.standard.map((item, i) => (
-      <div className="delivery-row" key={i}>
-        <div className="delivery-item-name">{item.name}</div>
-        <div className="delivery-item-qty">Qty: {item.qty}</div>
-        <input
-          type="text"
-          value={item.remark}
-          disabled
-          className="delivery-remark"
-          placeholder="make it fast"
-        />
-      </div>
-    ))}
-  </div>
-
-  {/* --- PAYLOAD --- */}
-  <div className="delivery-section">
-    <h4>Payload</h4>
-
-    {details.checklist.payload.map((item, i) => (
-      <div className="delivery-row" key={i}>
-        <div className="delivery-item-name">{item.name}</div>
-        <div className="delivery-item-qty">Qty: {item.qty}</div>
-        <input
-          type="text"
-          value={item.remark}
-          disabled
-          className="delivery-remark"
-          placeholder="make it fast"
-        />
-      </div>
-    ))}
-  </div>
-
-</div>
-
-  </div>
-)}
-
     </div>
   );
 }

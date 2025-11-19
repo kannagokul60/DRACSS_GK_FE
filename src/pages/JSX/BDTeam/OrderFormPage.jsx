@@ -1,83 +1,77 @@
 import React, { useState, useEffect } from "react";
 import "../../CSS/BDteam/orderForm.css";
+import { format } from "date-fns";
+
+import { BiColor } from "react-icons/bi";
 
 export default function OrderFormPage() {
   const [showPopup, setShowPopup] = useState(false);
   const [orders, setOrders] = useState([]);
-  const [backendItems, setBackendItems] = useState([]); // raw items from API
-  const [formState, setFormState] = useState({}); // { [id]: { checked, remark } }
+  const [backendItems, setBackendItems] = useState([]);
+  const [formState, setFormState] = useState({});
   const [manualAccessories, setManualAccessories] = useState([]);
-  const [droneName, setDroneName] = useState("");
-  const [droneQty, setDroneQty] = useState(1);
-  const API_URL = "http://127.0.0.1:8000/api/checklist-items/";
 
-  // Load previously saved orders (if you have endpoint; fallback empty)
+  const [droneName, setDroneName] = useState("");
+  const [cusName, setCusName] = useState("");
+  const [droneQty, setDroneQty] = useState(1);
+
+  const [viewOrder, setViewOrder] = useState(null);
+
+  // Fetch existing orders
   useEffect(() => {
-    // if you have an orders endpoint you can replace this fetch
-    setOrders([]); // start empty
+    fetch("http://127.0.0.1:8000/api/orders/")
+      .then((res) => res.json())
+      .then((data) => setOrders(data))
+      .catch((err) => console.error("Order fetch error:", err));
   }, []);
 
-  // Fetch checklist items from backend and initialize formState
+  // Fetch checklist items from backend
   useEffect(() => {
-    fetch(API_URL)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch checklist items");
-        return res.json();
-      })
+    fetch("http://127.0.0.1:8000/api/checklist-items/")
+      .then((res) => res.json())
       .then((data) => {
-        // sort by sort_order to keep sections ordered
-        data.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+        data.sort((a, b) => a.sort_order - b.sort_order);
         setBackendItems(data);
 
-        // initialize formState per item id
         const init = {};
-        data.forEach((item) => {
-          init[item.id] = {
-            checked: !!item.checklist,
-            remark: ""
+        data.forEach((it) => {
+          init[it.id] = {
+            checked: it.is_mandatory,
+            remark: "",
           };
         });
+
         setFormState(init);
       })
-      .catch((err) => {
-        console.error("Fetch checklist error:", err);
-        setBackendItems([]); // keep UI robust
-      });
+      .catch((err) => console.error("Checklist fetch error:", err));
   }, []);
 
-  // Helpers for grouped rendering by description (section)
-  const groupByDescription = () => {
-    const groups = {};
-    backendItems.forEach((it) => {
-      const key = it.description || "Other";
-      if (!groups[key]) groups[key] = [];
-      groups[key].push(it);
-    });
-    return groups;
-  };
-
-  const openChecklist = () => {
-    setShowPopup(true);
-  };
+  // Group backend items
+  const grouped = backendItems.reduce((acc, item) => {
+    const key = item.category_label || "Other";
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(item);
+    return acc;
+  }, {});
 
   const toggleCheckbox = (id) => {
     setFormState((prev) => ({
       ...prev,
-      [id]: { ...prev[id], checked: !prev[id].checked }
+      [id]: { ...prev[id], checked: !prev[id].checked },
     }));
   };
 
   const updateRemark = (id, value) => {
     setFormState((prev) => ({
       ...prev,
-      [id]: { ...prev[id], remark: value }
+      [id]: { ...prev[id], remark: value },
     }));
   };
 
   const addAccessoryRow = () => {
     setManualAccessories((prev) => [
       ...prev,
-      { name: "", qty: 1, remark: "", checked: false }
+      { name: "", qty: 1, remark: "", checked: false },
     ]);
   };
 
@@ -89,92 +83,82 @@ export default function OrderFormPage() {
     });
   };
 
-  // Build payload (array of items) and POST to backend
+  // SAVE ORDER
   const handleSave = async () => {
-    // Build payload array from backendItems and manual accessories
-    const payload = backendItems.map((item) => ({
-      id: item.id, // existing id
+    const qtyMultiplier = Number(droneQty) || 1;
+
+    const checklist = backendItems.map((item) => ({
+      id: item.id,
       description: item.description,
-      bhumi_a10e_drone: item.bhumi_a10e_drone,
-      nos: item.nos,
-      checklist: !!(formState[item.id] && formState[item.id].checked),
-      sort_order: item.sort_order,
-      remark: (formState[item.id] && formState[item.id].remark) || ""
+      // multiply default by number of drones
+      quantity_ordered: (Number(item.default_quantity) || 0) * qtyMultiplier,
+      is_checked: formState[item.id]?.checked || false,
+      remarks: formState[item.id]?.remark || "",
+      category: item.category_label,
     }));
 
-    // Append manual accessories as new items (id = null)
-    manualAccessories.forEach((acc, idx) => {
-      // only include non-empty accessory names (skip blank rows)
-      if (!acc.name?.trim()) return;
-      payload.push({
+    manualAccessories.forEach((acc) => {
+      if (!acc.name.trim()) return;
+
+      checklist.push({
         id: null,
-        description: "Accessories",
-        bhumi_a10e_drone: acc.name,
-        nos: Number(acc.qty) || 1,
-        checklist: !!acc.checked,
-        sort_order: 1000 + idx, // arbitrary large sort for manual items
-        remark: acc.remark || ""
+        description: acc.name,
+        quantity_ordered: (Number(acc.qty) || 1) * qtyMultiplier, // also multiply manual items
+        is_checked: !!acc.checked,
+        remarks: acc.remark,
+        category: "Additional Accessories",
       });
     });
 
-    // Also include drone-level metadata as a separate object? 
-    // Your backend sample is item-level; if you need top-level metadata adjust backend to accept combined object.
-    // We're posting array of items as your last examples showed earlier.
+    const payload = {
+      customer_name: cusName,
+      drone_model: droneName,
+      drone_qty: qtyMultiplier, // include the drone count explicitly
+      status: "DRAFT",
+      items: checklist,
+    };
 
     try {
-      const res = await fetch(API_URL, {
+      const res = await fetch("http://127.0.0.1:8000/api/orders/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
-        const text = await res.text();
-        console.error("Save failed:", text);
-        alert("Failed to save checklist. See console for details.");
+        console.error(await res.text());
+        alert("Failed to save order!");
         return;
       }
 
-      // server response (depending on your API might return created objects)
-      const resData = await res.json();
-      console.log("Saved response:", resData);
+      const saved = await res.json();
+      setOrders((prev) => [...prev, saved]);
 
-      // add a simple order row to UI for user's table
-      setOrders((prev) => [
-        ...prev,
-        {
-          orderId: "ORD" + Date.now(),
-          client: "Client Name",
-          date: new Date().toLocaleDateString(),
-          status: "Moved to Inventory"
-        }
-      ]);
-
-      // reset popup related state (keep backendItems)
       setShowPopup(false);
       setManualAccessories([]);
+      setCusName("");
       setDroneName("");
       setDroneQty(1);
 
-      alert("Checklist saved & moved to inventory.");
+      alert("Order saved successfully!");
     } catch (err) {
       console.error("Save error:", err);
-      alert("Error saving checklist (see console).");
     }
   };
-
-  const grouped = groupByDescription();
 
   return (
     <div className="orderform-page">
       <div className="orderform-header-wrapper">
         <h2 className="orderform-header">Order Forms</h2>
-        <button className="plus-btn orderform-plus-btn" onClick={openChecklist}>
+        <button
+          className="plus-btn orderform-plus-btn"
+          onClick={() => setShowPopup(true)}
+        >
           +
         </button>
       </div>
 
-      {/* ORDER FORM TABLE */}
+      {/* TABLE LIST */}
       <div className="order-table-wrapper">
         <table>
           <thead>
@@ -190,17 +174,16 @@ export default function OrderFormPage() {
 
           <tbody>
             {orders.map((o, i) => (
-              <tr key={i}>
+              <tr key={o.id}>
                 <td>{i + 1}</td>
-                <td>{o.orderId}</td>
-                <td>{o.client}</td>
-                <td>{o.date}</td>
-                <td className={`status ${o.status.toLowerCase()}`}>{o.status}</td>
+                <td>{o.order_number}</td>
+                <td>{o.customer_name}</td>
+                <td>{format(new Date(o.order_date), "dd-MM-yyyy")}</td>
+                <td className={`status ${o.status.toLowerCase()}`}>
+                  {o.status}
+                </td>
                 <td>
-                  <button
-                    className="view-btn"
-                    onClick={() => alert("Open view page (implement as needed)")}
-                  >
+                  <button className="view-btn" onClick={() => setViewOrder(o)}>
                     View
                   </button>
                 </td>
@@ -210,22 +193,154 @@ export default function OrderFormPage() {
         </table>
       </div>
 
-      {/* CHECKLIST POPUP */}
+      {/* ===================== VIEW POPUP ====================== */}
+      {viewOrder && (
+        <div className="popup-bg">
+          <div className="popup-box big-box">
+            <h3 className="popup-title-centered">Order Details</h3>
+
+            {/* infer drone qty from viewOrder or backendItems */}
+            {(() => {
+              // prefer backend value if present
+              const backendDroneQty = viewOrder.drone_qty;
+              let inferredDroneQty = backendDroneQty;
+
+              if (inferredDroneQty == null) {
+                try {
+                  // build map of template default quantities by description
+                  const templateMap = {};
+                  backendItems.forEach((t) => {
+                    templateMap[t.description] =
+                      Number(t.default_quantity) || 1;
+                  });
+
+                  // compute ratios quantity_ordered / default_quantity for items that match template
+                  const ratios = viewOrder.items
+                    .map((it) => {
+                      const def = templateMap[it.description];
+                      if (!def) return null;
+                      const ratio = (Number(it.quantity_ordered) || 0) / def;
+                      return Number.isFinite(ratio) ? ratio : null;
+                    })
+                    .filter((r) => r != null && r > 0);
+
+                  // if all ratios are same integer, use it
+                  if (ratios.length) {
+                    const allEqual = ratios.every(
+                      (r) => Math.abs(r - ratios[0]) < 1e-6
+                    );
+                    if (allEqual) {
+                      inferredDroneQty = Math.round(ratios[0]);
+                    }
+                  }
+                } catch (e) {
+                  inferredDroneQty = undefined;
+                }
+              }
+
+              return (
+                <div className="popup-input-row">
+                  <div className="input-group">
+                    <label>Customer Name</label>
+                    <input
+                      type="text"
+                      className="top-input"
+                      value={viewOrder.customer_name}
+                      readOnly
+                    />
+                  </div>
+
+                  <div className="input-group">
+                    <label>Drone Model</label>
+                    <input
+                      type="text"
+                      className="top-input"
+                      value={
+                        viewOrder.drone_model || viewOrder.drone_name || ""
+                      }
+                      readOnly
+                    />
+                  </div>
+
+                  <div className="input-group">
+                    <label>No. of Drones</label>
+                    <input
+                      type="text"
+                      className="top-input"
+                      value={inferredDroneQty ?? "-"}
+                      readOnly
+                    />
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* ... rest of view popup rendering unchanged */}
+
+            {/* GROUPED VIEW ITEMS */}
+            {Object.values(
+              viewOrder.items.reduce((acc, it) => {
+                const key = it.category || "Other";
+                if (!acc[key]) acc[key] = { title: key, items: [] };
+                acc[key].items.push(it);
+                return acc;
+              }, {})
+            ).map((group, index) => (
+              <div className="section" key={index}>
+                <h4>{group.title}</h4>
+
+                {group.items.map((it, idx) => (
+                  <div className="form-row" key={idx}>
+                    <div className="item-name">{it.description}</div>
+                    <div className="item-qty">Qty: {it.quantity_ordered}</div>
+                    <input
+                      type="text"
+                      className="readOnly-input"
+                      value={it.remarks || "Nil"}
+                      readOnly
+                    />
+
+                    {/* <input type="checkbox" checked={it.is_checked} readOnly /> */}
+                  </div>
+                ))}
+              </div>
+            ))}
+
+            <div className="popup-actions">
+              <button className="cancel-btn" onClick={() => setViewOrder(null)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===================== CREATE POPUP ====================== */}
       {showPopup && (
         <div className="popup-bg">
           <div className="popup-box big-box">
             <h3 className="popup-title-centered">Delivery Checklist Form</h3>
 
-            {/* Top inputs */}
             <div className="popup-input-row">
+              <div className="input-group">
+                <label>Customer Name</label>
+                <input
+                  type="text"
+                  className="top-input"
+                  value={cusName}
+                  onChange={(e) => setCusName(e.target.value)}
+                  placeholder="customer name"
+                />
+              </div>
+
               <div className="input-group">
                 <label>Drone Name</label>
                 <input
                   type="text"
                   className="top-input"
-                  placeholder="Enter Drone Name"
                   value={droneName}
                   onChange={(e) => setDroneName(e.target.value)}
+                  placeholder="drone name"
                 />
               </div>
 
@@ -234,7 +349,6 @@ export default function OrderFormPage() {
                 <input
                   type="number"
                   className="top-input"
-                  placeholder="Qty"
                   min="1"
                   value={droneQty}
                   onChange={(e) => setDroneQty(e.target.value)}
@@ -242,15 +356,15 @@ export default function OrderFormPage() {
               </div>
             </div>
 
-            {/* Render each section in the order received */}
-            {Object.keys(grouped).map((sectionTitle) => (
-              <div className="section" key={sectionTitle}>
-                <h4>{sectionTitle}</h4>
+            {/* CHECKLIST */}
+            {Object.keys(grouped).map((cat) => (
+              <div className="section" key={cat}>
+                <h4>{cat}</h4>
 
-                {grouped[sectionTitle].map((item) => (
+                {grouped[cat].map((item) => (
                   <div className="form-row" key={item.id}>
-                    <div className="item-name">{item.bhumi_a10e_drone}</div>
-                    <div className="item-qty">Qty: {item.nos}</div>
+                    <div className="item-name">{item.description}</div>
+                    <div className="item-qty">Qty: {item.default_quantity}</div>
 
                     <input
                       type="text"
@@ -262,8 +376,7 @@ export default function OrderFormPage() {
 
                     <input
                       type="checkbox"
-                      className="included-check"
-                      checked={!!formState[item.id]?.checked}
+                      checked={formState[item.id]?.checked}
                       onChange={() => toggleCheckbox(item.id)}
                     />
                   </div>
@@ -271,26 +384,29 @@ export default function OrderFormPage() {
               </div>
             ))}
 
-            {/* Manual accessories section */}
+            {/* Additional Accessories */}
             <div className="section">
               <h4>Additional Accessories</h4>
 
               {manualAccessories.map((row, idx) => (
-                <div className="form-row" key={`manual-${idx}`}>
+                <div className="form-row" key={idx}>
                   <input
                     type="text"
                     className="item-name-input"
-                    placeholder="Accessory Name"
+                    placeholder="Name"
                     value={row.name}
-                    onChange={(e) => updateAccessory(idx, "name", e.target.value)}
+                    onChange={(e) =>
+                      updateAccessory(idx, "name", e.target.value)
+                    }
                   />
 
                   <input
                     type="number"
                     className="item-qty-input"
-                    placeholder="Qty"
                     value={row.qty}
-                    onChange={(e) => updateAccessory(idx, "qty", e.target.value)}
+                    onChange={(e) =>
+                      updateAccessory(idx, "qty", e.target.value)
+                    }
                   />
 
                   <input
@@ -298,14 +414,17 @@ export default function OrderFormPage() {
                     className="remarks-input"
                     placeholder="Remarks"
                     value={row.remark}
-                    onChange={(e) => updateAccessory(idx, "remark", e.target.value)}
+                    onChange={(e) =>
+                      updateAccessory(idx, "remark", e.target.value)
+                    }
                   />
 
                   <input
                     type="checkbox"
-                    className="included-check"
-                    checked={!!row.checked}
-                    onChange={(e) => updateAccessory(idx, "checked", e.target.checked)}
+                    checked={row.checked}
+                    onChange={(e) =>
+                      updateAccessory(idx, "checked", e.target.checked)
+                    }
                   />
                 </div>
               ))}
@@ -315,12 +434,14 @@ export default function OrderFormPage() {
               </button>
             </div>
 
-            {/* Action buttons */}
             <div className="popup-actions">
               <button className="save-btn" onClick={handleSave}>
-                Move to Inventory
+                Save Order
               </button>
-              <button className="cancel-btn" onClick={() => setShowPopup(false)}>
+              <button
+                className="cancel-btn"
+                onClick={() => setShowPopup(false)}
+              >
                 Cancel
               </button>
             </div>
