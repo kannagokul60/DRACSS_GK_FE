@@ -6,6 +6,8 @@ import pendingImg from "../../../assets/pending.png";
 import completedImg from "../../../assets/completed.png";
 import assignedImg from "../../../assets/assigned.png";
 import profileImg from "../../../assets/profile.png";
+import droneAssemble from "../../../assets/droneAssemble.png";
+
 import "../../CSS/Technical/dashboard.css";
 
 export default function TechnicalDashboard() {
@@ -17,15 +19,22 @@ export default function TechnicalDashboard() {
     { title: "Assigned Work", image: assignedImg, type: "assigned" },
     { title: "Completed Work", image: completedImg, type: "completed" },
     { title: "Profile Details", image: profileImg, type: "profile" },
+        { title: "Drone Dispatch", image: droneAssemble, type: "dronepending" },
+
   ];
 
-  const handleTileClick = (type) => {
-    if (type === "profile") {
-      navigate("/technical/profile-details");
-    } else {
-      navigate(`/technical/tasks?status=${type}`);
-    }
-  };
+const handleTileClick = (type) => {
+  if (type === "profile") {
+    navigate("/technical/profile-details");
+  } 
+  else if (type === "dronepending") {
+    navigate("/technical/assigned-drones"); // <-- FIXED ROUTE
+  }
+  else {
+    navigate(`/technical/tasks?status=${type}`);
+  }
+};
+
 
   return (
     <div className="dash-wrap">

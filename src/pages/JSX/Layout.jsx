@@ -10,6 +10,8 @@ export default function Layout() {
   const getRoleFromPath = (path) => {
     if (path.startsWith("/bd")) return "BD Team";
     if (path.startsWith("/technical")) return "Technical";
+        if (path.startsWith("/pilot")) return "Pilot";
+
     return "Client";
   };
 
@@ -27,6 +29,8 @@ export default function Layout() {
     if (newRole === "Client") navigate("/client/dashboard");
     else if (newRole === "BD Team") navigate("/bd/dashboard");
     else if (newRole === "Technical") navigate("/technical/dashboard");
+        else if (newRole === "Pilot") navigate("/pilot/dashboard");
+
   };
 
   const logout = () => {
@@ -56,6 +60,8 @@ export default function Layout() {
             <option value="Client">Client</option>
             <option value="BD Team">BD Team</option>
             <option value="Technical">Technical</option>
+                        <option value="Pilot">Pilot</option>
+
           </select>
 
           <button className="layout-logout-btn" onClick={logout}>

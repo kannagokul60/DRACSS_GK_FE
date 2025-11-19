@@ -1,29 +1,23 @@
 /* ===== DASHBOARD WRAPPER ===== */
-.dash-wrap {
+.pilot-dash-wrap {
   display: flex;
   flex-direction: column;
-background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
-   color: #1a2a4b;
-  height: 100%; /* fills parent container */
-  overflow-y: auto; /* scroll only when needed */
-  box-sizing: border-box; /* avoids layout overflow */
+  background: linear-gradient(135deg, #eeeeee, #b6bcc2, #eeeeee);
+  color: #1a2a4b;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
   padding: 10rem 5rem;
   border-radius: 10px;
   position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+
 }
 
-/* .dash-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: "Poppins", sans-serif;
-  padding: 20px;
-} */
-
 /* ===== HEADER ===== */
-.dash-header {
+.pilot-dash-header {
   width: 98%;
-  margin: 1rem auto; /* slight gap from window edges */
+  margin: 1rem auto;
   background: #ffffffcc;
   backdrop-filter: blur(8px);
   padding: 1rem 2rem;
@@ -39,7 +33,7 @@ background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
 }
 
 /* ===== BRAND ===== */
-.brand {
+.pilot-brand {
   font-size: 1.8rem;
   font-weight: 700;
   color: #1256b4;
@@ -47,7 +41,7 @@ background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
 }
 
 /* ===== LOGOUT BUTTON ===== */
-.btn-logout {
+.pilot-btn-logout {
   background: linear-gradient(135deg, #1e88e5, #64b5f6);
   border: none;
   color: #fff;
@@ -58,33 +52,33 @@ background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
   transition: all 0.3s ease;
 }
 
-.btn-logout:hover {
+.pilot-btn-logout:hover {
   background: linear-gradient(135deg, #1565c0, #64b5f6);
   transform: scale(1.05);
 }
 
 /* ===== MAIN ===== */
-.dash-main {
+.pilot-dash-main {
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center; /* center vertically */
+  align-items: center;
   padding: 1rem 2rem;
   overflow: hidden;
 }
 
 /* ===== TILE GRID ===== */
-.tile-grid {
+.pilot-tile-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem 2rem; /* reduced spacing */
+  gap: 1.5rem 2rem;
   justify-items: center;
   width: 100%;
   max-width: 1200px;
 }
 
 /* ===== TILE CARD ===== */
-.tile {
+.pilot-tile {
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 6px 18px rgba(33, 150, 243, 0.08);
@@ -102,21 +96,21 @@ background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
   overflow: hidden;
 }
 
-.tile:hover {
+.pilot-tile:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 24px rgba(33, 150, 243, 0.15);
   background: #f9fcff;
 }
 
 /* ===== ICON IMAGE ===== */
-.tile-image {
+.pilot-tile-image {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 90px;
 }
 
-.tile-image img {
+.pilot-tile-image img {
   width: 90px;
   height: 90px;
   object-fit: contain;
@@ -124,13 +118,13 @@ background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.tile:hover .tile-image img {
+.pilot-tile:hover .pilot-tile-image img {
   transform: scale(1.15);
   opacity: 1;
 }
 
 /* ===== TITLE ===== */
-.tile-title {
+.pilot-tile-title {
   font-size: 1.15rem;
   font-weight: 600;
   color: #0d3058;
@@ -141,13 +135,13 @@ background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
   transition: all 0.4s ease;
 }
 
-.tile:hover .tile-title {
+.pilot-tile:hover .pilot-tile-title {
   opacity: 1;
   transform: translateY(0);
 }
 
 /* ===== LIGHT SWEEP EFFECT ===== */
-.tile::before {
+.pilot-tile::before {
   content: "";
   position: absolute;
   top: 0;
@@ -163,40 +157,40 @@ background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
   transition: all 0.6s ease;
 }
 
-.tile:hover::before {
+.pilot-tile:hover::before {
   left: 100%;
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
-  .tile-grid {
+  .pilot-tile-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .tile-grid {
+  .pilot-tile-grid {
     grid-template-columns: 1fr;
     gap: 1.2rem;
   }
-  .tile {
+  .pilot-tile {
     max-width: 90%;
     height: 140px;
   }
 }
 
 @media (max-width: 480px) {
-  .brand {
+  .pilot-brand {
     font-size: 1.4rem;
   }
-  .btn-logout {
+  .pilot-btn-logout {
     padding: 0.5rem 1.2rem;
     font-size: 0.9rem;
   }
 }
 
 /* ===== STATUS TOGGLE CONTAINER ===== */
-.status-toggle-top {
+.pilot-status-toggle-top {
   position: absolute;
   top: 20px;
   right: 30px;
@@ -210,12 +204,12 @@ background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
   transition: all 0.3s ease;
 }
 
-.status-toggle-top:hover {
+.pilot-status-toggle-top:hover {
   box-shadow: 0 6px 20px rgba(21, 101, 192, 0.4);
 }
 
 /* ===== STATUS TEXT ===== */
-.status-text {
+.pilot-status-text {
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -223,32 +217,32 @@ background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
   transition: color 0.3s ease;
 }
 
-.status-text.online {
-  color: #c8f7c5; /* light green glow text */
+.pilot-status-text.online {
+  color: #c8f7c5;
   text-shadow: 0 0 8px rgba(76, 175, 80, 0.8);
 }
 
-.status-text.offline {
-  color: #ffcdd2; /* light red glow text */
+.pilot-status-text.offline {
+  color: #ffcdd2;
   text-shadow: 0 0 8px rgba(244, 67, 54, 0.8);
 }
 
 /* ===== SWITCH TOGGLE ===== */
-.switch {
+.pilot-switch {
   position: relative;
   display: inline-block;
   width: 55px;
   height: 28px;
 }
 
-.switch input {
+.pilot-switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
 /* ===== SLIDER BACKGROUND ===== */
-.slider {
+.pilot-slider {
   position: absolute;
   cursor: pointer;
   inset: 0;
@@ -259,7 +253,7 @@ background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
 }
 
 /* ===== SLIDER KNOB ===== */
-.slider::before {
+.pilot-slider::before {
   content: "";
   position: absolute;
   height: 22px;
@@ -272,33 +266,12 @@ background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* ===== ONLINE (GREEN) STATE ===== */
-input:checked + .slider {
+/* ===== ONLINE STATE ===== */
+input:checked + .pilot-slider {
   background: linear-gradient(135deg, #00c853, #43a047);
   box-shadow: inset 0 0 10px rgba(76, 175, 80, 0.5);
 }
 
-input:checked + .slider::before {
+input:checked + .pilot-slider::before {
   transform: translateX(27px);
-}
-
-/* ===== GLOW EFFECT ON ACTIVE STATE ===== */
-input:checked + .slider::after {
-  /* content: "✓"; */
-  position: absolute;
-  right: 7px;
-  top: 3px;
-  font-size: 16px;
-  color: white;
-  opacity: 0.9;
-}
-
-input:not(:checked) + .slider::after {
-  /* content: "✕"; */
-  position: absolute;
-  right: 7px;
-  top: 3px;
-  font-size: 16px;
-  color: white;
-  opacity: 0.9;
 }

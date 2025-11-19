@@ -4,12 +4,12 @@
   justify-content: space-between; /* distribute chat box & icons */
   gap: 40px;
   padding: 60px; /* balanced spacing on all sides */
-  background: linear-gradient(135deg, #e8f1ff, #f1f0f0);
+  background: #f7f7f7;
   height: 100%;
-  font-family: 'Times New Roman', Times, serif;
   border-radius: 10px;
   box-sizing: border-box;
   position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Breadcrumb wrapper — inside container (top-left) */

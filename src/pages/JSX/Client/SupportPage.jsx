@@ -14,7 +14,7 @@ export default function SupportPage() {
       description:
         "Connect instantly with our expert team for troubleshooting, guidance, or drone software issues.",
       icon: <FaHeadset />,
-  color: "linear-gradient(90deg, #2f587d, #4c9ac8)"
+  color: "linear-gradient(90deg, #0d5bb4, #29568a)"
     },
     
     {
@@ -22,14 +22,14 @@ export default function SupportPage() {
       description:
         "Book a certified technician for on-site maintenance or hardware issues at your preferred location.",
       icon: <FaTools />,
-  color: "linear-gradient(90deg, #2f587d, #4c9ac8)"
+  color: "linear-gradient(90deg, #0d5bb4, #29568a)"
     },
     {
       title: "Return to Service",
       description:
         "Send your drone for professional servicing or part replacement and get it back in top shape.",
       image: returnImg,
-  color: "linear-gradient(90deg, #2f587d, #4c9ac8)"
+  color: "linear-gradient(90deg, #0d5bb4, #29568a)"
     },
   ];
 

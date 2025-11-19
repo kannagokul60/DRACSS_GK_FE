@@ -1,11 +1,19 @@
 .onsite-container {
-  font-family: 'Times New Roman', Times, serif;
-  height: 100%;
-  background: linear-gradient(135deg, #e8f1ff, #f1f0f0);
+  flex: 1;
+  background: #f7f7f7;
+  color: #0d2a4b;
   padding: 60px 30px 40px;
-  position: relative;
   border-radius: 10px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-y: auto; /* scroll only if content overflows */
+  position: relative; /* ensures breadcrumb absolute position works */
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
+
 
 .onsite-breadcrumb-wrapper {
   position: absolute;
@@ -14,17 +22,21 @@
   z-index: 10;
 }
 
-/* Header */
 .onsite-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center; /* centers the h2 */
   margin-bottom: 30px;
+  position: relative; /* allows absolute button */
 }
 
 .onsite-header h2 {
   font-size: 22px;
-  color: #1a237e;
+  color: #1565c0 !important;
+  text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4) !important;
+  margin: 0;
+  text-align: center;
+  flex: 1;
 }
 
 .add-btn {

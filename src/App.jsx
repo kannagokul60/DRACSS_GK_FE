@@ -34,6 +34,11 @@ import TechnicalLayout from "./pages/JSX/Layout";
 import TechiDashboard from "./pages/JSX/Technical/Dashboard";
 import TechnicalTasks from "./pages/JSX/Technical/TechnicalTasks";
 import OrderFormPage from "./pages/JSX/BDTeam/OrderFormPage";
+import AssignedDroneList from "./pages/JSX/Technical/AssignedDroneList";
+
+//Pilot Team Imports
+import PilotLayout from "./pages/JSX/Layout";
+import PilotDashboard from "./pages/JSX/Pilot/PilotDashboard";
 
 export default function App() {
   const isLoggedIn = !!localStorage.getItem("access");
@@ -82,6 +87,13 @@ export default function App() {
           <Route path="/technical" element={<TechnicalLayout />}>
             <Route path="dashboard" element={<TechiDashboard />} />
             <Route path="tasks" element={<TechnicalTasks role="technical" />} />
+                    <Route path="assigned-drones" element={<AssignedDroneList />} />
+          </Route>
+
+          {/* PILOT TEAM ROUTES */}
+
+           <Route path="/pilot" element={<PilotLayout />}>
+            <Route path="dashboard" element={<PilotDashboard />} />
 
           </Route>
         </>

@@ -121,7 +121,7 @@ export default function ClientDroneList() {
       </div>
 
       <div className="client-drone-header">
-        <h2>{client?.name} - Purchased Drones</h2>
+        <h2>{client?.name} - Purchased Drones </h2>
       </div>
 
       {/* Drone List */}
