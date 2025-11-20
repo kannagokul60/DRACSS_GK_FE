@@ -35,6 +35,8 @@ import TechiDashboard from "./pages/JSX/Technical/Dashboard";
 import TechnicalTasks from "./pages/JSX/Technical/TechnicalTasks";
 import OrderFormPage from "./pages/JSX/BDTeam/OrderFormPage";
 import AssignedDroneList from "./pages/JSX/Technical/AssignedDroneList";
+            import OrderStatusPage from "./pages/JSX/Technical/OrderStatusPage";
+
 
 //Pilot Team Imports
 import PilotLayout from "./pages/JSX/Layout";
@@ -66,35 +68,36 @@ export default function App() {
           </Route>
 
           {/* BD TEAM ROUTES */}
-<Route path="/bd" element={<BDLayout />}>
-  <Route path="dashboard" element={<BDDashboard />} />
-  <Route path="client-list" element={<ClientList />} />
-  <Route path="client-drone-list/:id" element={<ClientDetails />} />
-  <Route path="drone-details" element={<BDDroneDetails />} />
-  <Route path="drone-details/:id" element={<BDDroneProfile />} />
-  <Route path="knowledge-base" element={<BDKnowledgeBase />} />
-  <Route path="knowledge/bhumi" element={<BDViewKnowledge />} />
-  <Route path="pending-tasks" element={<PendingTasks />} />
-  <Route path="profile-details" element={<Profile />} />
+          <Route path="/bd" element={<BDLayout />}>
+            <Route path="dashboard" element={<BDDashboard />} />
+            <Route path="client-list" element={<ClientList />} />
+            <Route path="client-drone-list/:id" element={<ClientDetails />} />
+            <Route path="drone-details" element={<BDDroneDetails />} />
+            <Route path="drone-details/:id" element={<BDDroneProfile />} />
+            <Route path="knowledge-base" element={<BDKnowledgeBase />} />
+            <Route path="knowledge/bhumi" element={<BDViewKnowledge />} />
+            <Route path="pending-tasks" element={<PendingTasks />} />
+            <Route path="profile-details" element={<Profile />} />
 
-  {/* FIXED: REMOVE leading slash */}
-  <Route path="drone-approve" element={<DroneApprove />} />
-  <Route path="orderform" element={<OrderFormPage />} />
-</Route>
-
+            {/* FIXED: REMOVE leading slash */}
+            <Route path="drone-approve" element={<DroneApprove />} />
+            <Route path="orderform" element={<OrderFormPage />} />
+          </Route>
 
           {/* TECHNICAL TEAM ROUTES */}
           <Route path="/technical" element={<TechnicalLayout />}>
             <Route path="dashboard" element={<TechiDashboard />} />
             <Route path="tasks" element={<TechnicalTasks role="technical" />} />
-                    <Route path="assigned-drones" element={<AssignedDroneList />} />
+            <Route path="assigned-drones" element={<AssignedDroneList />} />
+
+<Route path="order-status/:orderId" element={<OrderStatusPage />} />
+
           </Route>
 
           {/* PILOT TEAM ROUTES */}
 
-           <Route path="/pilot" element={<PilotLayout />}>
+          <Route path="/pilot" element={<PilotLayout />}>
             <Route path="dashboard" element={<PilotDashboard />} />
-
           </Route>
         </>
       ) : (

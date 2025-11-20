@@ -1,30 +1,59 @@
 import React, { useEffect, useState } from "react";
 import "../../CSS/Technical/assignedDroneList.css";
 import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
+import config from "../../../config"; // adjust path if needed
+
 
 export default function AssignedDroneList() {
   const [orders, setOrders] = useState([]);
   const [viewOrder, setViewOrder] = useState(null);
   const [backendItems, setBackendItems] = useState([]);
+  const navigate = useNavigate();
+  
 
-  // Fetch BD Orders
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/orders/")
-      .then((res) => res.json())
-      .then((data) => setOrders(data))
-      .catch((err) => console.error("Failed to load orders:", err));
-  }, []);
+// Fetch BD Orders
+useEffect(() => {
+  fetch(`${config.baseURL}/orders/`)
+    .then((res) => res.json())
+    .then((data) => setOrders(data))
+    .catch((err) => console.error("Failed to load orders:", err));
+}, []);
 
-  // Fetch Template Items (same as OrderFormPage)
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/checklist-items/")
-      .then((res) => res.json())
-      .then((data) => {
-        data.sort((a, b) => a.sort_order - b.sort_order);
-        setBackendItems(data);
-      })
-      .catch((err) => console.error("Failed to load template items:", err));
-  }, []);
+// Fetch Template Items (same as OrderFormPage)
+useEffect(() => {
+  fetch(`${config.baseURL}/checklist-items/`)
+    .then((res) => res.json())
+    .then((data) => {
+      data.sort((a, b) => a.sort_order - b.sort_order);
+      setBackendItems(data);
+    })
+    .catch((err) => console.error("Failed to load template items:", err));
+}, []);
+
+const checkDeliveryStatus = async (orderId) => {
+  try {
+    const res = await fetch(`${config.baseURL}/order-delivery-info/${orderId}/`);
+    if (res.ok) {
+      // delivery info exists
+      navigate(`/technical/order-status/${orderId}`, {
+        state: { readOnly: true },
+      });
+    } else {
+      // delivery not submitted
+      navigate(`/technical/order-status/${orderId}`, {
+        state: { readOnly: false },
+      });
+    }
+  } catch (err) {
+    console.error("Delivery check failed:", err);
+    navigate(`/technical/order-status/${orderId}`, {
+      state: { readOnly: false },
+    });
+  }
+};
+
+
 
   return (
     <div className="assigned-page">
@@ -48,7 +77,14 @@ export default function AssignedDroneList() {
             {orders.map((o, i) => (
               <tr key={o.id}>
                 <td>{i + 1}</td>
-                <td>{o.order_number}</td>
+<td
+  className="clickable-td"
+  onClick={() => checkDeliveryStatus(o.id)}
+>
+  {o.order_number}
+</td>
+
+
                 <td>{o.customer_name}</td>
                 <td>{format(new Date(o.order_date), "dd-MM-yyyy")}</td>
                 <td className={`status ${o.status.toLowerCase()}`}>
