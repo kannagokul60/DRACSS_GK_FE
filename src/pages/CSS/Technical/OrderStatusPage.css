@@ -128,3 +128,30 @@
   font-weight: bold;
 }
 
+.manufacture-link {
+  cursor: pointer;
+  color: #1565c0;
+  font-weight: 600;
+  text-decoration: underline;
+  display: inline-block;   /* required for transform animations */
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.manufacture-link:hover {
+  color: #68aaf5;          /* slightly darker */
+  transform: translateX(10px);  /* moves forward smoothly */
+}
+
+.testing-link {
+  cursor: pointer;
+  color: #1565c0;
+  font-weight: 600;
+  text-decoration: underline;
+  display: inline-block;   /* required for transform animations */
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.testing-link:hover {
+   color: #68aaf5;           /* slightly darker */
+  transform: translateX(10px);  /* moves forward smoothly */
+}

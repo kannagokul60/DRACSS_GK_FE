@@ -362,7 +362,7 @@ export default function OrderFormPage() {
                 <h4>{cat}</h4>
 
                 {grouped[cat].map((item) => (
-                  <div className="form-row" key={item.id}>
+                  <div className="order-form-row" key={item.id}>
                     <div className="item-name">{item.description}</div>
                     <div className="item-qty">Qty: {item.default_quantity}</div>
 
