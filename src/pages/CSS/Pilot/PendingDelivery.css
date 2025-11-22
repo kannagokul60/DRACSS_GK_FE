@@ -1,0 +1,229 @@
+/* ============================
+   Page Wrapper
+============================ */
+.pending-delivery-page {
+  flex: 1;
+  background: #f7f7f7;
+  display: flex;
+  flex-direction: column;
+  color: #0d2a4b;
+  padding: 2rem 3rem;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.pilot-breadcrumb-wrapper {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.2rem;
+  z-index: 10;
+}
+
+/* Page Title */
+.page-title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1565c0;
+  text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4);
+  text-align: center;
+}
+
+/* ============================
+   Table Styles
+============================ */
+.pending-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.pending-table thead {
+  background: #1565c0;
+}
+
+.pending-table th {
+  background: #1565c0;
+  color: #fff;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.pending-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eaeaea;
+  color: #333;
+}
+
+/* Hover Effect */
+.pending-table tbody tr:hover {
+  background: #e9f2ff;
+  cursor: pointer;
+}
+
+/* ============================
+   Buttons
+============================ */
+.view-btn {
+  background: #1565c0;
+  color: #fff;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.view-btn:hover {
+  background: #0d47a1;
+}
+
+/* Overlay background */
+.pd-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Popup container */
+.pd-popup-container {
+  background: #fff;
+  padding: 25px;
+  width: 100%;
+  max-width: 700px;
+  border-radius: 10px;
+  max-height: 85%;
+  overflow-y: auto;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.pd-popup-container h3 {
+  text-align: center;
+  color: #1565c0;
+  text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4);
+  font-size: 30px;
+}
+
+/* Section blocks */
+.pd-section-block {
+  margin-top: 20px;
+}
+
+/* File list */
+.pd-file-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.pd-file-list li {
+  margin-bottom: 8px;
+}
+
+.pd-doc-link {
+  display: inline-block; /* make padding work properly */
+  color: #1565c0; /* link color */
+  font-weight: 600;
+  text-decoration: none; /* remove underline if using background */
+  background: #f7f7f7;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  padding: 15px 20px;
+  border-radius: 5px; /* optional rounded corners */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.pd-uin-link {
+  display: inline-block; /* make padding work properly */
+  color: #1565c0; /* link color */
+  font-weight: 600;
+  text-decoration: none; /* remove underline if using background */
+  background: #f7f7f7;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  padding: 15px 20px;
+  border-radius: 5px; /* optional rounded corners */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.pd-doc-link:hover {
+  color: #68aaf5; /* slightly darker */
+  transform: translateX(
+    10px
+  ); /* moves forward smoothly */ /* prevent underline on hover */
+}
+
+/* Actions */
+.pd-popup-actions {
+  margin-top: 25px;
+  text-align: right;
+}
+
+.pd-close-btn {
+  background: #ccc;
+  padding: 6px 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.pd-close-btn:hover {
+  background: #b3b3b3;
+}
+
+/* ============================
+   Responsive Behavior
+============================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 20px;
+  }
+
+  .pending-table th,
+  .pending-table td {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .view-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .pending-table {
+    display: block;
+    white-space: nowrap;
+    overflow-x: auto;
+  }
+
+  .page-title {
+    font-size: 18px;
+  }
+
+  .view-btn {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+}

@@ -102,15 +102,16 @@ export default function Sidebar({ setIsSidebarCollapsed }) {
         icon: <FaClipboardCheck />,
         path: `${basePath}/tasks`,
       },
+
       {
-        name: "Profile",
-        icon: <FaUser />,
-        path: `${basePath}/profile-details`,
-      },
-       {
         name: "Drone Dispatch",
         icon: <FaUser />,
         path: `${basePath}/assigned-drones`,
+      },
+      {
+        name: "Profile",
+        icon: <FaUser />,
+        path: `${basePath}/profile`,
       },
     ],
     Pilot: [
@@ -120,9 +121,9 @@ export default function Sidebar({ setIsSidebarCollapsed }) {
         path: `${basePath}/dashboard`,
       },
       {
-        name: "Assigned Tasks",
+        name: "Pending Deliveries",
         icon: <FaClipboardCheck />,
-        path: `${basePath}/tasks`,
+        path: `${basePath}/pending-delivery`,
       },
       {
         name: "Profile",

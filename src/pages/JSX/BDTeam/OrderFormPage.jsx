@@ -179,8 +179,18 @@ status: "REQUESTED",
                 <td>{o.order_number}</td>
                 <td>{o.customer_name}</td>
                 <td>{format(new Date(o.order_date), "dd-MM-yyyy")}</td>
-                <td className={`status ${o.status.toLowerCase()}`}>
-                  {o.status}
+               <td>
+                  <span
+                    className={`status-badge-assigned ${
+                      o.status
+                        ? `status-${o.status
+                            .toLowerCase()
+                            .replace(/\s+/g, "-")}`
+                        : "status-default"
+                    }`}
+                  >
+                    {o.status ? o.status.toLowerCase() : "unknown"}
+                  </span>
                 </td>
                 <td>
                   <button className="view-btn" onClick={() => setViewOrder(o)}>

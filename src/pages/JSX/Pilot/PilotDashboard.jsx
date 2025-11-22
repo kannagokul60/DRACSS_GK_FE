@@ -4,13 +4,7 @@ import { useNavigate } from "react-router-dom";
 // Import all images from assets
 import deliveryImg from "../../../assets/delivered.png";
 import pendingdeliver from "../../../assets/pendingdeliver.png";
-import knowledgeImg from "../../../assets/Knowledge_base.svg";
-import storeImg from "../../../assets/shopping-cart.png";
-import supportImg from "../../../assets/call.png";
-import profileImg from "../../../assets/profile.png";
-import pendingImg from "../../../assets/pending.png";
-import DroneApprove from "../../../assets/apporrej.png";
-import orderForm from "../../../assets/orderForm.png";
+
 import "../../CSS/Pilot/Dashboard.css";
 
 export default function PilotDashboard() {
@@ -21,11 +15,11 @@ export default function PilotDashboard() {
     window.location.href = "/";
   };
 
-  const tiles = [
-        { title: "Pending Delivery", image: pendingdeliver, path: "/bd/drone-details" },
+const tiles = [
+  { title: "Pending Delivery", image: pendingdeliver, path: "/pilot/pending-delivery" },
+  { title: "Delivered", image: deliveryImg, path: "/pilot/delivered" },
+];
 
-    { title: "Delivered", image: deliveryImg, path: "/bd/client-list" },
-  ];
 
   const handleTileClick = (path) => {
     if (path) navigate(path);

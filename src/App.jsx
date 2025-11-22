@@ -35,12 +35,14 @@ import TechiDashboard from "./pages/JSX/Technical/Dashboard";
 import TechnicalTasks from "./pages/JSX/Technical/TechnicalTasks";
 import OrderFormPage from "./pages/JSX/BDTeam/OrderFormPage";
 import AssignedDroneList from "./pages/JSX/Technical/AssignedDroneList";
-            import OrderStatusPage from "./pages/JSX/Technical/OrderStatusPage";
-
+import OrderStatusPage from "./pages/JSX/Technical/OrderStatusPage";
+import TechnicalProfile from "./pages/JSX/Technical/TechnicalProfile.jsx";
 
 //Pilot Team Imports
 import PilotLayout from "./pages/JSX/Layout";
 import PilotDashboard from "./pages/JSX/Pilot/PilotDashboard";
+import PilotPendingDelivery from "./pages/JSX/Pilot/PilotPendingDelivery.jsx";
+import PilotProfile from "./pages/JSX/Pilot/PilotProfile.jsx";
 
 export default function App() {
   const isLoggedIn = !!localStorage.getItem("access");
@@ -89,15 +91,17 @@ export default function App() {
             <Route path="dashboard" element={<TechiDashboard />} />
             <Route path="tasks" element={<TechnicalTasks role="technical" />} />
             <Route path="assigned-drones" element={<AssignedDroneList />} />
-
-<Route path="order-status/:orderId" element={<OrderStatusPage />} />
-
+            <Route path="order-status/:orderId" element={<OrderStatusPage />} />
+            <Route path="profile" element={<TechnicalProfile/>} />
           </Route>
 
           {/* PILOT TEAM ROUTES */}
 
           <Route path="/pilot" element={<PilotLayout />}>
             <Route path="dashboard" element={<PilotDashboard />} />
+            <Route path="pending-delivery" element={<PilotPendingDelivery />} />
+                        <Route path="profile-details" element={<PilotProfile />} />
+
           </Route>
         </>
       ) : (

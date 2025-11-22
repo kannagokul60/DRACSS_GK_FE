@@ -234,3 +234,58 @@
   background-color: #e3f2fd; /* subtle highlight on hover */
   border-radius: 4px;        /* rounded background for hover */
 }
+
+
+.status-badge-assigned {
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-transform: capitalize; /* normal case */
+    text-align: center;
+    display: inline-block;
+    min-width: 100px;
+    font-size: 12px;
+}
+
+/* Status-specific colors */
+.status-pending { 
+    background: #fff3cd; /* light orange */
+    color: #b8860b;
+}
+
+.status-manufacturing { 
+    background: #d6eaf8; /* light blue */
+    color: #21618c;
+}
+
+.status-testing { 
+    background: #e8daef; /* light purple */
+    color: #6c3483;
+}
+
+.status-ready-for-delivery { 
+    background: #d5f5e3; /* light green */
+    color: #196f3d;
+}
+
+.status-requested	 { 
+   background: #fff3cd; color: #b8860b;
+}
+
+.status-draft	 { 
+    background: #d5d8dc; /* light gray */
+    color: #2c3e50;
+}
+
+
+.status-delivered { 
+    background: #d5d8dc; /* light gray */
+    color: #2c3e50;
+}
+
+.status-default { 
+    background: #ca8383; /* very light gray */
+    color: #616161;
+}
+
+

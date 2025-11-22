@@ -4,56 +4,54 @@ import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import config from "../../../config"; // adjust path if needed
 
-
 export default function AssignedDroneList() {
   const [orders, setOrders] = useState([]);
   const [viewOrder, setViewOrder] = useState(null);
   const [backendItems, setBackendItems] = useState([]);
   const navigate = useNavigate();
-  
 
-// Fetch BD Orders
-useEffect(() => {
-  fetch(`${config.baseURL}/orders/`)
-    .then((res) => res.json())
-    .then((data) => setOrders(data))
-    .catch((err) => console.error("Failed to load orders:", err));
-}, []);
+  // Fetch BD Orders
+  useEffect(() => {
+    fetch(`${config.baseURL}/orders/`)
+      .then((res) => res.json())
+      .then((data) => setOrders(data))
+      .catch((err) => console.error("Failed to load orders:", err));
+  }, []);
 
-// Fetch Template Items (same as OrderFormPage)
-useEffect(() => {
-  fetch(`${config.baseURL}/checklist-items/`)
-    .then((res) => res.json())
-    .then((data) => {
-      data.sort((a, b) => a.sort_order - b.sort_order);
-      setBackendItems(data);
-    })
-    .catch((err) => console.error("Failed to load template items:", err));
-}, []);
+  // Fetch Template Items (same as OrderFormPage)
+  useEffect(() => {
+    fetch(`${config.baseURL}/checklist-items/`)
+      .then((res) => res.json())
+      .then((data) => {
+        data.sort((a, b) => a.sort_order - b.sort_order);
+        setBackendItems(data);
+      })
+      .catch((err) => console.error("Failed to load template items:", err));
+  }, []);
 
-const checkDeliveryStatus = async (orderId) => {
-  try {
-    const res = await fetch(`${config.baseURL}/order-delivery-info/${orderId}/`);
-    if (res.ok) {
-      // delivery info exists
-      navigate(`/technical/order-status/${orderId}`, {
-        state: { readOnly: true },
-      });
-    } else {
-      // delivery not submitted
+  const checkDeliveryStatus = async (orderId) => {
+    try {
+      const res = await fetch(
+        `${config.baseURL}/order-delivery-info/${orderId}/`
+      );
+      if (res.ok) {
+        // delivery info exists
+        navigate(`/technical/order-status/${orderId}`, {
+          state: { readOnly: true },
+        });
+      } else {
+        // delivery not submitted
+        navigate(`/technical/order-status/${orderId}`, {
+          state: { readOnly: false },
+        });
+      }
+    } catch (err) {
+      console.error("Delivery check failed:", err);
       navigate(`/technical/order-status/${orderId}`, {
         state: { readOnly: false },
       });
     }
-  } catch (err) {
-    console.error("Delivery check failed:", err);
-    navigate(`/technical/order-status/${orderId}`, {
-      state: { readOnly: false },
-    });
-  }
-};
-
-
+  };
 
   return (
     <div className="assigned-page">
@@ -77,19 +75,29 @@ const checkDeliveryStatus = async (orderId) => {
             {orders.map((o, i) => (
               <tr key={o.id}>
                 <td>{i + 1}</td>
-<td
-  className="clickable-td"
-  onClick={() => checkDeliveryStatus(o.id)}
->
-  {o.order_number}
-</td>
-
+                <td
+                  className="clickable-td"
+                  onClick={() => checkDeliveryStatus(o.id)}
+                >
+                  {o.order_number}
+                </td>
 
                 <td>{o.customer_name}</td>
                 <td>{format(new Date(o.order_date), "dd-MM-yyyy")}</td>
-                <td className={`status ${o.status.toLowerCase()}`}>
-                  {o.status}
+                <td>
+                  <span
+                    className={`status-badge-assigned ${
+                      o.status
+                        ? `status-${o.status
+                            .toLowerCase()
+                            .replace(/\s+/g, "-")}`
+                        : "status-default"
+                    }`}
+                  >
+                    {o.status ? o.status.toLowerCase() : "unknown"}
+                  </span>
                 </td>
+
                 <td>
                   <button className="view-btn" onClick={() => setViewOrder(o)}>
                     View
@@ -116,7 +124,8 @@ const checkDeliveryStatus = async (orderId) => {
                 try {
                   const templateMap = {};
                   backendItems.forEach((t) => {
-                    templateMap[t.description] = Number(t.default_quantity) || 1;
+                    templateMap[t.description] =
+                      Number(t.default_quantity) || 1;
                   });
 
                   const ratios = viewOrder.items
@@ -156,7 +165,9 @@ const checkDeliveryStatus = async (orderId) => {
                     <input
                       type="text"
                       className="top-input"
-                      value={viewOrder.drone_model || viewOrder.drone_name || ""}
+                      value={
+                        viewOrder.drone_model || viewOrder.drone_name || ""
+                      }
                       readOnly
                     />
                   </div>
