@@ -114,7 +114,7 @@ export default function OrderFormPage() {
       customer_name: cusName,
       drone_model: droneName,
       drone_qty: qtyMultiplier, // include the drone count explicitly
-      status: "DRAFT",
+status: "REQUESTED",
       items: checklist,
     };
 
