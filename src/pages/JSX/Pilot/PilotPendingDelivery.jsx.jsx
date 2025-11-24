@@ -71,9 +71,9 @@ export default function PilotPendingDelivery() {
 
   return (
     <div className="pending-delivery-page">
-       <div className="pilot-breadcrumb-wrapper">
-              <BreadCrumbs />
-            </div>
+      <div className="pilot-breadcrumb-wrapper">
+        <BreadCrumbs />
+      </div>
       <h2 className="page-title">Pending Deliveries</h2>
 
       <table className="pending-table">
@@ -100,7 +100,7 @@ export default function PilotPendingDelivery() {
                 <td>{index + 1}</td>
                 <td>{order.order_number}</td>
                 <td>{order.customer_name}</td>
-                <td>{format(new Date(order.created_at), "dd-MM-yyyy")}</td>
+                <td>{format(new Date(), "dd-MM-yyyy")}</td>
                 <td>
                   <button
                     className="view-btn"

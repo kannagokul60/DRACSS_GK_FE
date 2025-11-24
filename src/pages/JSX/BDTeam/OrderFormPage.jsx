@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../CSS/BDteam/orderForm.css";
 import { format } from "date-fns";
-
-import { BiColor } from "react-icons/bi";
+import config from "../../../config"
 
 export default function OrderFormPage() {
   const [showPopup, setShowPopup] = useState(false);
@@ -19,7 +18,7 @@ export default function OrderFormPage() {
 
   // Fetch existing orders
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/orders/")
+    fetch(`${config.baseURL}/orders/`)
       .then((res) => res.json())
       .then((data) => setOrders(data))
       .catch((err) => console.error("Order fetch error:", err));
@@ -27,7 +26,7 @@ export default function OrderFormPage() {
 
   // Fetch checklist items from backend
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/checklist-items/")
+    fetch(`${config.baseURL}/checklist-items/`)
       .then((res) => res.json())
       .then((data) => {
         data.sort((a, b) => a.sort_order - b.sort_order);
@@ -119,7 +118,7 @@ status: "REQUESTED",
     };
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/orders/", {
+      const res = await fetch(`${config.baseURL}/orders/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

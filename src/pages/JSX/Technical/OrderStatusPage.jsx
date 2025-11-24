@@ -121,19 +121,21 @@ export default function OrderDeliveryPage() {
      SELECT HANDLERS
   ========================================================== */
 
-  const handleManufactureUpload = (e) => {
-    const f = Array.from(e.target.files || []);
-    if (f.length === 0) return;
-    setManufactureFiles(f);
-    setManufacturePending(true);
-  };
+const handleManufactureUpload = (e) => {
+  const selected = Array.from(e.target.files || []);
+  if (selected.length === 0) return;
 
-  const handleTestingUpload = (e) => {
-    const f = Array.from(e.target.files || []);
-    if (f.length === 0) return;
-    setTestingFiles(f);
-    setTestingPending(true);
-  };
+  setManufactureFiles((prev) => [...prev, ...selected]);  
+  setManufacturePending(true);
+};
+
+const handleTestingUpload = (e) => {
+  const selected = Array.from(e.target.files || []);
+  if (selected.length === 0) return;
+
+  setTestingFiles((prev) => [...prev, ...selected]);
+  setTestingPending(true);
+};
 
   /* =========================================================
      MANUFACTURING SAVE / CANCEL
@@ -299,9 +301,8 @@ export default function OrderDeliveryPage() {
 
         {/* Show upload ONLY if no manufacturing docs exist */}
         {existingManufacturerDocs.length === 0 && (
-          <>
+          <>     
             <input type="file" multiple onChange={handleManufactureUpload} />
-
             <ul className="file-list">
               {manufactureFiles.map((f, i) => (
                 <li key={i}>
