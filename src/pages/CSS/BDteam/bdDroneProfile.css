@@ -126,9 +126,10 @@
   color: #1565c0 !important;
 }
 
-.close-btn:hover {
-  color: #f44336;
+.client-popup .close-btn:hover{
+  color: #f44336 !important;
 }
+.close-btn:hover
 
 /* ===== POPUP BODY ===== */
 .popup-body {

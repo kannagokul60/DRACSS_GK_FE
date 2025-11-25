@@ -155,7 +155,7 @@ export default function ClientDroneList() {
       {/* Popup Form */}
       {showPopup && selectedDrone && (
         <div className="popup-overlay">
-          <div className="popup-content">
+          <div className="client-popup-content">
             <div className="popup-header">
               <h3>{selectedDrone.name}</h3>
 

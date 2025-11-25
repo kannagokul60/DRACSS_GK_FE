@@ -3,8 +3,9 @@
   background: #f7f7f7;
   padding: 3rem;
   border-radius: 14px;
-transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  font-family: "Poppins", sans-serif;
   height: 100%;
   box-sizing: border-box;
   position: relative;
@@ -134,7 +135,6 @@ transition: all 0.3s ease;
   box-sizing: border-box;
 }
 
-
 .popup-content h3 {
   text-align: center;
   margin-bottom: 20px;
@@ -161,10 +161,10 @@ transition: all 0.3s ease;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.assign-popup h3{
-    text-align: center;
-    color: #1565c0;
-    margin-bottom: 0.5rem !important;
+.assign-popup h3 {
+  text-align: center;
+  color: #1565c0;
+  margin-bottom: 0.5rem !important;
 }
 
 /* ===== CLOSE BUTTON (TOP-RIGHT) ===== */
@@ -194,6 +194,57 @@ transition: all 0.3s ease;
   margin: 0;
   color: #1565c0;
   font-size: 1.4rem;
+}
+
+.file-lists {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.file-lists li {
+  display: flex;
+  align-items: center;
+  background: #e0e0e0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
+.file-indexs {
+  font-weight: bold;
+  color: #1565c0;
+  margin-right: 10px;
+}
+.file-lists {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.file-items {
+  /* FIX: correct class name */
+  display: flex;
+  align-items: center;
+  background: #e0e0e0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+  gap: 10px;
+}
+
+.manufacture-links {
+  cursor: pointer;
+  color: #1565c0;
+  font-weight: 600;
+  text-decoration: underline;
+  display: inline-block;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+.manufacture-links:hover{
+  color: #68aaf5;
+  transform: translate(10px);
 }
 
 /* ===== RESPONSIVE DESIGN ===== */

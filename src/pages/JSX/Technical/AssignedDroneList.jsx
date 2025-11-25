@@ -33,7 +33,7 @@ export default function AssignedDroneList() {
     try {
       const res = await fetch(
         `${config.baseURL}/order-delivery-info/${orderId}/`
-      );
+      );        
       if (res.ok) {
         // delivery info exists
         navigate(`/technical/order-status/${orderId}`, {

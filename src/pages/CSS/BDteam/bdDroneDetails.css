@@ -2,14 +2,20 @@
    MAIN CONTAINER
    =========================== */
 .bd-drone-container {
-  padding: 40px;
-  font-family: 'Times New Roman', Times, serif;
+  padding: 45px 40px;
+  width: 100%;
   height: 100%;
   background: #f7f7f7;
-  border-radius: 10px;
+  border-radius: 14px;
   position: relative;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
+  overflow-x: hidden;
+}
+
+/* Smooth fade animation when page loads */
+.bd-drone-container {
+  animation: fadeIn 0.4s ease-in-out;
 }
 
 /* Breadcrumb */
@@ -24,10 +30,10 @@
 .bd-drone-heading {
   text-align: center;
   font-size: 2rem;
-  color: #20527a;
   margin-bottom: 30px;
-  font-weight: 500 !important;
-  text-shadow: 0 2px 6px rgba(48, 121, 180, 0.4);
+  font-weight: 600 !important;
+  color: #1565c0;
+  text-shadow: 0px 2px 3px rgba(25, 101, 163, 0.4);
 }
 
 /* Grid */
@@ -141,7 +147,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.95rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 /* SOLD */
@@ -151,7 +157,7 @@
 }
 
 .info-sold-btn:hover {
-  background: linear-gradient(135deg,  #42a5f5, #1565c0);
+  background: linear-gradient(135deg, #42a5f5, #1565c0);
   transform: translateY(-2px);
 }
 
@@ -216,7 +222,7 @@
   background: #ffffff;
   padding: 25px;
   border-radius: 18px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
   animation: popupShow 0.25s ease-out;
 }
 
@@ -229,8 +235,14 @@
 }
 
 @keyframes popupShow {
-  from { opacity: 0; transform: scale(0.85); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Popup Fields */

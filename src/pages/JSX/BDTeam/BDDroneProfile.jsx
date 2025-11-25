@@ -8,7 +8,8 @@ import "../../CSS/BDteam/bdDroneProfile.css";
 export default function BDDroneProfile() {
   const navigate = useNavigate();
   const location = useLocation();
-  const drone = location.state?.drone;
+const drone = location.state?.drone;
+const clients = location.state?.clients || [];
 
   const [selectedClient, setSelectedClient] = useState(null);
     const handleClientClick = (client) => {
@@ -29,93 +30,93 @@ export default function BDDroneProfile() {
     );
   }
 
-  // Example clients — can be fetched from backend later
-  const clients = [
-    {
-      name: "SkyView Technologies Pvt Ltd",
-      logo: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-      location: "Bangalore, Karnataka",
-      address: "45, MG Road, Bangalore, Karnataka, India",
-      purchaseDate: "10 June 2024",
-      warranty: "1 Year (till June 2025)",
-      partsReplaced: "Propeller Set, Flight Controller",
-      supportHistory: "2 on-site maintenance visits in 2024",
-      serialNumber: "DRN-AEROX1-20240610-001",
-      uinNumber: "UIN-IND-4567X1",
-    },
-    {
-      name: "AeroWorks Solutions",
-      logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-      location: "Pune, Maharashtra",
-      address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-      purchaseDate: "22 March 2023",
-      warranty: "Expired (was 1 year)",
-      partsReplaced: "Battery Module (once)",
-      supportHistory: "3 software updates & calibration done",
-      serialNumber: "DRN-AEROX1-20240610-001",
-      uinNumber: "UIN-IND-4567X1",
-    },
-    {
-      name: "AeroWorks Solutions",
-      logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-      location: "Pune, Maharashtra",
-      address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-      purchaseDate: "22 March 2023",
-      warranty: "Expired (was 1 year)",
-      partsReplaced: "Battery Module (once)",
-      supportHistory: "3 software updates & calibration done",
-      serialNumber: "DRN-AEROX1-20240610-001",
-      uinNumber: "UIN-IND-4567X1",
-    },
-    {
-      name: "AeroWorks Solutions",
-      logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-      location: "Pune, Maharashtra",
-      address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-      purchaseDate: "22 March 2023",
-      warranty: "Expired (was 1 year)",
-      partsReplaced: "Battery Module (once)",
-      supportHistory: "3 software updates & calibration done",
-      serialNumber: "DRN-AEROX1-20240610-001",
-      uinNumber: "UIN-IND-4567X1",
-    },
-    {
-      name: "AeroWorks Solutions",
-      logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-      location: "Pune, Maharashtra",
-      address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-      purchaseDate: "22 March 2023",
-      warranty: "Expired (was 1 year)",
-      partsReplaced: "Battery Module (once)",
-      supportHistory: "3 software updates & calibration done",
-      serialNumber: "DRN-AEROX1-20240610-001",
-      uinNumber: "UIN-IND-4567X1",
-    },
-    {
-      name: "AeroWorks Solutions",
-      logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-      location: "Pune, Maharashtra",
-      address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-      purchaseDate: "22 March 2023",
-      warranty: "Expired (was 1 year)",
-      partsReplaced: "Battery Module (once)",
-      supportHistory: "3 software updates & calibration done",
-      serialNumber: "DRN-AEROX1-20240610-001",
-      uinNumber: "UIN-IND-4567X1",
-    },
-    {
-      name: "FarmLink Drones",
-      logo: "https://cdn-icons-png.flaticon.com/512/3135/3135768.png",
-      location: "Coimbatore, Tamil Nadu",
-      address: "12, Green Valley, Coimbatore, Tamil Nadu, India",
-      purchaseDate: "18 November 2024",
-      warranty: "2 Years (till November 2026)",
-      partsReplaced: "No replacements yet",
-      supportHistory: "Regular online support and firmware upgrades",
-      serialNumber: "DRN-AEROX1-20240610-001",
-      uinNumber: "UIN-IND-4567X1",
-    },
-  ];
+  // // Example clients — can be fetched from backend later
+  // const clients = [
+  //   {
+  //     name: "SkyView Technologies Pvt Ltd",
+  //     logo: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+  //     location: "Bangalore, Karnataka",
+  //     address: "45, MG Road, Bangalore, Karnataka, India",
+  //     purchaseDate: "10 June 2024",
+  //     warranty: "1 Year (till June 2025)",
+  //     partsReplaced: "Propeller Set, Flight Controller",
+  //     supportHistory: "2 on-site maintenance visits in 2024",
+  //     serialNumber: "DRN-AEROX1-20240610-001",
+  //     uinNumber: "UIN-IND-4567X1",
+  //   },
+  //   {
+  //     name: "AeroWorks Solutions",
+  //     logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
+  //     location: "Pune, Maharashtra",
+  //     address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
+  //     purchaseDate: "22 March 2023",
+  //     warranty: "Expired (was 1 year)",
+  //     partsReplaced: "Battery Module (once)",
+  //     supportHistory: "3 software updates & calibration done",
+  //     serialNumber: "DRN-AEROX1-20240610-001",
+  //     uinNumber: "UIN-IND-4567X1",
+  //   },
+  //   {
+  //     name: "AeroWorks Solutions",
+  //     logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
+  //     location: "Pune, Maharashtra",
+  //     address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
+  //     purchaseDate: "22 March 2023",
+  //     warranty: "Expired (was 1 year)",
+  //     partsReplaced: "Battery Module (once)",
+  //     supportHistory: "3 software updates & calibration done",
+  //     serialNumber: "DRN-AEROX1-20240610-001",
+  //     uinNumber: "UIN-IND-4567X1",
+  //   },
+  //   {
+  //     name: "AeroWorks Solutions",
+  //     logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
+  //     location: "Pune, Maharashtra",
+  //     address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
+  //     purchaseDate: "22 March 2023",
+  //     warranty: "Expired (was 1 year)",
+  //     partsReplaced: "Battery Module (once)",
+  //     supportHistory: "3 software updates & calibration done",
+  //     serialNumber: "DRN-AEROX1-20240610-001",
+  //     uinNumber: "UIN-IND-4567X1",
+  //   },
+  //   {
+  //     name: "AeroWorks Solutions",
+  //     logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
+  //     location: "Pune, Maharashtra",
+  //     address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
+  //     purchaseDate: "22 March 2023",
+  //     warranty: "Expired (was 1 year)",
+  //     partsReplaced: "Battery Module (once)",
+  //     supportHistory: "3 software updates & calibration done",
+  //     serialNumber: "DRN-AEROX1-20240610-001",
+  //     uinNumber: "UIN-IND-4567X1",
+  //   },
+  //   {
+  //     name: "AeroWorks Solutions",
+  //     logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
+  //     location: "Pune, Maharashtra",
+  //     address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
+  //     purchaseDate: "22 March 2023",
+  //     warranty: "Expired (was 1 year)",
+  //     partsReplaced: "Battery Module (once)",
+  //     supportHistory: "3 software updates & calibration done",
+  //     serialNumber: "DRN-AEROX1-20240610-001",
+  //     uinNumber: "UIN-IND-4567X1",
+  //   },
+  //   {
+  //     name: "FarmLink Drones",
+  //     logo: "https://cdn-icons-png.flaticon.com/512/3135/3135768.png",
+  //     location: "Coimbatore, Tamil Nadu",
+  //     address: "12, Green Valley, Coimbatore, Tamil Nadu, India",
+  //     purchaseDate: "18 November 2024",
+  //     warranty: "2 Years (till November 2026)",
+  //     partsReplaced: "No replacements yet",
+  //     supportHistory: "Regular online support and firmware upgrades",
+  //     serialNumber: "DRN-AEROX1-20240610-001",
+  //     uinNumber: "UIN-IND-4567X1",
+  //   },
+  // ];
 
   return (
     <div className="bd-drone-container">
@@ -123,7 +124,9 @@ export default function BDDroneProfile() {
         <BreadCrumbs />
       </div>
 
-      <h2 className="client-list-title">{drone.name} - Purchased By</h2>
+<h2 className="client-list-title">
+  {drone?.name || "Drone"} - Purchased By
+</h2>
 
       {/* ======= CLIENT GRID ======= */}
       <div className="client-grid">

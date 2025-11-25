@@ -187,16 +187,18 @@ export default function DroneApprove() {
       </div>
 
       {attachments.length > 0 ? (
-        <ul>
-          {attachments.map((file, idx) => (
-            <li key={idx}>
-            {" "}
-              <a href={file.url} target="_blank" rel="noopener noreferrer">
-                {file.name}
-              </a>
-            </li>
-          ))}
-        </ul>
+<ul className="file-lists">
+  {attachments.map((file, idx) => (
+    <li key={idx} className="file-items">
+      <span className="file-index">{idx + 1})</span>
+      <a href={file.url} className="manufacture-links" target="_blank">
+        {file.name}
+      </a>
+    </li>
+  ))}
+</ul>
+
+
       ) : (
         <p>No attachments available</p>
       )}

@@ -82,6 +82,8 @@ export default function PilotPendingDelivery() {
             <th>S.No</th>
             <th>Order ID</th>
             <th>Client</th>
+            <th>Drone</th>
+
             <th>Date</th>
             <th>Action</th>
           </tr>
@@ -100,7 +102,12 @@ export default function PilotPendingDelivery() {
                 <td>{index + 1}</td>
                 <td>{order.order_number}</td>
                 <td>{order.customer_name}</td>
-                <td>{format(new Date(), "dd-MM-yyyy")}</td>
+                <td>{order.drone_model}</td>
+                <td>
+                  {order.order_date
+                    ? format(new Date(order.order_date), "dd-MM-yyyy")
+                    : "-"}
+                </td>
                 <td>
                   <button
                     className="view-btn"
