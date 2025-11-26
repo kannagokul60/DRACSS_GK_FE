@@ -14,9 +14,12 @@ export default function PilotPendingDelivery() {
   const [uin, setUIN] = useState("");
   const [orderForm, setOrderForm] = useState(null);
 
+  // NEW STATES FOR PATCH LOGIC
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [alreadySavedItems, setAlreadySavedItems] = useState([]);
+
   const navigate = useNavigate();
 
-  // Load pending deliveries on mount
   useEffect(() => {
     loadPendingDeliveries();
   }, []);
@@ -63,48 +66,57 @@ export default function PilotPendingDelivery() {
     }
   };
 
-  // Save all checkbox updates at once
-const handleSaveCheckedItems = async () => {
-  if (!orderForm) return;
+  // SAVE ONLY NEWLY CHECKED ITEMS
+  const handleSaveCheckedItems = async () => {
+    if (!orderForm) return;
 
-  try {
-    const csrftoken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("csrftoken="))
-      ?.split("=")[1];
+    try {
+      const csrftoken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("csrftoken="))
+        ?.split("=")[1];
 
-    for (let item of orderForm.items) {
-      const payload = { is_checked: item.is_checked || false };
-      await fetch(`${config.baseURL}/order-items/${item.id}/`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrftoken,
-        },
-        body: JSON.stringify(payload),
-        credentials: "include",
-      });
-    }
-
-    alert("Checklist updated successfully!");
-
-    // reload order
-    const res = await fetch(`${config.baseURL}/orders/${orderForm.id}/`);
-    if (res.ok) {
-      const updatedOrder = await res.json();
-      setPendingList((prev) =>
-        prev.map((o) => (o.id === updatedOrder.id ? updatedOrder : o))
+      // NEW items that were NOT previously checked in DB
+      const newItems = selectedItems.filter(
+        (id) => !alreadySavedItems.includes(id)
       );
+
+      if (newItems.length === 0) {
+        alert("No new items selected.");
+        setOrderForm(null);
+        return;
+      }
+
+      // PATCH only new items
+      for (let id of newItems) {
+        await fetch(`${config.baseURL}/order-items/${id}/`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken,
+          },
+          body: JSON.stringify({ is_checked: true }),
+          credentials: "include",
+        });
+      }
+
+      alert("Checklist updated successfully!");
+
+      // Refresh order
+      const res = await fetch(`${config.baseURL}/orders/${orderForm.id}/`);
+      if (res.ok) {
+        const updatedOrder = await res.json();
+        setPendingList((prev) =>
+          prev.map((o) => (o.id === updatedOrder.id ? updatedOrder : o))
+        );
+      }
+
+      setOrderForm(null);
+    } catch (err) {
+      console.error("Failed to save checklist:", err);
+      alert("Error saving checklist!");
     }
-
-    // ✅ CLOSE THE POPUP AFTER SAVE
-    setOrderForm(null);
-
-  } catch (err) {
-    console.error("Failed to save checklist:", err);
-    alert("Error saving checklist!");
-  }
-};
+  };
 
   return (
     <div className="pending-delivery-page">
@@ -154,9 +166,24 @@ const handleSaveCheckedItems = async () => {
                     >
                       View
                     </button>
+
                     <button
                       className="view-btn"
-                      onClick={() => setOrderForm(order)}
+                      onClick={() => {
+                        setOrderForm(order);
+
+                        // Load already saved items
+                        const saved = order.items
+                          .filter((i) => i.is_checked === true)
+                          .map((i) => i.id);
+                        setAlreadySavedItems(saved);
+
+                        // Set selected items (checked + new)
+                        const current = order.items
+                          .filter((i) => i.is_checked)
+                          .map((i) => i.id);
+                        setSelectedItems(current);
+                      }}
                     >
                       Order Form
                     </button>
@@ -168,7 +195,7 @@ const handleSaveCheckedItems = async () => {
         </tbody>
       </table>
 
-      {/* Documents Popup */}
+      {/* DOCUMENTS POPUP */}
       {viewOrder && (
         <div className="pd-popup-overlay">
           <div className="pd-popup-container">
@@ -235,7 +262,7 @@ const handleSaveCheckedItems = async () => {
         </div>
       )}
 
-      {/* Order Form Popup */}
+      {/* ORDER FORM POPUP */}
       {orderForm && (
         <div className="popup-bg">
           <div className="popup-box big-box">
@@ -266,20 +293,32 @@ const handleSaveCheckedItems = async () => {
               <div className="form-row" key={idx}>
                 <div className="item-name">{it.description}</div>
                 <div className="item-qty">Qty: {it.quantity_ordered}</div>
+
                 <input
                   type="text"
                   className="readOnly-input"
                   value={it.remarks || "Nil"}
                   readOnly
                 />
+
                 <div className="item-check">
                   <input
                     type="checkbox"
-                    checked={it.is_checked || false} // use is_checked here
+                    checked={selectedItems.includes(it.id)}
                     onChange={(e) => {
+                      const checked = e.target.checked;
+
                       const updatedOrder = { ...orderForm };
-                      updatedOrder.items[idx].is_checked = e.target.checked; // update is_checked
+                      updatedOrder.items[idx].is_checked = checked;
                       setOrderForm(updatedOrder);
+
+                      if (checked) {
+                        setSelectedItems((prev) => [...new Set([...prev, it.id])]);
+                      } else {
+                        setSelectedItems((prev) =>
+                          prev.filter((id) => id !== it.id)
+                        );
+                      }
                     }}
                   />
                 </div>
