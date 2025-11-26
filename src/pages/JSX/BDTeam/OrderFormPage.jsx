@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import "../../CSS/BDteam/orderForm.css";
 import { format } from "date-fns";
-import config from "../../../config"
+import config from "../../../config";
 
 export default function OrderFormPage() {
   const [showPopup, setShowPopup] = useState(false);
@@ -15,6 +16,19 @@ export default function OrderFormPage() {
   const [droneQty, setDroneQty] = useState(1);
 
   const [viewOrder, setViewOrder] = useState(null);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { orderId } = useParams();
+
+  const fromPilot = location.state?.fromPilot || false;
+
+  // LOAD DELIVERY INFO IF COMING FROM PILOT
+  useEffect(() => {
+    if (fromPilot && orderId) {
+      loadOrCreateDeliveryInfo(orderId);
+    }
+  }, [fromPilot, orderId]);
 
   // Fetch existing orders
   useEffect(() => {
@@ -32,15 +46,12 @@ export default function OrderFormPage() {
         data.sort((a, b) => a.sort_order - b.sort_order);
         setBackendItems(data);
 
-        const init = {};
+        // Initialize formState for remarks and checkbox
+        const initState = {};
         data.forEach((it) => {
-          init[it.id] = {
-            checked: it.is_mandatory,
-            remark: "",
-          };
+          initState[it.id] = { checked: it.is_mandatory || false, remark: "" };
         });
-
-        setFormState(init);
+        setFormState(initState);
       })
       .catch((err) => console.error("Checklist fetch error:", err));
   }, []);
@@ -82,14 +93,51 @@ export default function OrderFormPage() {
     });
   };
 
-  // SAVE ORDER
+  async function loadOrCreateDeliveryInfo(orderID) {
+    try {
+      const res = await fetch(
+        `${config.baseURL}/order-delivery-info/${orderID}/`
+      );
+      if (res.ok) return;
+
+      await fetch(`${config.baseURL}/order-delivery-info/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          order: orderID,
+          ready_for_delivery: false,
+          pilot_checks: [],
+          manufacturer_attachments: [],
+          testing_attachments: [],
+          uin_registration_number: "",
+        }),
+      });
+    } catch (err) {
+      console.error("Delivery info create/load error:", err);
+    }
+  }
+
+  // Reset form when opening new popup
+  const openNewOrderPopup = () => {
+    setShowPopup(true);
+    setFormState(
+      backendItems.reduce((acc, it) => {
+        acc[it.id] = { checked: it.is_mandatory || false, remark: "" };
+        return acc;
+      }, {})
+    );
+    setManualAccessories([]);
+    setCusName("");
+    setDroneName("");
+    setDroneQty(1);
+  };
+
   const handleSave = async () => {
     const qtyMultiplier = Number(droneQty) || 1;
 
     const checklist = backendItems.map((item) => ({
       id: item.id,
       description: item.description,
-      // multiply default by number of drones
       quantity_ordered: (Number(item.default_quantity) || 0) * qtyMultiplier,
       is_checked: formState[item.id]?.checked || false,
       remarks: formState[item.id]?.remark || "",
@@ -102,8 +150,8 @@ export default function OrderFormPage() {
       checklist.push({
         id: null,
         description: acc.name,
-        quantity_ordered: (Number(acc.qty) || 1) * qtyMultiplier, // also multiply manual items
-        is_checked: !!acc.checked,
+        quantity_ordered: (Number(acc.qty) || 1) * qtyMultiplier,
+        is_checked: acc.checked || false,
         remarks: acc.remark,
         category: "Additional Accessories",
       });
@@ -112,8 +160,8 @@ export default function OrderFormPage() {
     const payload = {
       customer_name: cusName,
       drone_model: droneName,
-      drone_qty: qtyMultiplier, // include the drone count explicitly
-status: "REQUESTED",
+      drone_qty: qtyMultiplier,
+      status: "REQUESTED",
       items: checklist,
     };
 
@@ -131,10 +179,25 @@ status: "REQUESTED",
       }
 
       const saved = await res.json();
-      setOrders((prev) => [...prev, saved]);
 
+      // Create empty delivery info
+      await fetch(`${config.baseURL}/order-delivery-info/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          order: saved.id,
+          ready_for_delivery: false,
+          pilot_checks: [],
+          manufacturer_attachments: [],
+          testing_attachments: [],
+          uin_registration_number: "",
+        }),
+      });
+
+      setOrders((prev) => [...prev, saved]);
       setShowPopup(false);
       setManualAccessories([]);
+      setFormState({});
       setCusName("");
       setDroneName("");
       setDroneQty(1);
@@ -142,6 +205,7 @@ status: "REQUESTED",
       alert("Order saved successfully!");
     } catch (err) {
       console.error("Save error:", err);
+      alert("Failed to save order!");
     }
   };
 
@@ -151,13 +215,13 @@ status: "REQUESTED",
         <h2 className="orderform-header">Order Forms</h2>
         <button
           className="plus-btn orderform-plus-btn"
-          onClick={() => setShowPopup(true)}
+          onClick={openNewOrderPopup}
         >
           +
         </button>
       </div>
 
-      {/* TABLE LIST */}
+      {/* ================= TABLE ================= */}
       <div className="order-table-wrapper">
         <table>
           <thead>
@@ -170,7 +234,6 @@ status: "REQUESTED",
               <th>Action</th>
             </tr>
           </thead>
-
           <tbody>
             {orders.map((o, i) => (
               <tr key={o.id}>
@@ -178,7 +241,7 @@ status: "REQUESTED",
                 <td>{o.order_number}</td>
                 <td>{o.customer_name}</td>
                 <td>{format(new Date(o.order_date), "dd-MM-yyyy")}</td>
-               <td>
+                <td>
                   <span
                     className={`status-badge-assigned ${
                       o.status
@@ -202,91 +265,42 @@ status: "REQUESTED",
         </table>
       </div>
 
-      {/* ===================== VIEW POPUP ====================== */}
+      {/* VIEW POPUP */}
       {viewOrder && (
         <div className="popup-bg">
           <div className="popup-box big-box">
             <h3 className="popup-title-centered">Order Details</h3>
+            <div className="popup-input-row">
+              <div className="input-group">
+                <label>Customer Name</label>
+                <input
+                  type="text"
+                  className="top-input"
+                  value={viewOrder.customer_name}
+                  readOnly
+                />
+              </div>
+              <div className="input-group">
+                <label>Drone Model</label>
+                <input
+                  type="text"
+                  className="top-input"
+                  value={viewOrder.drone_model}
+                  readOnly
+                />
+              </div>
+              <div className="input-group">
+                <label>No. of Drones</label>
+                <input
+                  type="text"
+                  className="top-input"
+                  value={viewOrder.drone_qty}
+                  readOnly
+                />
+              </div>
+            </div>
 
-            {/* infer drone qty from viewOrder or backendItems */}
-            {(() => {
-              // prefer backend value if present
-              const backendDroneQty = viewOrder.drone_qty;
-              let inferredDroneQty = backendDroneQty;
-
-              if (inferredDroneQty == null) {
-                try {
-                  // build map of template default quantities by description
-                  const templateMap = {};
-                  backendItems.forEach((t) => {
-                    templateMap[t.description] =
-                      Number(t.default_quantity) || 1;
-                  });
-
-                  // compute ratios quantity_ordered / default_quantity for items that match template
-                  const ratios = viewOrder.items
-                    .map((it) => {
-                      const def = templateMap[it.description];
-                      if (!def) return null;
-                      const ratio = (Number(it.quantity_ordered) || 0) / def;
-                      return Number.isFinite(ratio) ? ratio : null;
-                    })
-                    .filter((r) => r != null && r > 0);
-
-                  // if all ratios are same integer, use it
-                  if (ratios.length) {
-                    const allEqual = ratios.every(
-                      (r) => Math.abs(r - ratios[0]) < 1e-6
-                    );
-                    if (allEqual) {
-                      inferredDroneQty = Math.round(ratios[0]);
-                    }
-                  }
-                } catch (e) {
-                  inferredDroneQty = undefined;
-                }
-              }
-
-              return (
-                <div className="popup-input-row">
-                  <div className="input-group">
-                    <label>Customer Name</label>
-                    <input
-                      type="text"
-                      className="top-input"
-                      value={viewOrder.customer_name}
-                      readOnly
-                    />
-                  </div>
-
-                  <div className="input-group">
-                    <label>Drone Model</label>
-                    <input
-                      type="text"
-                      className="top-input"
-                      value={
-                        viewOrder.drone_model || viewOrder.drone_name || ""
-                      }
-                      readOnly
-                    />
-                  </div>
-
-                  <div className="input-group">
-                    <label>No. of Drones</label>
-                    <input
-                      type="text"
-                      className="top-input"
-                      value={inferredDroneQty ?? "-"}
-                      readOnly
-                    />
-                  </div>
-                </div>
-              );
-            })()}
-
-            {/* ... rest of view popup rendering unchanged */}
-
-            {/* GROUPED VIEW ITEMS */}
+            {/* ITEMS GROUP */}
             {Object.values(
               viewOrder.items.reduce((acc, it) => {
                 const key = it.category || "Other";
@@ -297,7 +311,6 @@ status: "REQUESTED",
             ).map((group, index) => (
               <div className="section" key={index}>
                 <h4>{group.title}</h4>
-
                 {group.items.map((it, idx) => (
                   <div className="form-row" key={idx}>
                     <div className="item-name">{it.description}</div>
@@ -308,8 +321,6 @@ status: "REQUESTED",
                       value={it.remarks || "Nil"}
                       readOnly
                     />
-
-                    {/* <input type="checkbox" checked={it.is_checked} readOnly /> */}
                   </div>
                 ))}
               </div>
@@ -324,7 +335,7 @@ status: "REQUESTED",
         </div>
       )}
 
-      {/* ===================== CREATE POPUP ====================== */}
+      {/* CREATE POPUP */}
       {showPopup && (
         <div className="popup-bg">
           <div className="popup-box big-box">
@@ -335,7 +346,7 @@ status: "REQUESTED",
                 <label>Customer Name</label>
                 <input
                   type="text"
-                  className="top-input"
+                  className="top-inputs"
                   value={cusName}
                   onChange={(e) => setCusName(e.target.value)}
                   placeholder="customer name"
@@ -346,7 +357,7 @@ status: "REQUESTED",
                 <label>Drone Name</label>
                 <input
                   type="text"
-                  className="top-input"
+                  className="top-inputs"
                   value={droneName}
                   onChange={(e) => setDroneName(e.target.value)}
                   placeholder="drone name"
@@ -357,7 +368,7 @@ status: "REQUESTED",
                 <label>No. of Drones</label>
                 <input
                   type="number"
-                  className="top-input"
+                  className="top-inputs"
                   min="1"
                   value={droneQty}
                   onChange={(e) => setDroneQty(e.target.value)}
@@ -365,11 +376,10 @@ status: "REQUESTED",
               </div>
             </div>
 
-            {/* CHECKLIST */}
+            {/* CHECKLIST GROUPS */}
             {Object.keys(grouped).map((cat) => (
               <div className="section" key={cat}>
                 <h4>{cat}</h4>
-
                 {grouped[cat].map((item) => (
                   <div className="order-form-row" key={item.id}>
                     <div className="item-name">{item.description}</div>
@@ -382,21 +392,14 @@ status: "REQUESTED",
                       value={formState[item.id]?.remark || ""}
                       onChange={(e) => updateRemark(item.id, e.target.value)}
                     />
-
-                    <input
-                      type="checkbox"
-                      checked={formState[item.id]?.checked}
-                      onChange={() => toggleCheckbox(item.id)}
-                    />
                   </div>
                 ))}
               </div>
             ))}
 
-            {/* Additional Accessories */}
+            {/* ADDITIONAL ACCESSORIES */}
             <div className="section">
               <h4>Additional Accessories</h4>
-
               {manualAccessories.map((row, idx) => (
                 <div className="form-row" key={idx}>
                   <input
@@ -408,7 +411,6 @@ status: "REQUESTED",
                       updateAccessory(idx, "name", e.target.value)
                     }
                   />
-
                   <input
                     type="number"
                     className="item-qty-input"
@@ -417,7 +419,6 @@ status: "REQUESTED",
                       updateAccessory(idx, "qty", e.target.value)
                     }
                   />
-
                   <input
                     type="text"
                     className="remarks-input"
@@ -427,17 +428,8 @@ status: "REQUESTED",
                       updateAccessory(idx, "remark", e.target.value)
                     }
                   />
-
-                  <input
-                    type="checkbox"
-                    checked={row.checked}
-                    onChange={(e) =>
-                      updateAccessory(idx, "checked", e.target.checked)
-                    }
-                  />
                 </div>
               ))}
-
               <button className="add-row-btn" onClick={addAccessoryRow}>
                 + Add Accessory
               </button>

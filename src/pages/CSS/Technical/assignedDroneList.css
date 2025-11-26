@@ -136,6 +136,7 @@
   border: 1px solid #bbb;
   border-radius: 6px;
   background: #f2f2f2;
+  cursor: not-allowed;
 }
 
 /* ================================
