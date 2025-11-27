@@ -17,7 +17,7 @@ export default function PilotDashboard() {
 
 const tiles = [
   { title: "Pending Delivery", image: pendingdeliver, path: "/pilot/pending-delivery" },
-  { title: "Delivered", image: deliveryImg, path: "/pilot/delivered" },
+  { title: "Delivered", image: deliveryImg, path: "/pilot/pilot-delivered" },
 ];
 
 

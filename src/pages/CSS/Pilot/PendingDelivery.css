@@ -112,6 +112,8 @@
   max-height: 85%;
   overflow-y: auto;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  padding-bottom: 60px;
 }
 
 .pd-popup-container h3 {
@@ -266,3 +268,75 @@
     font-size: 11px;
   }
 }
+
+.split-layout {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.pd-left,
+.pd-right {
+  flex: 1;
+  background: #fff;
+}
+
+.pd-left {
+  border-right: 1px solid #ddd;
+  padding-right: 20px;
+}
+
+.pd-right {
+  padding-left: 20px;
+}
+
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.upload-label {
+  font-weight: 600;
+}
+
+.pd-upload-btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+  background: #1565c0;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pd-upload-btn:hover {
+  background: #0d47a1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .split-layout {
+    flex-direction: column;
+  }
+
+  .pd-left {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .pd-right {
+    padding-left: 0;
+    margin-top: 20px;
+  }
+}
+
+.pd-popup-actions-bottom {
+  position: absolute;
+  bottom: 15px;
+  right: 20px;
+}
+

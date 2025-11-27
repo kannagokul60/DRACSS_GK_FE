@@ -125,6 +125,12 @@ export default function Sidebar({ setIsSidebarCollapsed }) {
         icon: <FaClipboardCheck />,
         path: `${basePath}/pending-delivery`,
       },
+       {
+        name: "Pilot Delivered",
+        icon: <FaClipboardCheck />,
+        path: `${basePath}/pilot-delivered`,
+      },
+     
       {
         name: "Profile",
         icon: <FaUser />,

@@ -260,8 +260,9 @@
 }
 
 .status-testing { 
-    background: #e8daef; /* light purple */
-    color: #6c3483;
+    background: #ffe5cc; /* light orange */
+color: #d35400;      /* dark orange */
+
 }
 
 .status-ready-for-delivery { 
@@ -280,8 +281,8 @@
 
 
 .status-delivered { 
-    background: #d5d8dc; /* light gray */
-    color: #2c3e50;
+ background: #b7f0d0; /* light green */
+    color: #196f3d;
 }
 
 .status-default { 

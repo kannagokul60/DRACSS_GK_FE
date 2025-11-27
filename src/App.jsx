@@ -43,6 +43,7 @@ import PilotLayout from "./pages/JSX/Layout";
 import PilotDashboard from "./pages/JSX/Pilot/PilotDashboard";
 import PilotPendingDelivery from "./pages/JSX/Pilot/PilotPendingDelivery.jsx";
 import PilotProfile from "./pages/JSX/Pilot/PilotProfile.jsx";
+import PilotDelivered from "./pages/JSX/Pilot/PilotDelivered.jsx";
 
 export default function App() {
   const isLoggedIn = !!localStorage.getItem("access");
@@ -100,6 +101,8 @@ export default function App() {
           <Route path="/pilot" element={<PilotLayout />}>
             <Route path="dashboard" element={<PilotDashboard />} />
             <Route path="pending-delivery" element={<PilotPendingDelivery />} />
+            <Route path="pilot-delivered" element={<PilotDelivered />} />
+
                         <Route path="profile-details" element={<PilotProfile />} />
 
           </Route>
