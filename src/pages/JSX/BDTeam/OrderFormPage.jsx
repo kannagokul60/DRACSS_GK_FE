@@ -22,6 +22,7 @@ export default function OrderFormPage() {
   const { orderId } = useParams();
 
   const fromPilot = location.state?.fromPilot || false;
+  const [endDate, setEndDate] = useState("");
 
   // LOAD DELIVERY INFO IF COMING FROM PILOT
   useEffect(() => {
@@ -161,6 +162,7 @@ export default function OrderFormPage() {
       customer_name: cusName,
       drone_model: droneName,
       drone_qty: qtyMultiplier,
+      Required_by_date: endDate,
       status: "REQUESTED",
       items: checklist,
     };
@@ -240,7 +242,11 @@ export default function OrderFormPage() {
                 <td>{i + 1}</td>
                 <td>{o.order_number}</td>
                 <td>{o.customer_name}</td>
-                <td>{format(new Date(o.order_date), "dd-MM-yyyy")}</td>
+                <td>
+                  {o.created_at && !isNaN(new Date(o.created_at))
+                    ? format(new Date(o.created_at), "dd-MM-yyyy")
+                    : "N/A"}
+                </td>
                 <td>
                   <span
                     className={`status-badge-assigned ${
@@ -295,6 +301,23 @@ export default function OrderFormPage() {
                   type="text"
                   className="top-input"
                   value={viewOrder.drone_qty}
+                  readOnly
+                />
+              </div>
+              <div className="input-group">
+                <label>Requested Date</label>
+                <input
+                  type="text"
+                  className="top-input"
+                  value={
+                    viewOrder.required_by_date &&
+                    !isNaN(new Date(viewOrder.required_by_date))
+                      ? format(
+                          new Date(viewOrder.required_by_date),
+                          "dd-MM-yyyy"
+                        )
+                      : "N/A"
+                  }
                   readOnly
                 />
               </div>
@@ -372,6 +395,16 @@ export default function OrderFormPage() {
                   min="1"
                   value={droneQty}
                   onChange={(e) => setDroneQty(e.target.value)}
+                />
+              </div>
+
+              <div className="input-group">
+                <label>End Date</label>
+                <input
+                  type="date"
+                  className="top-inputs"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
                 />
               </div>
             </div>

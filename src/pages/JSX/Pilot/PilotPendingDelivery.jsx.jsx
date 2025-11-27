@@ -21,6 +21,7 @@ export default function PilotPendingDelivery() {
   // ATTACHMENTS PER ORDER
   const [orderAttachments, setOrderAttachments] = useState({});
   const [pendingAttachments, setPendingAttachments] = useState(false);
+  const [attachmentsSaved, setAttachmentsSaved] = useState({});
 
   const navigate = useNavigate();
 
@@ -35,46 +36,45 @@ export default function PilotPendingDelivery() {
     loadPendingDeliveries();
   }, []);
 
-const loadPendingDeliveries = async () => {
-  try {
-    const [ordersRes, deliveryRes] = await Promise.all([
-      fetch(`${config.baseURL}/orders/`),
-      fetch(`${config.baseURL}/order-delivery-info/`)
-    ]);
+  const loadPendingDeliveries = async () => {
+    try {
+      const [ordersRes, deliveryRes] = await Promise.all([
+        fetch(`${config.baseURL}/orders/`),
+        fetch(`${config.baseURL}/order-delivery-info/`),
+      ]);
 
-    const orders = await ordersRes.json();
-    const delivery = await deliveryRes.json();
+      const orders = await ordersRes.json();
+      const delivery = await deliveryRes.json();
 
-    // Filter only orders where ready_for_delivery = true AND status != DELIVERED
-    const pending = orders.filter((order) => {
-      const info = delivery.find(
-        (d) =>
-          d.order === order.id ||
-          d.order?.includes?.(`/${order.id}/`)
-      );
+      // Filter only orders where ready_for_delivery = true AND status != DELIVERED
+      const pending = orders.filter((order) => {
+        const info = delivery.find(
+          (d) => d.order === order.id || d.order?.includes?.(`/${order.id}/`)
+        );
 
-      return info?.ready_for_delivery === true && order.status !== "DELIVERED";
-    });
+        return (
+          info?.ready_for_delivery === true && order.status !== "DELIVERED"
+        );
+      });
 
-    setPendingList(pending);
+      setPendingList(pending);
 
-    // Map attachments correctly
-    const attachmentsMap = {};
-    delivery.forEach((d) => {
-      const id =
-        typeof d.order === "number"
-          ? d.order
-          : parseInt(d.order.split("/").filter(Boolean).pop());
+      // Map attachments correctly
+      const attachmentsMap = {};
+      delivery.forEach((d) => {
+        const id =
+          typeof d.order === "number"
+            ? d.order
+            : parseInt(d.order.split("/").filter(Boolean).pop());
 
-      attachmentsMap[id] = d.attachments || [];
-    });
+        attachmentsMap[id] = d.attachments || [];
+      });
 
-    setOrderAttachments(attachmentsMap);
-  } catch (err) {
-    console.error("Failed to load pending deliveries:", err);
-  }
-};
-
+      setOrderAttachments(attachmentsMap);
+    } catch (err) {
+      console.error("Failed to load pending deliveries:", err);
+    }
+  };
 
   // ================== LOAD DELIVERY INFO ==================
   const loadDeliveryInfo = async (orderId) => {
@@ -183,9 +183,11 @@ const loadPendingDeliveries = async () => {
 
   const saveAttachmentFiles = async () => {
     if (!viewOrder) return;
-    const files = orderAttachments[viewOrder.id].filter(
+
+    const files = (orderAttachments[viewOrder.id] || []).filter(
       (f) => f instanceof File
     );
+
     if (files.length === 0) return;
 
     try {
@@ -194,9 +196,18 @@ const loadPendingDeliveries = async () => {
       }
 
       alert("Attachments uploaded successfully!");
+
       setPendingAttachments(false);
-      await loadDeliveryInfo(viewOrder.id); // refresh attachments
-      setViewOrder({ ...viewOrder }); // rerender
+
+      await loadDeliveryInfo(viewOrder.id); // Refresh final attachments
+
+      setViewOrder({ ...viewOrder }); // Force re-render
+
+      // ✅ Mark attachments saved → Deliver button enabled
+      setAttachmentsSaved((prev) => ({
+        ...prev,
+        [viewOrder.id]: true,
+      }));
     } catch (err) {
       console.error("Attachment upload error:", err);
       alert("Failed to upload attachments");
@@ -205,52 +216,60 @@ const loadPendingDeliveries = async () => {
 
   const cancelAttachmentFiles = () => {
     if (!viewOrder) return;
-    // Keep only existing attachments (remove newly selected files)
+
+    // ❌ Mark unsaved → Deliver button disabled
+    setAttachmentsSaved((prev) => ({
+      ...prev,
+      [viewOrder.id]: false,
+    }));
+
+    // Remove only unsaved (new) files
     setOrderAttachments((prev) => ({
       ...prev,
-      [viewOrder.id]: prev[viewOrder.id].filter((f) => !(f instanceof File)),
+      [viewOrder.id]: (prev[viewOrder.id] || []).filter(
+        (f) => !(f instanceof File)
+      ),
     }));
+
     setPendingAttachments(false);
   };
 
   // ================== MARK ORDER DELIVERED ==================
-const handleDeliverOrder = async (orderId) => {
-  try {
-    const csrftoken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("csrftoken="))
-      ?.split("=")[1];
+  const handleDeliverOrder = async (orderId) => {
+    try {
+      const csrftoken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("csrftoken="))
+        ?.split("=")[1];
 
-    const res = await fetch(`${config.baseURL}/orders/${orderId}/`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrftoken,
-      },
-      body: JSON.stringify({ status: "DELIVERED" }),
-      credentials: "include",
-    });
+      const res = await fetch(`${config.baseURL}/orders/${orderId}/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrftoken,
+        },
+        body: JSON.stringify({ status: "DELIVERED" }),
+        credentials: "include",
+      });
 
-    if (!res.ok) throw new Error("Failed to mark as delivered");
+      if (!res.ok) throw new Error("Failed to mark as delivered");
 
-    // ---- IMPORTANT FIX ----
-    // Remove the delivered order immediately from the UI
-    setPendingList((prev) => prev.filter((o) => o.id !== orderId));
+      // ---- IMPORTANT FIX ----
+      // Remove the delivered order immediately from the UI
+      setPendingList((prev) => prev.filter((o) => o.id !== orderId));
 
-    // Clear popup
-    setViewOrder(null);
+      // Clear popup
+      setViewOrder(null);
 
-    alert("Order status updated to DELIVERED!");
+      alert("Order status updated to DELIVERED!");
 
-    // Navigate after UI update
-    navigate("/pilot-delivered");
-
-  } catch (err) {
-    console.error(err);
-    alert("Failed to update delivery status");
-  }
-};
-
+      // Navigate after UI update
+      navigate("/pilot-delivered");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update delivery status");
+    }
+  };
 
   // ================== RENDER ==================
   return (
@@ -259,83 +278,88 @@ const handleDeliverOrder = async (orderId) => {
         <BreadCrumbs />
       </div>
       <h2 className="page-title">Pending Deliveries</h2>
-
-      <table className="pending-table">
-        <thead>
-          <tr>
-            <th>S.No</th>
-            <th>Order ID</th>
-            <th>Client</th>
-            <th>Drone</th>
-            <th>Date</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pendingList.length === 0 ? (
+      <div className="pending-table-wrapper">
+        <table>
+          <thead>
             <tr>
-              <td colSpan="6" style={{ textAlign: "center", padding: "20px" }}>
-                No Pending Deliveries
-              </td>
+              <th>S.No</th>
+              <th>Order ID</th>
+              <th>Client</th>
+              <th>Drone</th>
+              <th>Date</th>
+              <th>Action</th>
             </tr>
-          ) : (
-            pendingList.map((order, index) => (
-              <tr key={order.id}>
-                <td>{index + 1}</td>
-                <td>{order.order_number}</td>
-                <td>{order.customer_name}</td>
-                <td>{order.drone_model}</td>
-                <td>
-                  {order.order_date
-                    ? format(new Date(order.order_date), "dd-MM-yyyy")
-                    : "-"}
-                </td>
-                <td>
-                  <div className="pilot-btn">
-                    <button
-                      className="view-btn"
-                      onClick={async () => {
-                        setViewOrder(order);
-                        await loadDeliveryInfo(order.id);
-                      }}
-                    >
-                      View
-                    </button>
-
-                    <button
-                      className="view-btn"
-                      onClick={() => {
-                        setOrderForm(order);
-
-                        const saved = order.items
-                          .filter((i) => i.is_checked === true)
-                          .map((i) => i.id);
-                        setAlreadySavedItems(saved);
-
-                        const current = order.items
-                          .filter((i) => i.is_checked)
-                          .map((i) => i.id);
-                        setSelectedItems(current);
-                      }}
-                    >
-                      Order Form
-                    </button>
-
-                    {hasAttachments(order.id) && (
-                      <button
-                        className="deliver-btn"
-                        onClick={() => handleDeliverOrder(order.id)}
-                      >
-                        Deliver
-                      </button>
-                    )}
-                  </div>
+          </thead>
+          <tbody>
+            {pendingList.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="6"
+                  style={{ textAlign: "center", padding: "20px" }}
+                >
+                  No Pending Deliveries
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              pendingList.map((order, index) => (
+                <tr key={order.id}>
+                  <td>{index + 1}</td>
+                  <td>{order.order_number}</td>
+                  <td>{order.customer_name}</td>
+                  <td>{order.drone_model}</td>
+                  <td>
+                    {order.order_date
+                      ? format(new Date(order.order_date), "dd-MM-yyyy")
+                      : "-"}
+                  </td>
+                  <td>
+                    <div className="pilot-btn">
+                      <button
+                        className="view-btn"
+                        onClick={async () => {
+                          setViewOrder(order);
+                          await loadDeliveryInfo(order.id);
+                        }}
+                      >
+                        View
+                      </button>
+
+                      <button
+                        className="view-btn"
+                        onClick={() => {
+                          setOrderForm(order);
+
+                          const saved = order.items
+                            .filter((i) => i.is_checked === true)
+                            .map((i) => i.id);
+                          setAlreadySavedItems(saved);
+
+                          const current = order.items
+                            .filter((i) => i.is_checked)
+                            .map((i) => i.id);
+                          setSelectedItems(current);
+                        }}
+                      >
+                        Order Form
+                      </button>
+
+                      {hasAttachments(order.id) &&
+                        attachmentsSaved[order.id] && (
+                          <button
+                            className="deliver-btn"
+                            onClick={() => handleDeliverOrder(order.id)}
+                          >
+                            Deliver
+                          </button>
+                        )}
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* ================== VIEW ORDER POPUP ================== */}
       {viewOrder && (
@@ -395,9 +419,14 @@ const handleDeliverOrder = async (orderId) => {
 
             <div className="pd-right">
               <h3>Upload Documents</h3>
-              <div className="section-block">
-                <h4>Attachments</h4>
+              <h4>Attachments</h4>
 
+              <div className="section-block">
+                <input
+                  type="file"
+                  multiple
+                  onChange={(e) => handleAttachmentSelect(e, viewOrder.id)}
+                />
                 <ul className="file-list">
                   {(orderAttachments[viewOrder.id] || []).map((f, i) => (
                     <li key={i}>
@@ -433,12 +462,6 @@ const handleDeliverOrder = async (orderId) => {
                     </li>
                   ))}
                 </ul>
-
-                <input
-                  type="file"
-                  multiple
-                  onChange={(e) => handleAttachmentSelect(e, viewOrder.id)}
-                />
 
                 {pendingAttachments && (
                   <div className="btn-row">

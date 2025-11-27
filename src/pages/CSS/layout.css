@@ -104,6 +104,41 @@ background: white;
   transform: scale(1.1);
 }
 
+.layout-profile-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+  object-fit: cover;
+  background: #fff;
+  border: 2px solid transparent;
+}
+
+.layout-profile-icon:hover {
+  transform: scale(1.12);
+  border-color: #7d7e80;
+}
+
+.logout-profile-icon{
+    width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+  object-fit: cover;
+  background: #fff;
+  border: 2px solid transparent;
+  padding: 1px;
+}
+
+.logout-profile-icon:hover {
+  transform: scale(1.12);
+  border-color: #c04515;
+}
+
+
+
 /* ====== RESPONSIVE ====== */
 @media (max-width: 992px) {
   .layout-content {

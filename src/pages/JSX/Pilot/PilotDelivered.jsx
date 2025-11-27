@@ -31,42 +31,43 @@ export default function PilotDelivered() {
       </div>
 
       <h2 className="page-title">Delivered Orders</h2>
-
-      <table className="pending-table">
-        <thead>
-          <tr>
-            <th>S.No</th>
-            <th>Order ID</th>
-            <th>Client</th>
-            <th>Drone</th>
-            <th>Delivered Date</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {deliveredList.length === 0 ? (
+      <div className="pending-table-wrapper">
+        <table>
+          <thead>
             <tr>
-              <td colSpan="5" style={{ textAlign: "center", padding: 20 }}>
-                No Delivered Orders
-              </td>
+              <th>S.No</th>
+              <th>Order ID</th>
+              <th>Client</th>
+              <th>Drone</th>
+              <th>Delivered Date</th>
             </tr>
-          ) : (
-            deliveredList.map((order, index) => (
-              <tr key={order.id}>
-                <td>{index + 1}</td>
-                <td>{order.order_number}</td>
-                <td>{order.customer_name}</td>
-                <td>{order.drone_model}</td>
-                <td>
-                  {order.updated_at
-                    ? format(new Date(order.updated_at), "dd-MM-yyyy")
-                    : "-"}
+          </thead>
+
+          <tbody>
+            {deliveredList.length === 0 ? (
+              <tr>
+                <td colSpan="5" style={{ textAlign: "center", padding: 20 }}>
+                  No Delivered Orders
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              deliveredList.map((order, index) => (
+                <tr key={order.id}>
+                  <td>{index + 1}</td>
+                  <td>{order.order_number}</td>
+                  <td>{order.customer_name}</td>
+                  <td>{order.drone_model}</td>
+                  <td>
+                    {order.updated_at
+                      ? format(new Date(order.updated_at), "dd-MM-yyyy")
+                      : "-"}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

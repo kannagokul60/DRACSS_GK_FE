@@ -32,11 +32,11 @@ import DroneApprove from "./pages/JSX/BDTeam/DroneApprove";
 //Technical Team Imports
 import TechnicalLayout from "./pages/JSX/Layout";
 import TechiDashboard from "./pages/JSX/Technical/Dashboard";
-import TechnicalTasks from "./pages/JSX/Technical/TechnicalTasks";
 import OrderFormPage from "./pages/JSX/BDTeam/OrderFormPage";
 import AssignedDroneList from "./pages/JSX/Technical/AssignedDroneList";
 import OrderStatusPage from "./pages/JSX/Technical/OrderStatusPage";
 import TechnicalProfile from "./pages/JSX/Technical/TechnicalProfile.jsx";
+import CompletedDroneList from "./pages/JSX/Technical/CompletedDroneList.jsx";
 
 //Pilot Team Imports
 import PilotLayout from "./pages/JSX/Layout";
@@ -90,9 +90,10 @@ export default function App() {
           {/* TECHNICAL TEAM ROUTES */}
           <Route path="/technical" element={<TechnicalLayout />}>
             <Route path="dashboard" element={<TechiDashboard />} />
-            <Route path="tasks" element={<TechnicalTasks role="technical" />} />
             <Route path="assigned-drones" element={<AssignedDroneList />} />
             <Route path="order-status/:orderId" element={<OrderStatusPage />} />
+            <Route path="/technical/completed-work" element={<CompletedDroneList />} />
+
             <Route path="profile" element={<TechnicalProfile/>} />
           </Route>
 

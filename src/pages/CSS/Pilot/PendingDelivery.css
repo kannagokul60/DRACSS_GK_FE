@@ -37,37 +37,66 @@
 /* ============================
    Table Styles
 ============================ */
-.pending-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #fff;
+.pending-table-wrapper {
+   width: 100%;
+  max-height: 650px; /* table height control → enables vertical scroll */
+  overflow-x: auto; /* horizontal scroll */
+  overflow-y: auto; /* vertical scroll */
+
+  background: #ffffff;
   border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
-.pending-table thead {
-  background: #1565c0;
+
+.pending-table-wrapper table {
+  width: 100%;
+  min-width: 880px;
+  border-collapse: collapse;
 }
 
-.pending-table th {
+.pending-table-wrapper thead {
+  position: sticky;
+  top: 0;
+  background: #f5f5f5;
+  z-index: 10;
+}
+
+.pending-table-wrapper th,
+.pending-table-wrapper td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.pending-table-wrapper th {
   background: #1565c0;
   color: #fff;
-  padding: 12px;
-  text-align: left;
-  font-weight: 600;
+  text-transform: uppercase;
 }
 
-.pending-table td {
-  padding: 12px;
-  border-bottom: 1px solid #eaeaea;
-  color: #333;
+.pending-table-wrapper td {
+  background: #fafafa;
 }
 
-/* Hover Effect */
-.pending-table tbody tr:hover {
-  background: #e9f2ff;
-  cursor: pointer;
+.pending-table-wrapper tr:hover td {
+  background-color: #e3f2fd;
+}
+
+/* Scrollbar */
+.pending-table-wrapper::-webkit-scrollbar {
+  height: 8px;
+  width: 6px;
+}
+.pending-table-wrapper::-webkit-scrollbar-thumb {
+  background: #90caf9;
+  border-radius: 4px;
+}
+.pending-table-wrapper::-webkit-scrollbar-track {
+  background: #e3f2fd;
 }
 
 /* ============================
@@ -338,5 +367,13 @@
   position: absolute;
   bottom: 15px;
   right: 20px;
+}
+
+.pd-right h4 {
+  padding-top: 20px;
+}
+
+.section-block {
+  margin-top: 10px;
 }
 

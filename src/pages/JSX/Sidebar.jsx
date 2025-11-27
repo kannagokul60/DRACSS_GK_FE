@@ -98,15 +98,14 @@ export default function Sidebar({ setIsSidebarCollapsed }) {
         path: `${basePath}/dashboard`,
       },
       {
-        name: "Assigned Tasks",
-        icon: <FaClipboardCheck />,
-        path: `${basePath}/tasks`,
-      },
-
-      {
-        name: "Drone Dispatch",
+        name: "Pending Work",
         icon: <FaUser />,
         path: `${basePath}/assigned-drones`,
+      },
+            {
+        name: "Completed Work",
+        icon: <FaUser />,
+        path: `${basePath}/completed-work`,
       },
       {
         name: "Profile",

@@ -33,7 +33,7 @@ export default function AssignedDroneList() {
     try {
       const res = await fetch(
         `${config.baseURL}/order-delivery-info/${orderId}/`
-      );        
+      );
       if (res.ok) {
         // delivery info exists
         navigate(`/technical/order-status/${orderId}`, {
@@ -52,6 +52,8 @@ export default function AssignedDroneList() {
       });
     }
   };
+  // Only orders NOT delivered
+  const pendingOrders = orders.filter((o) => o.status !== "DELIVERED");
 
   return (
     <div className="assigned-page">
@@ -72,7 +74,7 @@ export default function AssignedDroneList() {
           </thead>
 
           <tbody>
-            {orders.map((o, i) => (
+            {pendingOrders.map((o, i) => (
               <tr key={o.id}>
                 <td>{i + 1}</td>
                 <td
@@ -81,7 +83,6 @@ export default function AssignedDroneList() {
                 >
                   {o.order_number}
                 </td>
-
                 <td>{o.customer_name}</td>
                 <td>{format(new Date(o.order_date), "dd-MM-yyyy")}</td>
                 <td>
@@ -97,7 +98,6 @@ export default function AssignedDroneList() {
                     {o.status ? o.status.toLowerCase() : "unknown"}
                   </span>
                 </td>
-
                 <td>
                   <button className="view-btn" onClick={() => setViewOrder(o)}>
                     View

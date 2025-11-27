@@ -15,26 +15,22 @@ export default function TechnicalDashboard() {
   const [isOnline, setIsOnline] = useState(false);
 
   const tiles = [
-    { title: "Pending Work", image: pendingImg, type: "pending" },
-    { title: "Assigned Work", image: assignedImg, type: "assigned" },
+    // { title: "Pending Work", image: pendingImg, type: "pending" },
+    // { title: "Assigned Work", image: assignedImg, type: "assigned" },
+    { title: "Pending Work", image: pendingImg, type: "dronepending" },
     { title: "Completed Work", image: completedImg, type: "completed" },
-    { title: "Profile Details", image: profileImg, type: "profile" },
-        { title: "Drone Dispatch", image: droneAssemble, type: "dronepending" },
-
+    // { title: "Profile Details", image: profileImg, type: "profile" },
   ];
 
-const handleTileClick = (type) => {
-  if (type === "profile") {
-    navigate("/technical/profile-details");
-  } 
-  else if (type === "dronepending") {
-    navigate("/technical/assigned-drones"); // <-- FIXED ROUTE
-  }
-  else {
-    navigate(`/technical/tasks?status=${type}`);
-  }
-};
-
+  const handleTileClick = (type) => {
+    if (type === "profile") {
+      navigate("/technical/profile-details");
+    } else if (type === "dronepending") {
+      navigate("/technical/assigned-drones"); // <-- FIXED ROUTE
+    } else {
+      navigate("/technical/completed-work");
+    }
+  };
 
   return (
     <div className="dash-wrap">
