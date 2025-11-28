@@ -163,7 +163,18 @@ export default function BDDroneDetails() {
                   Sold : {clients.length}
                 </button>
 
-                <button className="info-unsold-btn">Unsold : 5</button>
+<button
+  className="info-unsold-btn"
+  onClick={() =>
+    navigate("/bd/unsold-drones", {
+      state: {
+        unsoldDrones: drones.filter((d, i) => i % 2 === 0), // example: mark some drones unsold
+      },
+    })
+  }
+>
+  Unsold : 5
+</button>
               </div>
             </div>
           </div>
@@ -171,40 +182,75 @@ export default function BDDroneDetails() {
       </div>
 
       {/* Popup */}
-      {showPopup && (
-        <div className="bd-popup-overlay">
-          <div className="bd-popup">
-            <h3>Add New Drone</h3>
+  {showPopup && (
+  <div className="bd-popup-overlay">
+    <div className="bd-popup">
+      <h3>Add New Drone</h3>
 
-            <div className="bd-popup-fields">
-              <label>Drone Name</label>
-              <input type="text" placeholder="Enter Drone Name" />
+      <div className="bd-popup-fields">
 
-              <label>Serial Number</label>
-              <input type="text" placeholder="Enter Serial Number" />
+        <label>Drone Serial Number</label>
+        <input
+          type="text"
+          placeholder="Enter Drone Serial Number"
+        />
 
-              <label>Manufacturer</label>
-              <input type="text" placeholder="Enter Manufacturer" />
+        <label>UIN Number</label>
+        <input
+          type="text"
+          placeholder="Enter UIN Number"
+        />
 
-              <label>Purchase Date</label>
-              <input type="date" />
+        <label>Flight Controller Serial Number</label>
+        <input
+          type="text"
+          placeholder="Enter Flight Controller Serial Number"
+        />
 
-              <label>Upload Image</label>
-              <input type="file" />
-            </div>
+        <label>Remote Controller Serial Number</label>
+        <input
+          type="text"
+          placeholder="Enter Remote Controller Serial Number"
+        />
 
-            <div className="bd-popup-actions">
-              <button className="bd-save-btn">Save</button>
-              <button
-                className="bd-cancel-btn"
-                onClick={() => setShowPopup(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+        <label>Battery Charger Serial Number</label>
+        <input
+          type="text"
+          placeholder="Enter Battery Charger Serial Number"
+        />
+
+        <label>Battery Serial Number 1</label>
+        <input
+          type="text"
+          placeholder="Enter Battery Serial Number 1"
+        />
+
+        <label>Battery Serial Number 2</label>
+        <input
+          type="text"
+          placeholder="Enter Battery Serial Number 2"
+        />
+
+        <label>Attachments</label>
+        <input type="file" multiple />
+
+      </div>
+
+      <div className="bd-popup-actions">
+        <button className="bd-save-btn">Save</button>
+
+        <button
+          className="bd-cancel-btn"
+          onClick={() => setShowPopup(false)}
+        >
+          Cancel
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

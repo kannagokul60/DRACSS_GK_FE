@@ -3,16 +3,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import BreadCrumbs from "../BreadCrumbs";
 import { FaInfoCircle } from "react-icons/fa";
 
-import "../../CSS/BDteam/bdDroneProfile.css";
+import "../../CSS/BDteam/soldDroneList.css";
 
 export default function BDDroneProfile() {
   const navigate = useNavigate();
   const location = useLocation();
-const drone = location.state?.drone;
-const clients = location.state?.clients || [];
+  const drone = location.state?.drone;
+  const clients = location.state?.clients || [];
 
   const [selectedClient, setSelectedClient] = useState(null);
-    const handleClientClick = (client) => {
+  const handleClientClick = (client) => {
     setSelectedClient(client);
   };
 
@@ -124,9 +124,7 @@ const clients = location.state?.clients || [];
         <BreadCrumbs />
       </div>
 
-<h2 className="client-list-title">
-  {drone?.name || "Drone"} - Purchased By
-</h2>
+      <h2 className="client-list-title">Sold Drone List</h2>
 
       {/* ======= CLIENT GRID ======= */}
       <div className="client-grid">

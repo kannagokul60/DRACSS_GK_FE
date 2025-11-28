@@ -11,7 +11,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-background: white;
+  background: white;
   color: #1d6391;
   padding: 12px 25px;
   position: fixed;
@@ -35,31 +35,18 @@ background: white;
   gap: 15px;
 }
 
+/* ===== ROLE DROPDOWN ===== */
 .layout-role-dropdown {
   padding: 6px 10px;
   border-radius: 6px;
-  border: 1px solid #1d6391;;
+  border: 1px solid #1d6391;
   outline: none;
   font-size: 14px;
   cursor: pointer;
+  background: white;
 }
 
-.layout-logout-btn {
-  background-color: white;
-  color: #ef4444;
-  border: 1px solid #ef4444;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.layout-logout-btn:hover {
-  background-color: #db5b5b;
-  color: white;
-}
-
-/* ====== BODY SECTION ====== */
+/* ===== BODY SECTION ===== */
 .layout-body {
   display: flex;
   height: 100%;
@@ -67,24 +54,20 @@ background: white;
   position: relative;
 }
 
-/* ====== MAIN CONTENT ====== */
+/* ===== MAIN CONTENT ===== */
 .layout-content {
   flex-grow: 1;
   padding: 10px 30px;
-  margin-left: 240px; /* default when sidebar open */
- 
-  
+  margin-left: 240px;
   min-height: calc(100vh - 70px);
   overflow-y: auto;
   transition: margin-left 0.3s ease;
 }
 
-/* Expanded when sidebar is collapsed */
 .layout-content.expanded {
   margin-left: 70px;
 }
 
-/* Full width when sidebar hidden (mobile view) */
 .layout-content.full {
   margin-left: 0;
 }
@@ -104,6 +87,7 @@ background: white;
   transform: scale(1.1);
 }
 
+/* ===== PROFILE ICON ===== */
 .layout-profile-icon {
   width: 36px;
   height: 36px;
@@ -120,8 +104,9 @@ background: white;
   border-color: #7d7e80;
 }
 
-.logout-profile-icon{
-    width: 34px;
+/* ===== LOGOUT ICON ===== */
+.logout-profile-icon {
+  width: 34px;
   height: 34px;
   border-radius: 50%;
   cursor: pointer;
@@ -137,17 +122,99 @@ background: white;
   border-color: #c04515;
 }
 
+/* ===== PROFILE OVERLAY (CLICK OUTSIDE CLOSE) ===== */
+.profile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
 
+/* ===== DROPDOWN WRAPPER ===== */
+.profile-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
 
-/* ====== RESPONSIVE ====== */
+/* ===== PROFILE DROPDOWN POPUP ===== */
+.profile-dropdown {
+  position: absolute;
+  top: 58px;
+  right: 0px;
+  width: 380px;
+  min-height: 300px;
+  background: white;
+  padding: 20px;
+
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  z-index: 9999;
+  animation: dropdownFade 0.25s ease-out;
+}
+
+/* DROPDOWN ANIMATION */
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* POPUP TITLE */
+.profile-dropdown h4 {
+  margin: 0 0 12px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1565c0;
+  text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4);
+  text-align: center;
+}
+
+/* POPUP TEXT ROWS */
+.profile-dropdown p {
+  margin: 8px 0;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+
+/* LOGOUT BUTTON */
+.profile-logout-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.profile-logout-btn:hover {
+  background: #b71c1c;
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 992px) {
   .layout-content {
     margin-left: 0;
     padding: 20px;
-  }
-
-  .menu-toggle {
-    display: block;
   }
 }
 

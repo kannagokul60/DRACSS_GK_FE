@@ -22,12 +22,13 @@ import ClientDetails from "./pages/JSX/BDTeam/ClientDroneList";
 
 import "./App.css";
 import BDDroneDetails from "./pages/JSX/BDTeam/BDDroneDetails";
-import BDDroneProfile from "./pages/JSX/BDTeam/BDDroneProfile";
+import SoldDroneList from "./pages/JSX/BDTeam/soldDroneList.jsx";
 import BDKnowledgeBase from "./pages/JSX/BDTeam/KnowledgeBase";
 import BDViewKnowledge from "./pages/JSX/BDTeam/ViewKnowledge";
 import PendingTasks from "./pages/JSX/BDTeam/PendingTasks";
 import Profile from "./pages/JSX/BDTeam/Profile";
 import DroneApprove from "./pages/JSX/BDTeam/DroneApprove";
+import UnsoldDroneList from "./pages/JSX/BDTeam/UnsoldDroneList.jsx";
 
 //Technical Team Imports
 import TechnicalLayout from "./pages/JSX/Layout";
@@ -76,11 +77,12 @@ export default function App() {
             <Route path="client-list" element={<ClientList />} />
             <Route path="client-drone-list/:id" element={<ClientDetails />} />
             <Route path="drone-details" element={<BDDroneDetails />} />
-            <Route path="drone-details/:id" element={<BDDroneProfile />} />
+            <Route path="drone-details/:id" element={<SoldDroneList />} />
             <Route path="knowledge-base" element={<BDKnowledgeBase />} />
             <Route path="knowledge/bhumi" element={<BDViewKnowledge />} />
             <Route path="pending-tasks" element={<PendingTasks />} />
             <Route path="profile-details" element={<Profile />} />
+            <Route path="unsold-drones" element={<UnsoldDroneList />} />
 
             {/* FIXED: REMOVE leading slash */}
             <Route path="drone-approve" element={<DroneApprove />} />
@@ -92,9 +94,12 @@ export default function App() {
             <Route path="dashboard" element={<TechiDashboard />} />
             <Route path="assigned-drones" element={<AssignedDroneList />} />
             <Route path="order-status/:orderId" element={<OrderStatusPage />} />
-            <Route path="/technical/completed-work" element={<CompletedDroneList />} />
+            <Route
+              path="/technical/completed-work"
+              element={<CompletedDroneList />}
+            />
 
-            <Route path="profile" element={<TechnicalProfile/>} />
+            <Route path="profile" element={<TechnicalProfile />} />
           </Route>
 
           {/* PILOT TEAM ROUTES */}
@@ -104,8 +109,7 @@ export default function App() {
             <Route path="pending-delivery" element={<PilotPendingDelivery />} />
             <Route path="pilot-delivered" element={<PilotDelivered />} />
 
-                        <Route path="profile-details" element={<PilotProfile />} />
-
+            <Route path="profile-details" element={<PilotProfile />} />
           </Route>
         </>
       ) : (

@@ -1,0 +1,225 @@
+/* ===========================
+   MAIN CONTAINER
+   =========================== */
+.unsold-drone-container {
+  padding: 45px 40px;
+  width: 100%;
+  height: 100%;
+  background: #f7f7f7;
+  border-radius: 14px;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
+  overflow-x: hidden;
+}
+
+/* Heading */
+.unsold-drone-heading {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1565c0;
+  margin-bottom: 30px;
+  text-shadow: 0 1px 3px rgba(21, 101, 192, 0.3);
+}
+
+/* Grid */
+.unsold-drone-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+/* ===========================
+   CARD
+   =========================== */
+/* Date on top-right corner of card */
+.unsold-drone-card {
+  position: relative; /* needed for absolute positioning */
+  border-radius: 18px;
+  padding: 20px 18px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.unsold-drone-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+/* Top-right date */
+.unsold-drone-date {
+  position: absolute;
+  top: 15px;
+  right: 18px;
+  background: #1565c0;
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Drone Info */
+.unsold-drone-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.unsold-drone-name {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #0d47a1;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.unsold-drone-info p {
+  display: flex;
+  justify-content: space-between; /* left + right */
+  align-items: center;
+  font-size: 14px;
+  padding: 4px 0;
+  color: #333;
+}
+
+.unsold-drone-info p strong {
+  color: #1565c0;
+  font-weight: 600;
+}
+
+
+/* Button: Move to Sold */
+.unsold-move-btn {
+  margin-top: 12px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 22px;
+  background: #1565c0;
+;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.unsold-move-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #1565c0, #64b5f6);
+  box-shadow: 0 6px 15px rgba(21, 101, 192, 0.4);
+}
+
+/* No drones */
+.unsold-no-drones {
+  text-align: center;
+  font-size: 1rem;
+  color: #555;
+  padding: 30px 0;
+}
+
+/* ---------------- POPUP OVERLAY ---------------- */
+.unsold-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9990;
+}
+
+/* Popup box */
+.unsold-popup {
+  background: #fff;
+  padding: 25px;
+  border-radius: 15px;
+  width: 500px;
+  max-width: 90%;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+/* Popup Header */
+.unsold-popup h3 {
+text-align: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1565c0;
+    margin-bottom: 10px;
+    text-shadow: 0 1px 3px rgba(21, 101, 192, 0.3);
+}
+
+/* Logo */
+.popup-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto 15px;
+}
+
+/* Body */
+.popup-body p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+}
+
+/* Actions */
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.popup-save-btn {
+  background: linear-gradient(135deg, #1565c0, #42a5f5);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.popup-save-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #42a5f5, #1565c0);
+}
+
+.popup-cancel-btn {
+  background: #777;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.popup-cancel-btn:hover {
+  background: #555;
+  transform: translateY(-2px);
+}
+
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+@media (max-width: 768px) {
+  .unsold-drone-heading {
+    font-size: 1.7rem;
+  }
+
+  .unsold-drone-grid {
+    gap: 20px;
+  }
+}

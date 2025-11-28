@@ -218,7 +218,7 @@
 
 /* Popup Box */
 .bd-popup {
-  width: 420px;
+  width: 520px;
   background: #ffffff;
   padding: 25px;
   border-radius: 18px;
@@ -232,6 +232,31 @@
   margin-bottom: 20px;
   color: #0d47a1;
   text-shadow: 0 2px 6px #dce7f8;
+}
+
+.bd-popup-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 580px;
+  overflow-y: auto;
+
+  padding-right: 5px; /* avoid scrollbar overlay on text */
+}
+
+/* Optional: Smooth scrollbar styling */
+.bd-popup-fields::-webkit-scrollbar {
+  width: 6px;
+}
+
+.bd-popup-fields::-webkit-scrollbar-thumb {
+  background: #90caf9;
+  border-radius: 30px;
+}
+
+.bd-popup-fields::-webkit-scrollbar-track {
+  background: #e3f2fd;
+  border-radius: 30px;
 }
 
 @keyframes popupShow {
