@@ -13,7 +13,7 @@ export default function OrderFormPage() {
 
   const [droneName, setDroneName] = useState("");
   const [cusName, setCusName] = useState("");
-  const [droneQty, setDroneQty] = useState(1);
+  const [number_of_drone, setNumberOfDrone] = useState(1);
 
   const [viewOrder, setViewOrder] = useState(null);
 
@@ -130,11 +130,11 @@ export default function OrderFormPage() {
     setManualAccessories([]);
     setCusName("");
     setDroneName("");
-    setDroneQty(1);
+    setNumberOfDrone(1);
   };
 
   const handleSave = async () => {
-    const qtyMultiplier = Number(droneQty) || 1;
+    const qtyMultiplier = Number(number_of_drone) || 1;
 
     const checklist = backendItems.map((item) => ({
       id: item.id,
@@ -161,8 +161,8 @@ export default function OrderFormPage() {
     const payload = {
       customer_name: cusName,
       drone_model: droneName,
-      drone_qty: qtyMultiplier,
-      Required_by_date: endDate,
+      number_of_drone: Number(number_of_drone),
+      required_by_date: endDate,
       status: "REQUESTED",
       items: checklist,
     };
@@ -202,7 +202,7 @@ export default function OrderFormPage() {
       setFormState({});
       setCusName("");
       setDroneName("");
-      setDroneQty(1);
+      setNumberOfDrone(1);
 
       alert("Order saved successfully!");
     } catch (err) {
@@ -300,7 +300,7 @@ export default function OrderFormPage() {
                 <input
                   type="text"
                   className="top-input"
-                  value={viewOrder.drone_qty}
+                  value={viewOrder.number_of_drone}
                   readOnly
                 />
               </div>
@@ -393,8 +393,8 @@ export default function OrderFormPage() {
                   type="number"
                   className="top-inputs"
                   min="1"
-                  value={droneQty}
-                  onChange={(e) => setDroneQty(e.target.value)}
+                  value={number_of_drone}
+                  onChange={(e) => setNumberOfDrone(e.target.value)}
                 />
               </div>
 
