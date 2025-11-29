@@ -65,10 +65,10 @@
 
 /* ===== DRONE CARDS GRID ===== */
 .drone-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-  width: 100%;
+ display: flex;
+  flex-wrap: wrap;      
+  gap: 40px;               
+  justify-content: flex-start;
 }
 
 .drone-card {

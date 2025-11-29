@@ -25,92 +25,128 @@
 
 /* Grid */
 .unsold-drone-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 25px;
+  display: flex;
+  flex-wrap: wrap;         /* ⬅️ REQUIRED */
+  gap: 40px;               /* Reduce card gap */
+  justify-content: flex-start;
 }
 
 /* ===========================
-   CARD
+   IMPROVED CARD DESIGN
    =========================== */
-/* Date on top-right corner of card */
 .unsold-drone-card {
-  position: relative; /* needed for absolute positioning */
+  position: relative;
   border-radius: 18px;
-  padding: 20px 18px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 20px;
+  max-width: 420px;
+  width: 100%;
+  flex: 1 1 280px;
+
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Hover */
 .unsold-drone-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  transform: translateY(-6px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
 }
 
-/* Top-right date */
+/* Date Badge */
 .unsold-drone-date {
   position: absolute;
   top: 15px;
-  right: 18px;
+  right: 16px;
   background: #1565c0;
   color: #fff;
-  padding: 6px 10px;
-  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 0.78rem;
   font-weight: 600;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-
-/* Drone Info */
-.unsold-drone-info {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
+/* Drone Name */
 .unsold-drone-name {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #0d47a1;
-  margin-bottom: 10px;
   text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  padding-bottom: 5px;
+  color: #0d47a1;
 }
 
+/* Scroll Section for Long Data */
+.unsold-drone-scroll {
+  max-height: 260px;            /* ⬅️ LIMIT HEIGHT */
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* Divider Titles */
+.section-title {
+  font-size: 0.85rem;
+  margin: 12px 0 4px 0;
+  font-weight: 700;
+  color: #1565c0;
+  border-left: 4px solid #1565c0;
+  padding-left: 6px;
+  opacity: 0.9;
+}
+
+/* Info Lines */
 .unsold-drone-info p {
   display: flex;
-  justify-content: space-between; /* left + right */
-  align-items: center;
-  font-size: 14px;
+  justify-content: space-between;
   padding: 4px 0;
-  color: #333;
+  border-bottom: 1px dashed #ddd;
+  font-size: 14px;
 }
 
 .unsold-drone-info p strong {
-  color: #1565c0;
-  font-weight: 600;
+  color: #0d47a1;
 }
 
+/* File Link Styling */
+.unsold-drone-file-link {
+  color: #1a73e8;
+  font-weight: 600;
+  text-decoration: none;
+}
 
-/* Button: Move to Sold */
+.unsold-drone-file-link:hover {
+  text-decoration: underline;
+}
+
+/* Button */
 .unsold-move-btn {
-  margin-top: 12px;
-  padding: 10px 15px;
+  margin-top: 20px;
+  padding: 10px 16px;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #1565c0, #63a4ff);
   border: none;
-  border-radius: 22px;
-  background: #1565c0;
-;
   color: white;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  align-items: end ;
 }
 
 .unsold-move-btn:hover {
+  background: linear-gradient(135deg, #63a4ff, #1565c0);
   transform: translateY(-2px);
-  background: linear-gradient(135deg, #1565c0, #64b5f6);
-  box-shadow: 0 6px 15px rgba(21, 101, 192, 0.4);
 }
+
+/* Scrollbar Style */
+.unsold-drone-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.unsold-drone-scroll::-webkit-scrollbar-thumb {
+  background: #b0bec5;
+  border-radius: 10px;
+}
+
 
 /* No drones */
 .unsold-no-drones {
@@ -208,6 +244,85 @@ text-align: center;
 .popup-cancel-btn:hover {
   background: #555;
   transform: translateY(-2px);
+}
+
+/* ---------------- DRONE DETAILS POPUP ---------------- */
+.drone-details-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.drone-details-popup {
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  width: 450px;
+  max-width: 90%;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: popupFade 0.3s ease-in-out;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.drone-details-popup h2 {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #1565c0;
+  margin-bottom: 15px;
+}
+
+.drone-details-popup p {
+  margin: 8px 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.drone-details-popup a {
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.drone-details-popup a:hover {
+  text-decoration: underline;
+}
+
+.drone-details-close-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  color: #fff;
+  background-color: #929191;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.drone-details-close-btn:hover {
+  background-color: rgb(192, 188, 188);
+}
+
+
+@keyframes popupFade {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 

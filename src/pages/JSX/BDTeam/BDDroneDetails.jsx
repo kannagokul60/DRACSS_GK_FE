@@ -1,34 +1,105 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BreadCrumbs from "../BreadCrumbs";
 import { FaPlus } from "react-icons/fa";
 import "../../CSS/BDTeam/bdDroneDetails.css";
+import config from "../../../config";
+import Bhumi from "../../../assets/bhumi.png";
+import Bhima from "../../../assets/bhima.png";
+import Vajra from "../../../assets/Vajra.png";
+import VajraS from "../../../assets/Vajra-s.png";
+import VyomaM from "../../../assets/Vyoma-m.webp";
+import VyomaS from "../../../assets/Vyoma-s.webp";
 
 export default function BDDroneDetails() {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
+  const [selectedDrone, setSelectedDrone] = useState(null);
+
+  const [form, setForm] = useState({
+    model_name: "",
+    uin_number: "",
+    drone_serial_number: "",
+    flight_controller_serial_number: "",
+    remote_controller: "",
+    battery_charger_serial_number: "",
+    battery_serial_number_1: "",
+    battery_serial_number_2: "",
+    attachment: null,
+  });
+  const handleInputChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e) => {
+    setForm({ ...form, attachment: e.target.files[0] });
+  };
+
+  const handleSave = async () => {
+    try {
+      const formData = new FormData();
+
+      for (const key in form) {
+        if (form[key]) formData.append(key, form[key]);
+      }
+
+      // If backend expects "registered"
+      formData.append("registered", false);
+
+      const res = await fetch(`${config.baseURL}/drone_registration/`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      console.log("Backend Response:", data);
+
+      if (!res.ok) {
+        alert("Failed to save: " + JSON.stringify(data));
+        return;
+      }
+
+      alert("Drone Registered Successfully!");
+      setShowPopup(false);
+    } catch (error) {
+      console.log("Error:", error);
+      alert("Error while saving");
+    }
+  };
 
   const drones = [
     {
       id: 1,
-      name: "AeroScout X1",
-      image:
-        "https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/HbMAAOSwHxJkbRf7/$_32.JPG?set_id=880000500F",
+      name: "BHUMI A10E",
+      image: Bhumi,
     },
     {
       id: 2,
-      name: "AgriFlyer V2",
-      image:
-        "https://image.mono.ipros.com/public/product/image/2073529/IPROS2626387104845531324.png",
+      name: "BHIMA - M",
+      image: Bhima,
     },
     {
       id: 3,
-      name: "SkyGuard Pro",
-      image:
-        "https://flytechaviation.aero/wp-content/uploads/2025/09/drone-1-1.jpg",
+      name: "VAJRA-M",
+      image: Vajra,
+    },
+    {
+      id: 4,
+      name: "VAJRA-S",
+      image: VajraS,
+    },
+    {
+      id: 5,
+      name: "VYOMA-M",
+      image: VyomaM,
+    },
+    {
+      id: 5,
+      name: "VYOMA-S",
+      image: VyomaS,
     },
   ];
-  
+
   // // Example clients — can be fetched from backend later
   const clients = [
     {
@@ -121,6 +192,20 @@ export default function BDDroneDetails() {
     navigate(`/bd/drone-details/${drone.id}`, { state: { drone } });
   };
 
+  const [unsoldCount, setUnsoldCount] = useState(0);
+
+  useEffect(() => {
+    fetchUnsoldCount();
+  }, []);
+
+  const fetchUnsoldCount = async () => {
+    const res = await fetch(`${config.baseURL}/drone_registration/`);
+    const data = await res.json();
+
+    const unsold = data.filter((d) => d.registered === false);
+    setUnsoldCount(unsold.length);
+  };
+
   return (
     <div className="bd-drone-container">
       <div className="bd-drone-breadcrumb-wrapper">
@@ -135,7 +220,11 @@ export default function BDDroneDetails() {
             {/* --- NEW: + BUTTON INSIDE EACH CARD --- */}
             <button
               className="bd-add-card-btn"
-              onClick={() => setShowPopup(true)}
+              onClick={() => {
+                setSelectedDrone(drone);
+                setForm((prev) => ({ ...prev, model_name: drone.name })); // auto fill model
+                setShowPopup(true);
+              }}
             >
               <FaPlus size={14} />
             </button>
@@ -163,18 +252,12 @@ export default function BDDroneDetails() {
                   Sold : {clients.length}
                 </button>
 
-<button
-  className="info-unsold-btn"
-  onClick={() =>
-    navigate("/bd/unsold-drones", {
-      state: {
-        unsoldDrones: drones.filter((d, i) => i % 2 === 0), // example: mark some drones unsold
-      },
-    })
-  }
->
-  Unsold : 5
-</button>
+                <button
+                  className="info-unsold-btn"
+                  onClick={() => navigate("/bd/unsold-drones")}
+                >
+                  Unsold : {unsoldCount}
+                </button>
               </div>
             </div>
           </div>
@@ -182,75 +265,99 @@ export default function BDDroneDetails() {
       </div>
 
       {/* Popup */}
-  {showPopup && (
-  <div className="bd-popup-overlay">
-    <div className="bd-popup">
-      <h3>Add New Drone</h3>
+      {showPopup && (
+        <div className="bd-popup-overlay">
+          <div className="bd-popup">
+            <h3>Add New Drone – {selectedDrone?.name}</h3>
 
-      <div className="bd-popup-fields">
+            <div className="bd-popup-fields">
+              <label>Drone Model</label>
+              <input
+                type="text"
+                name="model_name"
+                value={form.model_name}
+                readOnly
+              />
 
-        <label>Drone Serial Number</label>
-        <input
-          type="text"
-          placeholder="Enter Drone Serial Number"
-        />
+              <label>Drone Serial Number</label>
+              <input
+                type="text"
+                name="drone_serial_number"
+                placeholder="Enter Drone Serial Number"
+                onChange={handleInputChange}
+              />
 
-        <label>UIN Number</label>
-        <input
-          type="text"
-          placeholder="Enter UIN Number"
-        />
+              <label>UIN Number</label>
+              <input
+                type="text"
+                name="uin_number"
+                placeholder="Enter UIN Number"
+                onChange={handleInputChange}
+              />
 
-        <label>Flight Controller Serial Number</label>
-        <input
-          type="text"
-          placeholder="Enter Flight Controller Serial Number"
-        />
+              <label>Flight Controller Serial Number</label>
+              <input
+                type="text"
+                name="flight_controller_serial_number"
+                placeholder="Enter Flight Controller Serial Number"
+                onChange={handleInputChange}
+              />
 
-        <label>Remote Controller Serial Number</label>
-        <input
-          type="text"
-          placeholder="Enter Remote Controller Serial Number"
-        />
+              <label>Remote Controller Serial Number</label>
+              <input
+                type="text"
+                name="remote_controller"
+                placeholder="Enter Remote Controller Serial Number"
+                onChange={handleInputChange}
+              />
 
-        <label>Battery Charger Serial Number</label>
-        <input
-          type="text"
-          placeholder="Enter Battery Charger Serial Number"
-        />
+              <label>Battery Charger Serial Number</label>
+              <input
+                type="text"
+                name="battery_charger_serial_number"
+                placeholder="Enter Battery Charger Serial Number"
+                onChange={handleInputChange}
+              />
 
-        <label>Battery Serial Number 1</label>
-        <input
-          type="text"
-          placeholder="Enter Battery Serial Number 1"
-        />
+              <label>Battery Serial Number 1</label>
+              <input
+                type="text"
+                name="battery_serial_number_1"
+                placeholder="Enter Battery Serial Number 1"
+                onChange={handleInputChange}
+              />
 
-        <label>Battery Serial Number 2</label>
-        <input
-          type="text"
-          placeholder="Enter Battery Serial Number 2"
-        />
+              <label>Battery Serial Number 2</label>
+              <input
+                type="text"
+                name="battery_serial_number_2"
+                placeholder="Enter Battery Serial Number 2"
+                onChange={handleInputChange}
+              />
 
-        <label>Attachments</label>
-        <input type="file" multiple />
+              <label>Attachments</label>
+              <input
+                type="file"
+                name="attachment"
+                onChange={handleFileChange}
+              />
+            </div>
 
-      </div>
+            <div className="bd-popup-actions">
+              <button className="bd-save-btn" onClick={handleSave}>
+                Save
+              </button>
 
-      <div className="bd-popup-actions">
-        <button className="bd-save-btn">Save</button>
-
-        <button
-          className="bd-cancel-btn"
-          onClick={() => setShowPopup(false)}
-        >
-          Cancel
-        </button>
-      </div>
-
-    </div>
-  </div>
-)}
-
+              <button
+                className="bd-cancel-btn"
+                onClick={() => setShowPopup(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

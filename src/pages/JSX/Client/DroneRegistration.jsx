@@ -9,6 +9,7 @@ import {
 import "../../CSS/Client/droneRegistration.css";
 import DroneRegistrationForm from "./DroneRegistrationForm";
 import BreadCrumbs from "../BreadCrumbs";
+import config from "../../../config";
 
 export default function DroneRegistration() {
   const [showForm, setShowForm] = useState(false);
@@ -20,9 +21,7 @@ export default function DroneRegistration() {
   useEffect(() => {
     const fetchDrones = async () => {
       try {
-        const res = await fetch(
-          "http://127.0.0.1:8000/api/drone_registration/"
-        );
+        const res = await fetch(`${config.baseURL}/drone_registration/`);
         const data = await res.json();
         setDrones(data);
       } catch (error) {
@@ -38,29 +37,26 @@ export default function DroneRegistration() {
   // Handle form submission (POST to backend)
   const handleFormSubmit = async (formData) => {
     try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/drone_registration/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model_name: formData.modelName,
-            drone_type: formData.type,
-            manufacturer: formData.manufacturer,
-            uin_number: formData.uin,
-            drone_serial_number: formData.droneSerial,
-            flight_controller_serial_number: formData.flightController,
-            remote_controller: formData.remoteController,
-            battery_charger_serial_number: formData.batteryCharger,
-            battery_serial_number_1: formData.battery1,
-            battery_serial_number_2: formData.battery2,
-            attachment: formData.attachment || null,
-            is_active: true,
-          }),
-        }
-      );
+      const response = await fetch(`${config.baseURL}/drone_registration/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model_name: formData.modelName,
+          drone_type: formData.type,
+          manufacturer: formData.manufacturer,
+          uin_number: formData.uin,
+          drone_serial_number: formData.droneSerial,
+          flight_controller_serial_number: formData.flightController,
+          remote_controller: formData.remoteController,
+          battery_charger_serial_number: formData.batteryCharger,
+          battery_serial_number_1: formData.battery1,
+          battery_serial_number_2: formData.battery2,
+          attachment: formData.attachment || null,
+          is_active: true,
+        }),
+      });
 
       if (response.ok) {
         const newDrone = await response.json();
@@ -113,56 +109,76 @@ export default function DroneRegistration() {
         </button>
       </div>
 
-      {/* Drone List */}
       {loading ? (
         <p>Loading drones...</p>
-      ) : drones.length === 0 ? (
+      ) : drones.filter((d) => d.client && d.client.length > 0).length === 0 ? (
         <p>No drones registered yet.</p>
       ) : (
         <div className="drone-cards-grid">
-          {drones.map((drone) => (
-            <div
-              key={drone.id}
-              className="drone-card"
-              onClick={() => handleCardClick(drone)}
-            >
-              <div className="drone-card-header">
-                <h3>{drone.model_name}</h3>
-                <span
-                  className={`status-badge ${
-                    drone.status ? drone.status.toLowerCase().trim() : "pending"
-                  }`}
-                >
-                  {getStatusIcon(drone.status)} {drone.status || "Pending"}
-                </span>
-              </div>
+          {drones
+            .filter((d) => d.client && d.client.length > 0)
+            .map((drone) => {
+              const clientList = drone.client;
+              const latestClient = clientList[clientList.length - 1]; // always use LAST entry
 
-              <div className="drone-card-body">
-                <p>
-                  <FaCalendarAlt /> Registered On:{" "}
-                  <strong>
-                    {drone.created_at
-                      ? new Date(drone.created_at).toLocaleDateString()
-                      : "N/A"}
-                  </strong>
-                </p>
-                <p>
-                  <FaPaperPlane /> Type: <strong>{drone.drone_type}</strong>
-                </p>
-              </div>
-            </div>
-          ))}
+              return (
+                <div
+                  key={drone.id}
+                  className="drone-card"
+                  onClick={() => handleCardClick(drone)}
+                >
+                  <div className="drone-card-header">
+                    <h3>{latestClient.model_name || drone.model_name}</h3>
+
+                    <span
+                      className={`status-badge ${
+                        drone.status
+                          ? drone.status.toLowerCase().trim()
+                          : "pending"
+                      }`}
+                    >
+                      {getStatusIcon(drone.status)} {drone.status || "Pending"}
+                    </span>
+                  </div>
+
+                  <div className="drone-card-body">
+                    <p>
+                      <FaCalendarAlt /> Registered On:{" "}
+                      <strong>
+                        {new Date(drone.created_at).toLocaleDateString()}
+                      </strong>
+                    </p>
+
+                    <p>
+                      <FaPaperPlane /> Drone Serial:{" "}
+                      <strong>{latestClient.drone_serial_number}</strong>
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
         </div>
       )}
 
-      {/* Modal */}
       {showForm && (
         <div className="modal-overlay" onClick={() => setShowForm(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <DroneRegistrationForm
-              drone={selectedDrone}
+              drone={
+                selectedDrone
+                  ? selectedDrone.client && selectedDrone.client.length > 0
+                    ? selectedDrone.client[selectedDrone.client.length - 1]
+                    : selectedDrone
+                  : null
+              }
               onClose={() => setShowForm(false)}
-              onSubmit={!selectedDrone ? handleFormSubmit : undefined}
+              onSubmit={
+                selectedDrone
+                  ? null
+                  : (newDrone) => {
+                      setDrones((prev) => [...prev, newDrone]); // update instantly
+                    }
+              }
               viewOnly={!!selectedDrone}
             />
           </div>

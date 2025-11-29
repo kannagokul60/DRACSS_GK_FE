@@ -1,211 +1,290 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "../../CSS/BDteam/droneApprove.css";
 import BreadCrumbs from "../BreadCrumbs";
-
 
 export default function DroneApprove() {
   const [drones, setDrones] = useState([]);
   const [selectedDrone, setSelectedDrone] = useState(null);
+  const [bdDrone, setBdDrone] = useState(null);
+  const [showApprovalModal, setShowApprovalModal] = useState(false);
   const [remarks, setRemarks] = useState("");
-  const [showRemarksPopup, setShowRemarksPopup] = useState(false);
-  const [showAttachmentsPopup, setShowAttachmentsPopup] = useState(false);
-  const [attachments, setAttachments] = useState([]);
 
-  //Fetch registered drones (dummy for now)
+  // Fetch all drones (from backend)
   useEffect(() => {
-    // Dummy data with attachments
-    const dummyDrones = [
-      {
-        id: 1,
-        register_date: "2025-11-10",
-        name: "AeroX Falcon",
-        model_name: "Falcon X1",
-        drone_type: "Quadcopter",
-        manufacturer: "AeroX Systems",
-        uin_number: "UIN-98765",
-        drone_serial_number: "DRN-AXF-1122",
-        attachments: [
-          { name: "UIN_Certificate.pdf", url: "#" },
-          { name: "Drone_Photo.jpg", url: "#" },
-        ],
-      },
-      {
-        id: 2,
-        register_date: "2025-11-11",
-        name: "SkyLink Eagle",
-        model_name: "Eagle Pro 2",
-        drone_type: "Hexacopter",
-        manufacturer: "SkyLink Technologies",
-        uin_number: "UIN-45678",
-        drone_serial_number: "DRN-SLK-9876",
-        attachments: [
-          { name: "Purchase_Bill.pdf", url: "#" },
-          { name: "Drone_Serial_Image.png", url: "#" },
-          { name: "UIN_Cert.pdf", url: "#" },
-        ],
-      },
-    ];
-    setDrones(dummyDrones);
+    const fetchDrones = async () => {
+      try {
+        const res = await fetch(
+          "http://127.0.0.1:8000/api/drone_registration/"
+        );
+        const data = await res.json();
+        // Only keep drones which have client info
+        const clientDrones = data.filter(
+          (d) => d.client && d.client.length > 0
+        );
+        setDrones(clientDrones);
+      } catch (err) {
+        console.error("Error fetching drones:", err);
+      }
+    };
+    fetchDrones();
   }, []);
 
-  const handleApprove = async (id) => {
-    alert(`Drone ID ${id} approved (dummy flow).`);
-    setDrones(drones.filter((d) => d.id !== id));
+  // Fetch BD Team Drone info by drone serial
+  const fetchBdDrone = async (droneSerial) => {
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:8000/api/drone_registration/?drone_serial_number=${droneSerial}`
+      );
+      const data = await res.json();
+      setBdDrone(data[0] || null);
+    } catch (err) {
+      console.error("Error fetching BD Drone:", err);
+      setBdDrone(null);
+    }
   };
 
-  const handleReject = (drone) => {
+  // Open modal and fetch BD Drone
+  const handleDroneClick = (drone) => {
     setSelectedDrone(drone);
-    setShowRemarksPopup(true);
+    fetchBdDrone(drone.client[0].drone_serial_number);
+    setShowApprovalModal(true);
   };
 
-  const submitRejection = () => {
+  const handleApprove = async () => {
+    // Call backend API to approve drone
+    try {
+      // Example PATCH request to mark approved
+      await fetch(
+        `http://127.0.0.1:8000/api/drone_registration/${selectedDrone.id}/`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: "approved" }),
+        }
+      );
+      alert("Drone approved successfully!");
+      setShowApprovalModal(false);
+      setDrones(drones.filter((d) => d.id !== selectedDrone.id));
+    } catch (err) {
+      console.error(err);
+      alert("Error approving drone.");
+    }
+  };
+
+  const handleReject = async () => {
     if (!remarks.trim()) {
       alert("Please enter remarks for rejection.");
       return;
     }
-    alert(`Drone ${selectedDrone.model_name} rejected for: ${remarks}`);
-    setShowRemarksPopup(false);
-    setRemarks("");
-    setDrones(drones.filter((d) => d.id !== selectedDrone.id));
-  };
-
-  const handleViewAttachments = (files) => {
-    setAttachments(files);
-    setShowAttachmentsPopup(true);
+    try {
+      // Example PATCH request to mark rejected with remarks
+      await fetch(
+        `http://127.0.0.1:8000/api/drone_registration/${selectedDrone.id}/`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: "rejected", remarks }),
+        }
+      );
+      alert("Drone rejected successfully!");
+      setShowApprovalModal(false);
+      setRemarks("");
+      setDrones(drones.filter((d) => d.id !== selectedDrone.id));
+    } catch (err) {
+      console.error(err);
+      alert("Error rejecting drone.");
+    }
   };
 
   return (
     <div className="drone-approve-page">
       <div className="drone-approve-breadcrumb-wrapper">
-              <BreadCrumbs />
-            </div>
+        <BreadCrumbs />
+      </div>
       <h2 className="drone-approve-header">Client Drone Request Approval</h2>
 
-      <div className="drone-table">
-        <table>
-          <thead>
-            <tr>
-              <th>S.No</th>
-              <th>Register On</th>
-              <th>Name</th>
-              <th>Model Name</th>
-              <th>Drone Type</th>
-              <th>Manufacturer</th>
-              <th>UIN Number</th>
-              <th>Serial No</th>
-              <th>Attachments</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {drones.length > 0 ? (
-              drones.map((drone, index) => (
-                <tr key={drone.id}>
-                  <td>{index + 1}</td>
-                  <td>{drone.register_date}</td>
-                  <td>{drone.name}</td>
-                  <td>{drone.model_name}</td>
-                  <td>{drone.drone_type}</td>
-                  <td>{drone.manufacturer}</td>
-                  <td>{drone.uin_number}</td>
-                  <td>{drone.drone_serial_number}</td>
-                  <td>
-                    <button
-                      className="view-btn"
-                      onClick={() => handleViewAttachments(drone.attachments)}
-                    >
-                      View Attachments
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      className="approve-btn"
-                      onClick={() => handleApprove(drone.id)}
-                    >
-                      Approve
-                    </button>
-                    <button
-                      className="reject-btn"
-                      onClick={() => handleReject(drone)}
-                    >
-                      Reject
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="10">No pending drones found</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+     {/* Drone List Table */}
+<div className="drone-table">
+  <table>
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Client Name</th>
+        <th>Drone Serial</th>
+        <th>Model Name</th>
+        <th>Status</th>
+      </tr>
+    </thead>
 
-      {/* Remarks Popup */}
-      {showRemarksPopup && (
-        <div className="remarks-popup">
-          <div className="popup-content">
-            <h3>Reject Drone</h3>
-            <p>
-              Reason for rejecting <strong>{selectedDrone?.model_name}</strong>:
-            </p>
-            <textarea
-              value={remarks}
-              onChange={(e) => setRemarks(e.target.value)}
-              placeholder="Enter rejection remarks"
-            ></textarea>
-            <div className="popup-actions">
-              <button className="submit-btn" onClick={submitRejection}>
-                Submit
-              </button>
+    <tbody>
+      {drones.length > 0 ? (
+        drones.map((drone, index) => (
+          <tr key={drone.id}>
+            <td>{index + 1}</td>
+
+            {/* Client Name */}
+            <td>{drone.client[0].model_name}</td>
+
+            {/* Drone Serial (Clickable) */}
+            <td>
               <button
-                className="cancel-btn"
-                onClick={() => setShowRemarksPopup(false)}
+                className="link-btn"
+                onClick={() => handleDroneClick(drone)}
               >
-                Cancel
+                {drone.client[0].drone_serial_number}
               </button>
+            </td>
+
+            {/* Model Name */}
+            <td>{drone.model_name}</td>
+
+           <td>
+  <span
+    className={`bdapprove-status-badge ${
+      drone.status
+        ? `status-${drone.status.toLowerCase().replace(/\s+/g, "-")}`
+        : "status-pending"
+    }`}
+  >
+    {drone.status ? drone.status.toLowerCase() : "pending"}
+  </span>
+</td>
+
+          </tr>
+        ))
+      ) : (
+        <tr>
+          <td colSpan="5">No client drones pending approval</td>
+        </tr>
+      )}
+    </tbody>
+  </table>
+</div>
+
+
+      {/* Approval Modal */}
+      {showApprovalModal && selectedDrone && (
+        <div
+          className="modal-overlay"
+          onClick={() => setShowApprovalModal(false)}
+        >
+          <div className="approval-modal" onClick={(e) => e.stopPropagation()}>
+            {/* CLOSE BUTTON (TOP RIGHT) */}
+            <button
+              className="close-btn"
+              onClick={() => setShowApprovalModal(false)}
+            >
+              ×
+            </button>
+
+            <h3>
+              Drone Approval - {selectedDrone.client[0].drone_serial_number}
+            </h3>
+
+            <div className="approval-table-wrapper">
+              <table className="approval-table">
+                <thead>
+                  <tr>
+                    <th>Field</th>
+                    <th>BD Drone Info</th>
+                    <th>Client Drone Info</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {[
+                    { label: "Model Name", key: "model_name" },
+                    { label: "Drone Type", key: "drone_type" },
+                    { label: "Manufacturer", key: "manufacturer" },
+                    { label: "UIN Number", key: "uin_number" },
+                    { label: "Drone Serial", key: "drone_serial_number" },
+                    {
+                      label: "Flight Controller Serial",
+                      key: "flight_controller_serial_number",
+                    },
+                    { label: "Remote Controller", key: "remote_controller" },
+                    {
+                      label: "Battery Charger Serial",
+                      key: "battery_charger_serial_number",
+                    },
+                    {
+                      label: "Battery 1 Serial",
+                      key: "battery_serial_number_1",
+                    },
+                    {
+                      label: "Battery 2 Serial",
+                      key: "battery_serial_number_2",
+                    },
+                    { label: "Attachments", key: "attachment" },
+                  ].map((field) => (
+                    <tr key={field.key}>
+                      {/* FIELD NAME */}
+                      <td className="field-label">{field.label}</td>
+
+                      {/* BD DRONE INFO FIRST */}
+                      <td>
+                        {bdDrone ? (
+                          field.key !== "attachment" ? (
+                            bdDrone[field.key] || "-"
+                          ) : bdDrone.attachment ? (
+                            <a
+                              href={bdDrone.attachment}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              View
+                            </a>
+                          ) : (
+                            "-"
+                          )
+                        ) : (
+                          "Loading..."
+                        )}
+                      </td>
+
+                      {/* CLIENT DRONE INFO SECOND */}
+                      <td>
+                        {field.key !== "attachment"
+                          ? selectedDrone.client[0][field.key] || "-"
+                          : selectedDrone.attachments?.length > 0
+                          ? selectedDrone.attachments.map((file, idx) => (
+                              <div key={idx}>
+                                <a
+                                  href={file.url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  {file.name}
+                                </a>
+                              </div>
+                            ))
+                          : "-"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {/* ACTION SECTION */}
+              <div className="approval-actions">
+                <textarea
+                  placeholder="Enter rejection remarks"
+                  value={remarks}
+                  onChange={(e) => setRemarks(e.target.value)}
+                />
+              </div>
+              <div className="action-buttons">
+                <button className="approve-btn" onClick={handleApprove}>
+                  Approve
+                </button>
+                <button className="reject-btn" onClick={handleReject}>
+                  Reject
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
-
-      {/* Attachments Popup */}
-   {showAttachmentsPopup && (
-  <div className="assign-popup-overlay">
-    <div className="assign-popup">
-           <button
-          className="close-btn"
-          onClick={() => setShowAttachmentsPopup(false)}
-        >
-          ✕
-        </button>
-      <div className="popup-header">
-        <h3>Drone Related Attachments</h3>
-     
-      </div>
-
-      {attachments.length > 0 ? (
-<ul className="file-lists">
-  {attachments.map((file, idx) => (
-    <li key={idx} className="file-items">
-      <span className="file-index">{idx + 1})</span>
-      <a href={file.url} className="manufacture-links" target="_blank">
-        {file.name}
-      </a>
-    </li>
-  ))}
-</ul>
-
-
-      ) : (
-        <p>No attachments available</p>
-      )}
-    </div>
-  </div>
-)}
-
     </div>
   );
 }

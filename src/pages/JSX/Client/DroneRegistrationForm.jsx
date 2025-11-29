@@ -1,8 +1,15 @@
 import { useState, useEffect } from "react";
 import { FaPlus, FaPaperclip, FaTimes } from "react-icons/fa";
 import "../../CSS/Client/DroneRegistrationForm.css";
+import config from "../../../config";
 
-export default function DroneRegistrationForm({ drone, onClose, onSubmit, viewOnly }) {
+export default function DroneRegistrationForm({
+  drone,
+  client,
+  onClose,
+  onSubmit,
+  viewOnly,
+}) {
   const [formData, setFormData] = useState({
     model_name: "",
     drone_type: "",
@@ -19,26 +26,26 @@ export default function DroneRegistrationForm({ drone, onClose, onSubmit, viewOn
 
   const [loading, setLoading] = useState(false);
 
-  // Prefill if drone is provided
+  // Prefill form if drone or client exists
   useEffect(() => {
     if (drone) {
       setFormData({
-        model_name: drone.model_name || "",
-        drone_type: drone.drone_type || "",
+        model_name: client?.model_name || drone.model_name || "",
+        drone_type: client?.drone_type || drone.drone_type || "",
         manufacturer: drone.manufacturer || "",
-        uin_number: drone.uin_number || "",
-        drone_serial_number: drone.drone_serial_number || "",
-        flight_controller_serial_number: drone.flight_controller_serial_number || "",
-        remote_controller: drone.remote_controller || "",
-        battery_charger_serial_number: drone.battery_charger_serial_number || "",
-        battery_serial_number_1: drone.battery_serial_number_1 || "",
-        battery_serial_number_2: drone.battery_serial_number_2 || "",
-        attachment: drone.attachment || null,
+        uin_number: client?.uin_number || drone.uin_number || "",
+        drone_serial_number: client?.drone_serial_number || drone.drone_serial_number || "",
+        flight_controller_serial_number: client?.flight_controller_serial_number || drone.flight_controller_serial_number || "",
+        remote_controller: client?.remote_controller || drone.remote_controller || "",
+        battery_charger_serial_number: client?.battery_charger_serial_number || drone.battery_charger_serial_number || "",
+        battery_serial_number_1: client?.battery_serial_number_1 || drone.battery_serial_number_1 || "",
+        battery_serial_number_2: client?.battery_serial_number_2 || drone.battery_serial_number_2 || "",
+        attachment: client?.attachment || drone.attachment || null,
       });
     }
-  }, [drone]);
+  }, [drone, client]);
 
-  // Handle input change (normal + file)
+  // Handle input change
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (files) {
@@ -48,37 +55,76 @@ export default function DroneRegistrationForm({ drone, onClose, onSubmit, viewOn
     }
   };
 
-  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const data = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        if (value !== null && value !== "") {
-          data.append(key, value);
+      const res = await fetch(`${config.baseURL}/drone_registration/`);
+      const existingDrones = await res.json();
+
+      const matchingDrone = existingDrones.find(
+        (d) => d.drone_serial_number === formData.drone_serial_number
+      );
+
+      if (matchingDrone) {
+        // Prepare new client data
+        const clientData = {
+          model_name: formData.model_name,
+          uin_number: formData.uin_number,
+          drone_serial_number: formData.drone_serial_number,
+          flight_controller_serial_number: formData.flight_controller_serial_number,
+          remote_controller: formData.remote_controller,
+          battery_charger_serial_number: formData.battery_charger_serial_number,
+          battery_serial_number_1: formData.battery_serial_number_1,
+          battery_serial_number_2: formData.battery_serial_number_2,
+          drone_type: formData.drone_type,
+        };
+
+        const updatedClientArray = [...matchingDrone.client, clientData];
+
+        // Use FormData for file upload
+        const data = new FormData();
+        data.append("client", JSON.stringify(updatedClientArray));
+        data.append("drone_type", formData.drone_type);
+        if (formData.attachment instanceof File) {
+          data.append("attachment", formData.attachment);
         }
-      });
 
-      const response = await fetch("http://127.0.0.1:8000/api/drone_registration/", {
-        method: "POST",
-        body: data,
-      });
+        const updateRes = await fetch(
+          `${config.baseURL}/drone_registration/${matchingDrone.id}/`,
+          {
+            method: "PATCH",
+            body: data,
+          }
+        );
 
-      if (!response.ok) {
-        throw new Error("Failed to register drone");
+        if (!updateRes.ok) throw new Error("Failed to update drone");
+        const result = await updateRes.json();
+        alert("Drone updated successfully!");
+        if (onSubmit) onSubmit(result);
+        onClose();
+      } else {
+        // New drone creation
+        const data = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+          if (value !== null && value !== "") data.append(key, value);
+        });
+
+        const createRes = await fetch(`${config.baseURL}/drone_registration/`, {
+          method: "POST",
+          body: data,
+        });
+
+        if (!createRes.ok) throw new Error("Failed to create new drone");
+        const newDrone = await createRes.json();
+        alert("New drone registered successfully!");
+        if (onSubmit) onSubmit(newDrone);
+        onClose();
       }
-
-      const result = await response.json();
-      console.log("✅ Drone Registered:", result);
-      alert("Drone registered successfully!");
-
-      if (onSubmit) onSubmit(result);
-      onClose();
     } catch (error) {
-      console.error("❌ Error:", error);
-      alert("Error registering drone. Please try again.");
+      console.error("Error:", error);
+      alert("Error saving drone. Please try again.");
     } finally {
       setLoading(false);
     }
