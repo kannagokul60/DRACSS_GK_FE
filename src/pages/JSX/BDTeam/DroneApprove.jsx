@@ -103,64 +103,64 @@ export default function DroneApprove() {
       </div>
       <h2 className="drone-approve-header">Client Drone Request Approval</h2>
 
-     {/* Drone List Table */}
-<div className="drone-table">
-  <table>
-    <thead>
-      <tr>
-        <th>S.No</th>
-        <th>Client Name</th>
-        <th>Drone Serial</th>
-        <th>Model Name</th>
-        <th>Status</th>
-      </tr>
-    </thead>
+      {/* Drone List Table */}
+      <div className="drone-table">
+        <table>
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Client Name</th>
+              <th>Drone Serial</th>
+              <th>Model Name</th>
+              <th>Status</th>
+            </tr>
+          </thead>
 
-    <tbody>
-      {drones.length > 0 ? (
-        drones.map((drone, index) => (
-          <tr key={drone.id}>
-            <td>{index + 1}</td>
+          <tbody>
+            {drones.length > 0 ? (
+              drones.map((drone, index) => (
+                <tr key={drone.id}>
+                  <td>{index + 1}</td>
 
-            {/* Client Name */}
-            <td>{drone.client[0].model_name}</td>
+                  {/* Client Name */}
+                  <td>{drone.client[0].model_name}</td>
 
-            {/* Drone Serial (Clickable) */}
-            <td>
-              <button
-                className="link-btn"
-                onClick={() => handleDroneClick(drone)}
-              >
-                {drone.client[0].drone_serial_number}
-              </button>
-            </td>
+                  {/* Drone Serial (Clickable) */}
+                  <td>
+                    <button
+                      className="link-btn"
+                      onClick={() => handleDroneClick(drone)}
+                    >
+                      {drone.client[0].drone_serial_number}
+                    </button>
+                  </td>
 
-            {/* Model Name */}
-            <td>{drone.model_name}</td>
+                  {/* Model Name */}
+                  <td>{drone.model_name}</td>
 
-           <td>
-  <span
-    className={`bdapprove-status-badge ${
-      drone.status
-        ? `status-${drone.status.toLowerCase().replace(/\s+/g, "-")}`
-        : "status-pending"
-    }`}
-  >
-    {drone.status ? drone.status.toLowerCase() : "pending"}
-  </span>
-</td>
-
-          </tr>
-        ))
-      ) : (
-        <tr>
-          <td colSpan="5">No client drones pending approval</td>
-        </tr>
-      )}
-    </tbody>
-  </table>
-</div>
-
+                  <td>
+                    <span
+                      className={`bdapprove-status-badge ${
+                        drone.status
+                          ? `status-${drone.status
+                              .toLowerCase()
+                              .replace(/\s+/g, "-")}`
+                          : "status-pending"
+                      }`}
+                    >
+                      {drone.status ? drone.status.toLowerCase() : "pending"}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5">No client drones pending approval</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* Approval Modal */}
       {showApprovalModal && selectedDrone && (
@@ -232,7 +232,7 @@ export default function DroneApprove() {
                               target="_blank"
                               rel="noreferrer"
                             >
-                              View
+                              View Attachment
                             </a>
                           ) : (
                             "-"
@@ -244,21 +244,19 @@ export default function DroneApprove() {
 
                       {/* CLIENT DRONE INFO SECOND */}
                       <td>
-                        {field.key !== "attachment"
-                          ? selectedDrone.client[0][field.key] || "-"
-                          : selectedDrone.attachments?.length > 0
-                          ? selectedDrone.attachments.map((file, idx) => (
-                              <div key={idx}>
-                                <a
-                                  href={file.url}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                >
-                                  {file.name}
-                                </a>
-                              </div>
-                            ))
-                          : "-"}
+                        {field.key !== "attachment" ? (
+                          selectedDrone.client[0][field.key] || "-"
+                        ) : selectedDrone.client[0].attachment ? (
+                          <a
+                            href={selectedDrone.client[0].attachment}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            View Attachment
+                          </a>
+                        ) : (
+                          "-"
+                        )}
                       </td>
                     </tr>
                   ))}

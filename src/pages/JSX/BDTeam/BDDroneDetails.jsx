@@ -15,6 +15,22 @@ export default function BDDroneDetails() {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [selectedDrone, setSelectedDrone] = useState(null);
+  const [unsoldCounts, setUnsoldCounts] = useState({});
+
+  useEffect(() => {
+    loadCounts();
+  }, []);
+
+  const loadCounts = async () => {
+    const result = {};
+
+    for (let d of drones) {
+      const count = await fetchUnsoldCount(d.name);
+      result[d.name] = count;
+    }
+
+    setUnsoldCounts(result);
+  };
 
   const [form, setForm] = useState({
     model_name: "",
@@ -198,12 +214,16 @@ export default function BDDroneDetails() {
     fetchUnsoldCount();
   }, []);
 
-  const fetchUnsoldCount = async () => {
+  const fetchUnsoldCount = async (droneName) => {
     const res = await fetch(`${config.baseURL}/drone_registration/`);
     const data = await res.json();
 
-    const unsold = data.filter((d) => d.registered === false);
-    setUnsoldCount(unsold.length);
+    // Filter unsold drones for THIS MODEL only
+    const unsold = data.filter(
+      (d) => d.registered === false && d.model_name === droneName
+    );
+
+    return unsold.length;
   };
 
   return (
@@ -256,7 +276,7 @@ export default function BDDroneDetails() {
                   className="info-unsold-btn"
                   onClick={() => navigate("/bd/unsold-drones")}
                 >
-                  Unsold : {unsoldCount}
+                  Unsold : {unsoldCounts[drone.name] || 0}
                 </button>
               </div>
             </div>

@@ -34,42 +34,6 @@ export default function DroneRegistration() {
     fetchDrones();
   }, []);
 
-  // Handle form submission (POST to backend)
-  const handleFormSubmit = async (formData) => {
-    try {
-      const response = await fetch(`${config.baseURL}/drone_registration/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model_name: formData.modelName,
-          drone_type: formData.type,
-          manufacturer: formData.manufacturer,
-          uin_number: formData.uin,
-          drone_serial_number: formData.droneSerial,
-          flight_controller_serial_number: formData.flightController,
-          remote_controller: formData.remoteController,
-          battery_charger_serial_number: formData.batteryCharger,
-          battery_serial_number_1: formData.battery1,
-          battery_serial_number_2: formData.battery2,
-          attachment: formData.attachment || null,
-          is_active: true,
-        }),
-      });
-
-      if (response.ok) {
-        const newDrone = await response.json();
-        setDrones((prev) => [...prev, newDrone]);
-        setShowForm(false);
-      } else {
-        console.error("Failed to register drone:", response.statusText);
-      }
-    } catch (err) {
-      console.error("Error submitting drone:", err);
-    }
-  };
-
   // Status icon helper
   const getStatusIcon = (status) => {
     switch (status?.toLowerCase()) {
@@ -145,7 +109,11 @@ export default function DroneRegistration() {
                     <p>
                       <FaCalendarAlt /> Registered On:{" "}
                       <strong>
-                        {new Date(drone.created_at).toLocaleDateString()}
+                        {latestClient.updated_at
+                          ? new Date(
+                              latestClient.updated_at
+                            ).toLocaleDateString()
+                          : new Date(drone.updated_at).toLocaleDateString()}
                       </strong>
                     </p>
 
@@ -167,7 +135,14 @@ export default function DroneRegistration() {
               drone={
                 selectedDrone
                   ? selectedDrone.client && selectedDrone.client.length > 0
-                    ? selectedDrone.client[selectedDrone.client.length - 1]
+                    ? {
+                        ...selectedDrone.client[
+                          selectedDrone.client.length - 1
+                        ],
+                        registered_on:
+                          selectedDrone.client[selectedDrone.client.length - 1]
+                            .created_at || selectedDrone.created_at,
+                      }
                     : selectedDrone
                   : null
               }
@@ -175,9 +150,7 @@ export default function DroneRegistration() {
               onSubmit={
                 selectedDrone
                   ? null
-                  : (newDrone) => {
-                      setDrones((prev) => [...prev, newDrone]); // update instantly
-                    }
+                  : (newDrone) => setDrones((prev) => [...prev, newDrone])
               }
               viewOnly={!!selectedDrone}
             />

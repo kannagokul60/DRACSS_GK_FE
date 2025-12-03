@@ -142,7 +142,7 @@
 }
 
 .close-btn {
-  font-size: 18px;
+  font-size: 18px !important;
   border: none;
   background: none;
   cursor: pointer;
@@ -264,4 +264,82 @@
   justify-content: flex-end;
   gap: 8px;
   margin-top: 12px;
+}
+
+.client-list-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centers the title */
+  margin-bottom: 20px;
+}
+
+/* Right-side button */
+.add-client-btn {
+  position: absolute;
+  right: 0;                /* Move button to top-right */
+  top:40%;
+  transform: translateY(-50%); /* Vertically align with title */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #1565c0;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s ease-in-out;
+}
+
+.add-client-btn:hover {
+  background: #76a9e2;
+}
+
+.add-client-icon {
+  font-size: 14px;
+}
+
+/* ================================
+   FIXED FORM ACTION BUTTONS (SAVE / CANCEL)
+   ================================ */
+.form-actions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end; /* push buttons to right */
+  gap: 10px;
+  margin-top: 18px;
+}
+
+/* Save Button */
+.form-actions .save-btn {
+  background: #1565c0;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s ease-in-out;
+}
+
+.form-actions .save-btn:hover {
+  background: #0d47a1;
+}
+
+/* Cancel Button */
+.form-actions .cancel-btn {
+  background: #e0e0e0;
+  color: #333;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s ease-in-out;
+}
+
+.form-actions .cancel-btn:hover {
+  background: #cccccc;
 }
