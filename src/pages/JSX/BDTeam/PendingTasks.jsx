@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "../../CSS/BDteam/pendingTasks.css";
 import BreadCrumbs from "../BreadCrumbs";
 
-
 export default function PendingTasks({ role = "manager" }) {
   const [tasks, setTasks] = useState([
     {
@@ -107,9 +106,9 @@ export default function PendingTasks({ role = "manager" }) {
 
   return (
     <div className="bd-pending-wrap">
-       <div className="drone-breadcrumb-wrapper">
-              <BreadCrumbs />
-            </div>
+      <div className="drone-breadcrumb-wrapper">
+        <BreadCrumbs />
+      </div>
       <h2 className="bd-pending-header">
         Pending Tasks – {role === "manager" ? "Manager" : "BD Team"}
       </h2>

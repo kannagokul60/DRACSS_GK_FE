@@ -116,87 +116,92 @@ export default function AssignedDroneList() {
           <div className="popup-box big-box">
             <h3 className="popup-title-centered">Order Delivery Details</h3>
 
-          {/* ===== QTY INFERENCE LOGIC ===== */}
-{(() => {
-  const backendDroneQty = viewOrder.number_of_drone; // <-- updated here
-  let inferredDroneQty = backendDroneQty;
+            {/* ===== QTY INFERENCE LOGIC ===== */}
+            {(() => {
+              const backendDroneQty = viewOrder.number_of_drone; // <-- updated here
+              let inferredDroneQty = backendDroneQty;
 
-  if (inferredDroneQty == null) {
-    try {
-      const templateMap = {};
-      backendItems.forEach((t) => {
-        templateMap[t.description] = Number(t.default_quantity) || 1;
-      });
+              if (inferredDroneQty == null) {
+                try {
+                  const templateMap = {};
+                  backendItems.forEach((t) => {
+                    templateMap[t.description] =
+                      Number(t.default_quantity) || 1;
+                  });
 
-      const ratios = viewOrder.items
-        .map((it) => {
-          const def = templateMap[it.description];
-          if (!def) return null;
-          const ratio = (Number(it.quantity_ordered) || 0) / def;
-          return Number.isFinite(ratio) ? ratio : null;
-        })
-        .filter((r) => r != null && r > 0);
+                  const ratios = viewOrder.items
+                    .map((it) => {
+                      const def = templateMap[it.description];
+                      if (!def) return null;
+                      const ratio = (Number(it.quantity_ordered) || 0) / def;
+                      return Number.isFinite(ratio) ? ratio : null;
+                    })
+                    .filter((r) => r != null && r > 0);
 
-      if (ratios.length) {
-        const allEqual = ratios.every(
-          (r) => Math.abs(r - ratios[0]) < 1e-6
-        );
-        if (allEqual) inferredDroneQty = Math.round(ratios[0]);
-      }
-    } catch (e) {
-      inferredDroneQty = undefined;
-    }
-  }
+                  if (ratios.length) {
+                    const allEqual = ratios.every(
+                      (r) => Math.abs(r - ratios[0]) < 1e-6
+                    );
+                    if (allEqual) inferredDroneQty = Math.round(ratios[0]);
+                  }
+                } catch (e) {
+                  inferredDroneQty = undefined;
+                }
+              }
 
-  return (
-    <div className="popup-input-row">
-      <div className="input-group">
-        <label>Customer Name</label>
-        <input
-          type="text"
-          className="top-input"
-          value={viewOrder.customer_name}
-          readOnly
-        />
-      </div>
+              return (
+                <div className="popup-input-row">
+                  <div className="input-group">
+                    <label>Customer Name</label>
+                    <input
+                      type="text"
+                      className="top-input"
+                      value={viewOrder.customer_name}
+                      readOnly
+                    />
+                  </div>
 
-      <div className="input-group">
-        <label>Drone Model</label>
-        <input
-          type="text"
-          className="top-input"
-          value={viewOrder.drone_model || viewOrder.drone_name || ""}
-          readOnly
-        />
-      </div>
+                  <div className="input-group">
+                    <label>Drone Model</label>
+                    <input
+                      type="text"
+                      className="top-input"
+                      value={
+                        viewOrder.drone_model || viewOrder.drone_name || ""
+                      }
+                      readOnly
+                    />
+                  </div>
 
-      <div className="input-group">
-        <label>No. of Drones</label>
-        <input
-          type="text"
-          className="top-input"
-          value={inferredDroneQty ?? "-"} // <-- uses number_of_drone now
-          readOnly
-        />
-      </div>
+                  <div className="input-group">
+                    <label>No. of Drones</label>
+                    <input
+                      type="text"
+                      className="top-input"
+                      value={inferredDroneQty ?? "-"} // <-- uses number_of_drone now
+                      readOnly
+                    />
+                  </div>
 
-      <div className="input-group">
-        <label>End Date</label>
-        <input
-          type="text"
-          className="top-input"
-          readOnly
-          value={
-            viewOrder.required_by_date
-              ? format(new Date(viewOrder.required_by_date), "dd-MM-yyyy")
-              : "-"
-          }
-        />
-      </div>
-    </div>
-  );
-})()}
-
+                  <div className="input-group">
+                    <label>End Date</label>
+                    <input
+                      type="text"
+                      className="top-input"
+                      readOnly
+                      value={
+                        viewOrder.required_by_date
+                          ? format(
+                              new Date(viewOrder.required_by_date),
+                              "dd-MM-yyyy"
+                            )
+                          : "-"
+                      }
+                    />
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* ===== GROUPED ITEMS ===== */}
             {Object.values(
