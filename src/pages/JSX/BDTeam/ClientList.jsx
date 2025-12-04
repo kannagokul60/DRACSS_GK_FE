@@ -43,6 +43,17 @@ export default function ClientList() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
 
+  const [showMoveSold, setShowMoveSold] = useState(false);
+const [sellDroneSerial, setSellDroneSerial] = useState("");
+const [activeClientId, setActiveClientId] = useState(null);
+
+
+const handleMoveToSold = (client) => {
+  setActiveClientId(client.id);
+  setShowMoveSold(true);
+};
+
+
   const [showAddModal, setShowAddModal] = useState(false);
   const [newClient, setNewClient] = useState({
     name: "",

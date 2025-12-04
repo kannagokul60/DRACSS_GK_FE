@@ -31,11 +31,8 @@ export default function DroneRegistrationForm({
     if (drone) {
       setFormData({
         model_name: client?.model_name || drone.model_name || "",
-        drone_type:
-          client?.drone_type !== "" && client?.drone_type !== undefined
-            ? client.drone_type
-            : drone.drone_type || "",
-        manufacturer: drone.manufacturer || "",
+        drone_type: client?.drone_type || drone.drone_type || "",
+        manufacturer: drone.manufacturer || "AERO 360",
         uin_number: client?.uin_number || drone.uin_number || "",
         drone_serial_number:
           client?.drone_serial_number || drone.drone_serial_number || "",

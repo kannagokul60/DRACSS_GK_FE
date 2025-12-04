@@ -77,7 +77,7 @@ export default function App() {
             <Route path="client-list" element={<ClientList />} />
             <Route path="client-drone-list/:id" element={<ClientDetails />} />
             <Route path="drone-details" element={<BDDroneDetails />} />
-            <Route path="drone-details/:id" element={<SoldDroneList />} />
+            <Route path="sold-drones" element={<SoldDroneList />} />
             <Route path="knowledge-base" element={<BDKnowledgeBase />} />
             <Route path="knowledge/bhumi" element={<BDViewKnowledge />} />
             <Route path="pending-tasks" element={<PendingTasks />} />

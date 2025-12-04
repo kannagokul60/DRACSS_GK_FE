@@ -16,20 +16,39 @@ export default function BDDroneDetails() {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedDrone, setSelectedDrone] = useState(null);
   const [unsoldCounts, setUnsoldCounts] = useState({});
+  const [soldCounts, setSoldCounts] = useState({});
 
   useEffect(() => {
     loadCounts();
   }, []);
 
   const loadCounts = async () => {
-    const result = {};
+    const unsoldResult = {};
+    const soldResult = {};
 
     for (let d of drones) {
-      const count = await fetchUnsoldCount(d.name);
-      result[d.name] = count;
+      // Fetch all drones from backend
+      const res = await fetch(`${config.baseURL}/drone_registration/`);
+      const data = await res.json();
+
+      // Filter unsold for this drone model
+      const unsold = data.filter(
+        (droneItem) =>
+          droneItem.registered === false && droneItem.model_name === d.name
+      );
+
+      // Filter sold for this drone model
+      const sold = data.filter(
+        (droneItem) =>
+          droneItem.registered === true && droneItem.model_name === d.name
+      );
+
+      unsoldResult[d.name] = unsold.length;
+      soldResult[d.name] = sold.length;
     }
 
-    setUnsoldCounts(result);
+    setUnsoldCounts(unsoldResult);
+    setSoldCounts(soldResult);
   };
 
   const [form, setForm] = useState({
@@ -116,94 +135,6 @@ export default function BDDroneDetails() {
     },
   ];
 
-  // // Example clients — can be fetched from backend later
-  const clients = [
-    {
-      name: "SkyView Technologies Pvt Ltd",
-      logo: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-      location: "Bangalore, Karnataka",
-      address: "45, MG Road, Bangalore, Karnataka, India",
-      purchaseDate: "10 June 2024",
-      warranty: "1 Year (till June 2025)",
-      partsReplaced: "Propeller Set, Flight Controller",
-      supportHistory: "2 on-site maintenance visits in 2024",
-      serialNumber: "DRN-AEROX1-20240610-001",
-      uinNumber: "UIN-IND-4567X1",
-    },
-    {
-      name: "AeroWorks Solutions",
-      logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-      location: "Pune, Maharashtra",
-      address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-      purchaseDate: "22 March 2023",
-      warranty: "Expired (was 1 year)",
-      partsReplaced: "Battery Module (once)",
-      supportHistory: "3 software updates & calibration done",
-      serialNumber: "DRN-AEROX1-20240610-001",
-      uinNumber: "UIN-IND-4567X1",
-    },
-    {
-      name: "AeroWorks Solutions",
-      logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-      location: "Pune, Maharashtra",
-      address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-      purchaseDate: "22 March 2023",
-      warranty: "Expired (was 1 year)",
-      partsReplaced: "Battery Module (once)",
-      supportHistory: "3 software updates & calibration done",
-      serialNumber: "DRN-AEROX1-20240610-001",
-      uinNumber: "UIN-IND-4567X1",
-    },
-    {
-      name: "AeroWorks Solutions",
-      logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-      location: "Pune, Maharashtra",
-      address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-      purchaseDate: "22 March 2023",
-      warranty: "Expired (was 1 year)",
-      partsReplaced: "Battery Module (once)",
-      supportHistory: "3 software updates & calibration done",
-      serialNumber: "DRN-AEROX1-20240610-001",
-      uinNumber: "UIN-IND-4567X1",
-    },
-    {
-      name: "AeroWorks Solutions",
-      logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-      location: "Pune, Maharashtra",
-      address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-      purchaseDate: "22 March 2023",
-      warranty: "Expired (was 1 year)",
-      partsReplaced: "Battery Module (once)",
-      supportHistory: "3 software updates & calibration done",
-      serialNumber: "DRN-AEROX1-20240610-001",
-      uinNumber: "UIN-IND-4567X1",
-    },
-    {
-      name: "AeroWorks Solutions",
-      logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-      location: "Pune, Maharashtra",
-      address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-      purchaseDate: "22 March 2023",
-      warranty: "Expired (was 1 year)",
-      partsReplaced: "Battery Module (once)",
-      supportHistory: "3 software updates & calibration done",
-      serialNumber: "DRN-AEROX1-20240610-001",
-      uinNumber: "UIN-IND-4567X1",
-    },
-    {
-      name: "FarmLink Drones",
-      logo: "https://cdn-icons-png.flaticon.com/512/3135/3135768.png",
-      location: "Coimbatore, Tamil Nadu",
-      address: "12, Green Valley, Coimbatore, Tamil Nadu, India",
-      purchaseDate: "18 November 2024",
-      warranty: "2 Years (till November 2026)",
-      partsReplaced: "No replacements yet",
-      supportHistory: "Regular online support and firmware upgrades",
-      serialNumber: "DRN-AEROX1-20240610-001",
-      uinNumber: "UIN-IND-4567X1",
-    },
-  ];
-
   const handleViewDetails = (drone) => {
     navigate(`/bd/drone-details/${drone.id}`, { state: { drone } });
   };
@@ -261,24 +192,29 @@ export default function BDDroneDetails() {
               <h3 className="bd-drone-name">{drone.name}</h3>
 
               <div className="bd-drone-info-row">
-                <button
-                  className="info-sold-btn"
-                  onClick={() =>
-                    navigate(`/bd/drone-details/${drone.id}`, {
-                      state: { drone, clients },
-                    })
-                  }
-                >
-                  Sold : {clients.length}
-                </button>
+  <button
+    className="info-sold-btn"
+    onClick={() =>
+      navigate("/bd/sold-drones", {
+        state: { droneName: drone.name }, // Pass only the model name
+      })
+    }
+  >
+    Sold : {soldCounts[drone.name] || 0}
+  </button>
 
-                <button
-                  className="info-unsold-btn"
-                  onClick={() => navigate("/bd/unsold-drones")}
-                >
-                  Unsold : {unsoldCounts[drone.name] || 0}
-                </button>
-              </div>
+  <button
+    className="info-unsold-btn"
+    onClick={() =>
+      navigate("/bd/unsold-drones", {
+        state: { droneName: drone.name }, // Pass only the model name
+      })
+    }
+  >
+    Unsold : {unsoldCounts[drone.name] || 0}
+  </button>
+</div>
+
             </div>
           </div>
         ))}

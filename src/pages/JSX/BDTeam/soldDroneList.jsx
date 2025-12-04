@@ -1,122 +1,61 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import BreadCrumbs from "../BreadCrumbs";
 import { FaInfoCircle } from "react-icons/fa";
-
 import "../../CSS/BDteam/soldDroneList.css";
 
-export default function BDDroneProfile() {
+export default function SoldDroneList() {
   const navigate = useNavigate();
   const location = useLocation();
-  const drone = location.state?.drone;
-  const clients = location.state?.clients || [];
+  const droneName = location.state?.droneName || ""; // Get model name if passed
 
-  const [selectedClient, setSelectedClient] = useState(null);
-  const handleClientClick = (client) => {
-    setSelectedClient(client);
+  const [soldDrones, setSoldDrones] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedDrone, setSelectedDrone] = useState(null);
+
+  useEffect(() => {
+    fetchSoldDrones();
+  }, [droneName]); // re-fetch if droneName changes
+
+  const fetchSoldDrones = async () => {
+    try {
+      const clientsRes = await fetch("http://127.0.0.1:8000/api/clients/");
+      const clientsData = await clientsRes.json();
+
+      const dronesRes = await fetch("http://127.0.0.1:8000/api/drone_registration/");
+      const dronesData = await dronesRes.json();
+
+      const soldList = [];
+
+      clientsData.forEach((client) => {
+        (client.drones || []).forEach((serial) => {
+          const droneDetails = dronesData.find(
+            (d) =>
+              d.drone_serial_number === serial &&
+              (!droneName || d.model_name === droneName) // filter by selected drone
+          );
+          if (droneDetails) {
+            soldList.push({
+              ...droneDetails,
+              clientName: client.name,
+              phone: client.phone,
+              email: client.email,
+              location: client.location,
+              logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png", // placeholder logo
+            });
+          }
+        });
+      });
+
+      setSoldDrones(soldList);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching sold drones:", error);
+      setLoading(false);
+    }
   };
 
-  if (!drone) {
-    return (
-      <div className="bd-drone-container">
-        <p>Drone data not available. Please return to the main list.</p>
-        <button
-          className="back-btn"
-          onClick={() => navigate("/bd-drone-details")}
-        >
-          ← Back
-        </button>
-      </div>
-    );
-  }
-
-  // // Example clients — can be fetched from backend later
-  // const clients = [
-  //   {
-  //     name: "SkyView Technologies Pvt Ltd",
-  //     logo: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-  //     location: "Bangalore, Karnataka",
-  //     address: "45, MG Road, Bangalore, Karnataka, India",
-  //     purchaseDate: "10 June 2024",
-  //     warranty: "1 Year (till June 2025)",
-  //     partsReplaced: "Propeller Set, Flight Controller",
-  //     supportHistory: "2 on-site maintenance visits in 2024",
-  //     serialNumber: "DRN-AEROX1-20240610-001",
-  //     uinNumber: "UIN-IND-4567X1",
-  //   },
-  //   {
-  //     name: "AeroWorks Solutions",
-  //     logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-  //     location: "Pune, Maharashtra",
-  //     address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-  //     purchaseDate: "22 March 2023",
-  //     warranty: "Expired (was 1 year)",
-  //     partsReplaced: "Battery Module (once)",
-  //     supportHistory: "3 software updates & calibration done",
-  //     serialNumber: "DRN-AEROX1-20240610-001",
-  //     uinNumber: "UIN-IND-4567X1",
-  //   },
-  //   {
-  //     name: "AeroWorks Solutions",
-  //     logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-  //     location: "Pune, Maharashtra",
-  //     address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-  //     purchaseDate: "22 March 2023",
-  //     warranty: "Expired (was 1 year)",
-  //     partsReplaced: "Battery Module (once)",
-  //     supportHistory: "3 software updates & calibration done",
-  //     serialNumber: "DRN-AEROX1-20240610-001",
-  //     uinNumber: "UIN-IND-4567X1",
-  //   },
-  //   {
-  //     name: "AeroWorks Solutions",
-  //     logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-  //     location: "Pune, Maharashtra",
-  //     address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-  //     purchaseDate: "22 March 2023",
-  //     warranty: "Expired (was 1 year)",
-  //     partsReplaced: "Battery Module (once)",
-  //     supportHistory: "3 software updates & calibration done",
-  //     serialNumber: "DRN-AEROX1-20240610-001",
-  //     uinNumber: "UIN-IND-4567X1",
-  //   },
-  //   {
-  //     name: "AeroWorks Solutions",
-  //     logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-  //     location: "Pune, Maharashtra",
-  //     address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-  //     purchaseDate: "22 March 2023",
-  //     warranty: "Expired (was 1 year)",
-  //     partsReplaced: "Battery Module (once)",
-  //     supportHistory: "3 software updates & calibration done",
-  //     serialNumber: "DRN-AEROX1-20240610-001",
-  //     uinNumber: "UIN-IND-4567X1",
-  //   },
-  //   {
-  //     name: "AeroWorks Solutions",
-  //     logo: "https://cdn-icons-png.flaticon.com/512/3135/3135823.png",
-  //     location: "Pune, Maharashtra",
-  //     address: "23 Tech Park, Hinjewadi Phase II, Pune, India",
-  //     purchaseDate: "22 March 2023",
-  //     warranty: "Expired (was 1 year)",
-  //     partsReplaced: "Battery Module (once)",
-  //     supportHistory: "3 software updates & calibration done",
-  //     serialNumber: "DRN-AEROX1-20240610-001",
-  //     uinNumber: "UIN-IND-4567X1",
-  //   },
-  //   {
-  //     name: "FarmLink Drones",
-  //     logo: "https://cdn-icons-png.flaticon.com/512/3135/3135768.png",
-  //     location: "Coimbatore, Tamil Nadu",
-  //     address: "12, Green Valley, Coimbatore, Tamil Nadu, India",
-  //     purchaseDate: "18 November 2024",
-  //     warranty: "2 Years (till November 2026)",
-  //     partsReplaced: "No replacements yet",
-  //     supportHistory: "Regular online support and firmware upgrades",
-  //     serialNumber: "DRN-AEROX1-20240610-001",
-  //     uinNumber: "UIN-IND-4567X1",
-  //   },
-  // ];
+  if (loading) return <p>Loading sold drones...</p>;
 
   return (
     <div className="bd-drone-container">
@@ -124,70 +63,79 @@ export default function BDDroneProfile() {
         <BreadCrumbs />
       </div>
 
-      <h2 className="client-list-title">Sold Drone List</h2>
+      <h2 className="client-list-title">
+        Sold Drones Inventory {droneName ? `- ${droneName}` : ""}
+      </h2>
 
-      {/* ======= CLIENT GRID ======= */}
+      {soldDrones.length === 0 && (
+  <div className="no-data-message">
+    No sold drones found for {droneName || "this model"}.
+  </div>
+)}
+
+
+      {/* CLIENT GRID */}
       <div className="client-grid">
-        {clients.map((client, index) => (
+        {soldDrones.map((drone, index) => (
           <div key={index} className="client-card">
-            <img src={client.logo} alt={client.name} className="client-logo" />
-            <h4 className="client-name">{client.name}</h4>
-            <p className="client-location">{client.location}</p>
+            <img src={drone.logo} alt={drone.clientName} className="client-logo" />
+            <h4 className="client-name">{drone.clientName}</h4>
+            <p className="client-location">{drone.location}</p>
             <p className="client-serial">
-              <strong>Serial:</strong> {client.serialNumber}
+              <strong>Serial:</strong> {drone.drone_serial_number}
             </p>
             <p className="client-uin">
-              <strong>UIN:</strong> {client.uinNumber}
+              <strong>UIN:</strong> {drone.uin_number}
             </p>
 
             <FaInfoCircle
               className="bd-info-icon"
               title="View More Details"
-              onClick={() => handleClientClick(client)}
+              onClick={() => setSelectedDrone(drone)}
             />
           </div>
         ))}
       </div>
 
-      {/* ======= POPUP ======= */}
-      {selectedClient && (
+      {/* POPUP */}
+      {selectedDrone && (
         <div className="client-popup-overlay">
           <div className="client-popup">
             <div className="popup-header">
-              <h3>{selectedClient.name} - Full Details</h3>
-              <button
-                className="close-btn"
-                onClick={() => setSelectedClient(null)}
-              >
+              <h3>{selectedDrone.clientName} - Drone Details</h3>
+              <button className="close-btn" onClick={() => setSelectedDrone(null)}>
                 ✖
               </button>
             </div>
 
             <div className="popup-body">
               <img
-                src={selectedClient.logo}
-                alt={selectedClient.name}
+                src={selectedDrone.logo}
+                alt={selectedDrone.clientName}
                 className="popup-logo"
               />
-              <p>
-                <strong>Location:</strong> {selectedClient.location}
-              </p>
-              <p>
-                <strong>Address:</strong> {selectedClient.address}
-              </p>
-              <p>
-                <strong>Purchase Date:</strong> {selectedClient.purchaseDate}
-              </p>
-              <p>
-                <strong>Warranty:</strong> {selectedClient.warranty}
-              </p>
-              <p>
-                <strong>Parts Replaced:</strong> {selectedClient.partsReplaced}
-              </p>
-              <p>
-                <strong>Support History:</strong>{" "}
-                {selectedClient.supportHistory}
-              </p>
+              <p><strong>Phone:</strong> {selectedDrone.phone}</p>
+              <p><strong>Email:</strong> {selectedDrone.email}</p>
+              <p><strong>Location:</strong> {selectedDrone.location}</p>
+              <p><strong>Serial:</strong> {selectedDrone.drone_serial_number}</p>
+              <p><strong>UIN:</strong> {selectedDrone.uin_number}</p>
+              <p><strong>Flight Controller:</strong> {selectedDrone.flight_controller_serial_number}</p>
+              <p><strong>Remote Controller:</strong> {selectedDrone.remote_controller}</p>
+              <p><strong>Battery Charger:</strong> {selectedDrone.battery_charger_serial_number}</p>
+              <p><strong>Battery 1:</strong> {selectedDrone.battery_serial_number_1}</p>
+              <p><strong>Battery 2:</strong> {selectedDrone.battery_serial_number_2}</p>
+              {selectedDrone.attachment && (
+                <p>
+                  <strong>Attachment:</strong>{" "}
+                  <a
+                    href={selectedDrone.attachment}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {selectedDrone.attachment.split("/").pop()}
+                  </a>
+                </p>
+              )}
             </div>
           </div>
         </div>

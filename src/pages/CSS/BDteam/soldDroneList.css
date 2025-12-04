@@ -19,8 +19,19 @@ text-align: center;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
   gap: 25px;
-  justify-items: center;
+  justify-items: start; /* <-- change from center to start */
 }
+
+.no-data-message {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  padding: 40px 0;
+  font-weight: 600;
+  animation: fadeIn 0.4s ease;
+}
+
+
 
 .client-card {
   position: relative; /* required for info icon positioning */
