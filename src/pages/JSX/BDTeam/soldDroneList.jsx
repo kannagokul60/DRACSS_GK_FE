@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import BreadCrumbs from "../BreadCrumbs";
 import { FaInfoCircle } from "react-icons/fa";
 import "../../CSS/BDteam/soldDroneList.css";
+import config from "../../../config";
 
 export default function SoldDroneList() {
   const navigate = useNavigate();
@@ -15,14 +16,14 @@ export default function SoldDroneList() {
 
   useEffect(() => {
     fetchSoldDrones();
-  }, [droneName]); // re-fetch if droneName changes
+  }, [droneName]); // re-fetch if droneName chuanges
 
   const fetchSoldDrones = async () => {
     try {
-      const clientsRes = await fetch("http://127.0.0.1:8000/api/clients/");
+      const clientsRes = await fetch(`${config.baseURL}/clients/`);
       const clientsData = await clientsRes.json();
 
-      const dronesRes = await fetch("http://127.0.0.1:8000/api/drone_registration/");
+      const dronesRes = await fetch(`${config.baseURL}/drone_registration/`);
       const dronesData = await dronesRes.json();
 
       const soldList = [];

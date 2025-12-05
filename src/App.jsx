@@ -79,11 +79,11 @@ export default function App() {
             <Route path="drone-details" element={<BDDroneDetails />} />
             <Route path="sold-drones" element={<SoldDroneList />} />
             <Route path="knowledge-base" element={<BDKnowledgeBase />} />
-            <Route path="knowledge/bhumi" element={<BDViewKnowledge />} />
+            <Route path="knowledge/:drone" element={<BDViewKnowledge />} />
+
             <Route path="pending-tasks" element={<PendingTasks />} />
             <Route path="profile-details" element={<Profile />} />
             <Route path="unsold-drones" element={<UnsoldDroneList />} />
-
             {/* FIXED: REMOVE leading slash */}
             <Route path="drone-approve" element={<DroneApprove />} />
             <Route path="orderform" element={<OrderFormPage />} />

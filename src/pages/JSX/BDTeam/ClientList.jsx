@@ -12,7 +12,8 @@ import "../../CSS/BDteam/clientList.css";
 import phoneImg from "../../../assets/group.png";
 import BreadCrumbs from "../BreadCrumbs";
 import { format } from "date-fns";
-
+import config from "../../../config";
+         
 // Convert API response → UI structure
 const mapApiClientToUi = (c) => ({
   id: c.id,
@@ -72,7 +73,7 @@ const handleMoveToSold = (client) => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/clients/");
+        const res = await fetch(`${config.baseURL}/clients/`);
         if (!res.ok) throw new Error("Failed to load clients");
 
         const data = await res.json();
@@ -126,7 +127,7 @@ const handleMoveToSold = (client) => {
     };
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/clients/", {
+      const res = await fetch(`${config.baseURL}/clients/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

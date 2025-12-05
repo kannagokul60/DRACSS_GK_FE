@@ -182,7 +182,7 @@ export default function OrderFormPage() {
 
       const saved = await res.json();
 
-      // Create empty delivery info
+      // Create empty delihvery info
       await fetch(`${config.baseURL}/order-delivery-info/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -215,11 +215,9 @@ export default function OrderFormPage() {
     <div className="orderform-page">
       <div className="orderform-header-wrapper">
         <h2 className="orderform-header">Order Forms</h2>
-        <button
-          className="plus-btn orderform-plus-btn"
-          onClick={openNewOrderPopup}
-        >
-          +
+
+        <button className="orderform-plus-btn" onClick={openNewOrderPopup}>
+          + ADD
         </button>
       </div>
 

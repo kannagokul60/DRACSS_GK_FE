@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../../CSS/BDTeam/unsoldDroneList.css";
 import BreadCrumbs from "../BreadCrumbs";
+import config from "../../../config";
 
 export default function UnsoldDroneList() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export default function UnsoldDroneList() {
 
   const fetchUnsoldDrones = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/drone_registration/");
+      const res = await fetch(`${config.baseURL}/drone_registration/`);
       const data = await res.json();
 
       const unsold = data.filter(
@@ -71,7 +72,7 @@ export default function UnsoldDroneList() {
 
   const fetchClients = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/clients/");
+      const res = await fetch(`${config.baseURL}/clients/`);
       const data = await res.json();
       setClients(data);
     } catch (error) {
@@ -153,7 +154,7 @@ export default function UnsoldDroneList() {
 
       // Update client
       await fetch(
-        `http://127.0.0.1:8000/api/clients/${selectedClient.client_id}/`,
+        `${config.baseURL}/clients/${selectedClient.client_id}/`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -163,7 +164,7 @@ export default function UnsoldDroneList() {
 
       // Update drone to sold
       await fetch(
-        `http://127.0.0.1:8000/api/drone_registration/${moveDrone.id}/`,
+        `${config.baseURL}/drone_registration/${moveDrone.id}/`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -181,7 +182,7 @@ export default function UnsoldDroneList() {
 
       closeMovePopup();
 
-      navigate("/bd/sold-drones"); // optional, sold drones page
+      navigate("/bd/sold-drones"); // optionaul, sold drones page
     } catch (error) {
       console.error("Error saving drone to client:", error);
       alert("Failed to save drone. Check console for details.");
@@ -198,7 +199,7 @@ export default function UnsoldDroneList() {
 
       {unsoldDrones.length === 0 ? (
         <div className="no-data-message">
-          No sold drones found for {selectedModel || "this model"}.
+          No unsold drones found for {selectedModel || "this model"}.
         </div>
       ) : (
         <div className="unsold-drone-grid">

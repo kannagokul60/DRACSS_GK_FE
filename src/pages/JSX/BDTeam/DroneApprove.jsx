@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../CSS/BDteam/droneApprove.css";
 import BreadCrumbs from "../BreadCrumbs";
+import config from "../../../config";
 
 export default function DroneApprove() {
   const [drones, setDrones] = useState([]);
@@ -14,7 +15,7 @@ export default function DroneApprove() {
     const fetchDrones = async () => {
       try {
         const res = await fetch(
-          "http://127.0.0.1:8000/api/drone_registration/"
+          `${config.baseURL}/drone_registration/`
         );
         const data = await res.json();
         // Only keep drones which have client info
@@ -33,7 +34,7 @@ export default function DroneApprove() {
   const fetchBdDrone = async (droneSerial) => {
     try {
       const res = await fetch(
-        `http://127.0.0.1:8000/api/drone_registration/?drone_serial_number=${droneSerial}`
+        `${config.baseURL}/drone_registration/?drone_serial_number=${droneSerial}`
       );
       const data = await res.json();
       setBdDrone(data[0] || null);
@@ -55,7 +56,7 @@ export default function DroneApprove() {
     try {
       // Example PATCH request to mark approved
       await fetch(
-        `http://127.0.0.1:8000/api/drone_registration/${selectedDrone.id}/`,
+        `${config.baseURL}/drone_registration/${selectedDrone.id}/`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -79,7 +80,7 @@ export default function DroneApprove() {
     try {
       // Example PATCH request to mark rejected with remarks
       await fetch(
-        `http://127.0.0.1:8000/api/drone_registration/${selectedDrone.id}/`,
+        `${config.baseURL}/drone_registration/${selectedDrone.id}/`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -221,32 +222,28 @@ export default function DroneApprove() {
                       {/* FIELD NAME */}
                       <td className="field-label">{field.label}</td>
 
-                      {/* BD DRONE INFO FIRST */}
+                      {/* BD DRONE INFO */}
                       <td>
-                        {bdDrone ? (
-                          field.key !== "attachment" ? (
-                            bdDrone[field.key] || "-"
-                          ) : bdDrone.attachment ? (
-                            <a
-                              href={bdDrone.attachment}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              View Attachment
-                            </a>
-                          ) : (
-                            "-"
-                          )
+                        {field.key !== "attachment" ? (
+                          selectedDrone[field.key] || "-"
+                        ) : selectedDrone.attachment ? (
+                          <a
+                            href={selectedDrone.attachment}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            View Attachment
+                          </a>
                         ) : (
-                          "Loading..."
+                          "-"
                         )}
                       </td>
 
-                      {/* CLIENT DRONE INFO SECOND */}
+                      {/* CLIENT DRONE INFO */}
                       <td>
                         {field.key !== "attachment" ? (
-                          selectedDrone.client[0][field.key] || "-"
-                        ) : selectedDrone.client[0].attachment ? (
+                          selectedDrone.client?.[0]?.[field.key] || "-"
+                        ) : selectedDrone.client?.[0]?.attachment ? (
                           <a
                             href={selectedDrone.client[0].attachment}
                             target="_blank"
@@ -263,7 +260,7 @@ export default function DroneApprove() {
                 </tbody>
               </table>
 
-              {/* ACTION SECTION */}
+              {/* ACTIONS */}
               <div className="approval-actions">
                 <textarea
                   placeholder="Enter rejection remarks"
@@ -271,6 +268,7 @@ export default function DroneApprove() {
                   onChange={(e) => setRemarks(e.target.value)}
                 />
               </div>
+
               <div className="action-buttons">
                 <button className="approve-btn" onClick={handleApprove}>
                   Approve

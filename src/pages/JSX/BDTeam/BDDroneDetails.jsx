@@ -10,6 +10,9 @@ import Vajra from "../../../assets/Vajra.png";
 import VajraS from "../../../assets/Vajra-s.png";
 import VyomaM from "../../../assets/Vyoma-m.webp";
 import VyomaS from "../../../assets/Vyoma-s.webp";
+import AstraM from "../../../assets/AstraM.png";
+import AstraS from "../../../assets/AstraS.png";
+import Chakra from "../../../assets/Chakra.png";
 
 export default function BDDroneDetails() {
   const navigate = useNavigate();
@@ -17,6 +20,7 @@ export default function BDDroneDetails() {
   const [selectedDrone, setSelectedDrone] = useState(null);
   const [unsoldCounts, setUnsoldCounts] = useState({});
   const [soldCounts, setSoldCounts] = useState({});
+  const [addPopup, setAddPopup] = useState(false);
 
   useEffect(() => {
     loadCounts();
@@ -133,6 +137,21 @@ export default function BDDroneDetails() {
       name: "VYOMA-S",
       image: VyomaS,
     },
+    {
+      id: 6,
+      name: "ASTRA-M",
+      image: AstraM,
+    },
+    {
+      id: 7,
+      name: "ASTRA-S",
+      image: AstraS,
+    },
+    {
+      id: 8,
+      name: "CHAKRA",
+      image: Chakra,
+    },
   ];
 
   const handleViewDetails = (drone) => {
@@ -163,8 +182,13 @@ export default function BDDroneDetails() {
         <BreadCrumbs />
       </div>
 
-      <h2 className="bd-drone-heading">Company Drone Fleet</h2>
+      <div className="bd-drone-header-row">
+        <h2 className="bd-drone-heading">Company Drone Fleet</h2>
 
+        <button className="bd-add-main-btn" onClick={() => setAddPopup(true)}>
+          + Add
+        </button>
+      </div>
       <div className="bd-drone-grid">
         {drones.map((drone) => (
           <div key={drone.id} className="bd-drone-card">
@@ -192,29 +216,28 @@ export default function BDDroneDetails() {
               <h3 className="bd-drone-name">{drone.name}</h3>
 
               <div className="bd-drone-info-row">
-  <button
-    className="info-sold-btn"
-    onClick={() =>
-      navigate("/bd/sold-drones", {
-        state: { droneName: drone.name }, // Pass only the model name
-      })
-    }
-  >
-    Sold : {soldCounts[drone.name] || 0}
-  </button>
+                <button
+                  className="info-sold-btn"
+                  onClick={() =>
+                    navigate("/bd/sold-drones", {
+                      state: { droneName: drone.name }, // Pass only the model name
+                    })
+                  }
+                >
+                  Sold : {soldCounts[drone.name] || 0}
+                </button>
 
-  <button
-    className="info-unsold-btn"
-    onClick={() =>
-      navigate("/bd/unsold-drones", {
-        state: { droneName: drone.name }, // Pass only the model name
-      })
-    }
-  >
-    Unsold : {unsoldCounts[drone.name] || 0}
-  </button>
-</div>
-
+                <button
+                  className="info-unsold-btn"
+                  onClick={() =>
+                    navigate("/bd/unsold-drones", {
+                      state: { droneName: drone.name }, // Pass only the model name
+                    })
+                  }
+                >
+                  Unsold : {unsoldCounts[drone.name] || 0}
+                </button>
+              </div>
             </div>
           </div>
         ))}
@@ -307,6 +330,32 @@ export default function BDDroneDetails() {
               <button
                 className="bd-cancel-btn"
                 onClick={() => setShowPopup(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {addPopup && (
+        <div className="bd-popup-overlay">
+          <div className="bd-popup">
+            <h3>Add New Drone</h3>
+
+            <div className="bd-popup-fields">
+              <label>Upload Drone Image</label>
+              <input type="file" accept="image/*" />
+
+              <label>Drone Name</label>
+              <input type="text" placeholder="Enter drone name" />
+            </div>
+
+            <div className="bd-popup-actions">
+              <button className="bd-save-btn">Submit</button>
+              <button
+                className="bd-cancel-btn"
+                onClick={() => setAddPopup(false)}
               >
                 Cancel
               </button>

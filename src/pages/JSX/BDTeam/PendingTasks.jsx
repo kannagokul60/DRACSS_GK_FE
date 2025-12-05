@@ -14,7 +14,7 @@ export default function PendingTasks({ role = "manager" }) {
     },
     {
       id: 102,
-      requestType: "Battery Maintenance (Client B)",
+      requestType: "Battery Maintehnance (Client B)",
       mode: "Online",
       requestedDate: "12-11-2025",
       managerStatus: "Sent for Approval",

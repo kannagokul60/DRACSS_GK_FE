@@ -1,7 +1,3 @@
-/* ============================================================
-   ORDER FORM PAGE — Same Styling As Drone Approve Page
-============================================================ */
-
 .orderform-page {
   width: 100%;
   height: 100%; /* consistent height */
@@ -16,47 +12,43 @@
   box-sizing: border-box;
 }
 
-/* ============================================================
-   TOP HEADER (Title + Button)
-============================================================ */
-
 .orderform-header-wrapper {
+  position: relative;
+  width: 100%;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  justify-content: center; /* center the title */
+  margin-bottom: 1rem;
 }
 
+/* Center Title */
 .orderform-header {
   font-size: 2rem;
-  font-weight: 600;
-  color: #0d47a1;
+  font-weight: 700;
+  color: #1565c0;
   margin: 0;
+  text-shadow: 0 1px 3px rgba(21, 101, 192, 0.3);
 }
 
-/* ============================================================
-   + ADD NEW BUTTON
-============================================================ */
-
-.plus-btn {
+/* Right-side button */
+.orderform-plus-btn {
+  position: absolute;
+  right: 0; /* forces button to right side */
   background: #1565c0;
   color: #fff;
-  font-size: 20px;
-  font-weight: 600;
-  width: 38px;
-  height: 38px;
+  padding: 8px 18px;
   border: none;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 20px;
+  font-weight: 600;
   cursor: pointer;
+  font-size: 0.95rem;
   transition: 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-.plus-btn:hover {
+.orderform-plus-btn:hover {
   background: #0d47a1;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 /* ============================================================
@@ -65,14 +57,12 @@
 
 .order-table-wrapper {
   width: 100%;
-  max-height: 650px; /* table height control → enables vertical scroll */
-  overflow-x: auto; /* horizontal scroll */
-  overflow-y: auto; /* vertical scroll */
-
+  max-height: 650px; 
+  overflow-x: auto;
+  overflow-y: auto;
   background: #ffffff;
   border-radius: 12px;
   border: 1px solid #e0e0e0;
-
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 

@@ -1,55 +1,68 @@
-/* ===== PAGE WRAPPER ===== */
+/* ===============================
+   PAGE WRAPPER
+================================*/
 .kb-page {
-  padding: 2rem;
-  font-family: 'Times New Roman', Times, serif;
-  height: 100%;
-  background: linear-gradient(135deg, #8bb0ca, #c9e4f6 60%, #a9d2f0); 
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* soft shadow */
-  position: relative; /* so breadcrumbs can be positioned absolutely */
+  padding: 45px 40px;
+  width: 100%;
+  height: 90vh;
+  background: #f7f7f7;
+  border-radius: 14px;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
+  overflow-x: hidden;
 }
 
-/* ===== BREADCRUMB WRAPPER ===== */
-.kb-page  .drone-breadcrumb-wrapper {
+/* ===============================
+   BREADCRUMB
+================================*/
+.kb-page .drone-breadcrumb-wrapper {
   position: absolute;
-  top: 1rem; /* space from top */
-  left: 1rem; /* space from left */
+  top: 1rem;
+  left: 1rem;
   font-size: 0.95rem;
-  z-index: 10; /* stay above other elements */
+  z-index: 10;
 }
 
-
-/* ===== PAGE TITLE ===== */
+/* ===============================
+   PAGE TITLE
+================================*/
 .kb-title {
-  font-size: 2rem;
-  font-weight: 600;
-  color: #0d2a4b;
-  margin-bottom: 2rem;
   text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1565c0;
+  margin-bottom: 30px;
+  text-shadow: 0 1px 3px rgba(21, 101, 192, 0.3);
 }
 
-/* ====== GRID LAYOUT ====== */
+/* ===============================
+   GRID LAYOUT
+================================*/
 .kb-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 3.5rem;
 }
 
-/* ====== CARD STYLE (GLASS OVERLAY) ====== */
+/* ===============================
+   CARD
+================================*/
 .kb-card {
   position: relative;
   cursor: pointer;
   overflow: hidden;
   border-radius: 20px;
   transition: transform 0.4s ease;
-  height: 320px; /* reduced card height */
+  height: 320px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12); /* corrected */
 }
 
 .kb-card:hover {
   transform: translateY(-6px);
 }
 
-/* Image wrapper */
+/* IMAGE */
 .kb-image-wrapper {
   position: relative;
   width: 100%;
@@ -59,7 +72,7 @@
 .kb-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* ensures full fit without distortion */
+  object-fit: cover;
   border-radius: 20px;
   transition: transform 0.4s ease;
 }
@@ -68,23 +81,29 @@
   transform: scale(1.03);
 }
 
-/* ===== Glass Overlay ===== */
+/* ===============================
+   GLASS OVERLAY
+================================*/
 .kb-overlay {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
+
   height: 0;
+  padding: 20px;
+
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(8px);
-  color: #fff;
-  padding: 20px;
-  border-radius: 0 0 20px 20px;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  color: #fff;
   opacity: 0;
+  border-radius: 0 0 20px 20px;
   transition: all 0.4s ease;
 }
 
@@ -93,7 +112,7 @@
   opacity: 1;
 }
 
-/* Overlay text */
+/* OVERLAY TEXT */
 .kb-card-title {
   font-size: 1.3rem;
   font-weight: 600;
@@ -111,14 +130,16 @@
 
 .kb-more-icon {
   font-size: 16px;
-  transition: transform 0.3s;
+  transition: transform 0.3s ease;
 }
 
 .kb-more:hover .kb-more-icon {
   transform: translateX(4px);
 }
 
-/* ===== Responsive ===== */
+/* ===============================
+   RESPONSIVE
+================================*/
 @media (max-width: 768px) {
   .kb-page {
     padding: 20px;
@@ -127,8 +148,9 @@
   .kb-grid {
     grid-template-columns: 1fr;
   }
+
   .kb-card {
-    height: 260px; /* smaller on mobile */
+    height: 260px;
   }
 
   .kb-card-title {
@@ -136,3 +158,154 @@
   }
 }
 
+/* Header section */
+.kb-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 25px;
+}
+
+/* Add Button */
+.kb-add-btn {
+  background: #1565c0;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  position: absolute;
+  right: 0;
+}
+
+.kb-add-btn:hover {
+  background: #0d47a1;
+  transform: translateY(-2px);
+}
+
+/* Popup overlay */
+.kb-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+}
+
+/* Popup box */
+.kb-popup {
+  background: #ffffff;
+  padding: 2rem;
+  width: 480px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+.kb-popup h3 {
+  text-align: center;
+  color: #1565c0;
+  margin-bottom: 20px;
+  text-shadow: 0 1px 3px rgba(21, 101, 192, 0.3);
+  font-size: 1.5rem;
+}
+
+/* Popup input / textarea styling */
+.kb-input,
+.kb-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  margin-top: 12px;
+  border: 1px solid #bdbdbd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: #fafafa;
+  transition: 0.2s ease;
+}
+
+.kb-input:focus,
+.kb-textarea:focus {
+  border-color: #1565c0;
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(21, 101, 192, 0.3);
+}
+
+/* Textarea height */
+.kb-textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+/* File upload label */
+.kb-file-label {
+  margin-top: 15px;
+  display: block;
+  font-weight: 600;
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  border: 1px dashed #1565c0;
+  transition: 0.3s;
+}
+
+.kb-file-label:hover {
+  background: #bbdefb;
+}
+
+.kb-file-input {
+  display: none;
+}
+
+/* Bottom right button row */
+.kb-btn-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.kb-save {
+  background: linear-gradient(135deg, #1565c0, #42a5f5);
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.kb-save:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #1e88e5, #64b5f6);
+}
+
+.kb-close {
+  background: #777;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.kb-close:hover {
+  background: #555;
+  transform: translateY(-2px);
+}
