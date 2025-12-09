@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "../../CSS/BDTeam/knowledgeBase.css";
-import { FaArrowRight, FaPlus } from "react-icons/fa";
+import {
+  FaEdit,
+  FaChevronRight,
+  FaChevronLeft,
+  FaArrowLeft,
+  FaArrowRight,
+  FaPlus,
+} from "react-icons/fa";
 import BreadCrumbs from "../BreadCrumbs";
 import { useNavigate } from "react-router-dom";
 import config from "../../../config";
@@ -11,17 +18,19 @@ export default function KnowledgeBase() {
   const [showPopup, setShowPopup] = useState(false);
   const [uploadPopup, setUploadPopup] = useState(false);
 
-  const [selectedDrone, setSelectedDrone] = useState(null);
   const [kbItems, setKbItems] = useState([]);
-  const [uploadStatus, setUploadStatus] = useState("");
+  const [selectedDrone, setSelectedDrone] = useState(null);
 
-  // Add Drone form
+  const [uploadStatus, setUploadStatus] = useState("");
+  const [sliderIndex, setSliderIndex] = useState(0);
+
+  // ---------------- NEW DRONE -----------------
   const [newDrone, setNewDrone] = useState({
     name: "",
     image: null,
   });
 
-  // Upload Extra Data
+  // ---------------- EXTRA DATA POPUP ----------------
   const [extraData, setExtraData] = useState({
     specification: {
       weight: "",
@@ -33,9 +42,12 @@ export default function KnowledgeBase() {
     },
     tutorial_video: null,
     troubleshooting_video: null,
+    images: [],
   });
 
-  // Load Drone List
+  // -------------------------------------------------------
+  // LOAD DRONES LIST
+  // -------------------------------------------------------
   useEffect(() => {
     loadDroneList();
   }, []);
@@ -44,24 +56,35 @@ export default function KnowledgeBase() {
     try {
       const res = await fetch(`${config.baseURL}/drone_images/`);
       const data = await res.json();
-      setKbItems(data);
+
+      const parsed = data.map((item) => ({
+        ...item,
+        specification:
+          typeof item.specification === "string"
+            ? JSON.parse(item.specification)
+            : item.specification || {},
+      }));
+
+      setKbItems(parsed);
     } catch (err) {
-      console.error("API Error:", err);
+      console.error("Failed to load drones", err);
     }
   };
 
-  // Handle Add Drone Input
+  // -------------------------------------------------------
+  // ADD DRONE
+  // -------------------------------------------------------
   const handleNewDroneChange = (e) => {
     const { name, value, files } = e.target;
+
     setNewDrone((prev) => ({
       ...prev,
       [name]: files ? files[0] : value,
     }));
   };
 
-  // Save New Drone (Name + Image)
   const saveNewDrone = async () => {
-    if (!newDrone.name) return alert("Enter drone name");
+    if (!newDrone.name.trim()) return alert("Enter drone name");
 
     const fd = new FormData();
     fd.append("name", newDrone.name);
@@ -78,104 +101,150 @@ export default function KnowledgeBase() {
         setNewDrone({ name: "", image: null });
         loadDroneList();
       } else {
-        alert("Failed to add drone!");
+        alert("Failed to add drone");
       }
-    } catch (error) {
-      console.error("Add Drone Error:", error);
+    } catch (err) {
+      console.error("Add drone error:", err);
     }
   };
 
-  // Handle Extra Data Change
+  // -------------------------------------------------------
+  // EXTRA DATA CHANGE HANDLERS
+  // -------------------------------------------------------
   const handleExtraChange = (e, isSpec = false) => {
     const { name, value, files } = e.target;
 
     if (isSpec) {
       setExtraData((prev) => ({
         ...prev,
-        specification: {
-          ...prev.specification,
-          [name]: value,
-        },
+        specification: { ...prev.specification, [name]: value },
       }));
-    } else {
-      setExtraData((prev) => ({
-        ...prev,
-        [name]: files ? files[0] : value,
-      }));
-    }
-  };
-
-  const saveExtraData = async () => {
-    if (!selectedDrone) return;
-
-    const specToSend = Object.fromEntries(
-      Object.entries(extraData.specification).filter(
-        ([_, v]) => v && v.trim() !== ""
-      )
-    );
-
-    if (
-      Object.keys(specToSend).length === 0 &&
-      !extraData.tutorial_video &&
-      !extraData.troubleshooting_video
-    ) {
-      alert("Please upload at least one field");
       return;
     }
 
-    const fd = new FormData();
-    if (Object.keys(specToSend).length > 0) {
-      fd.append("specification", JSON.stringify(specToSend));
+    if (name === "images") {
+      setExtraData((prev) => ({
+        ...prev,
+        images: [...files],
+      }));
+      return;
     }
 
-    if (extraData.tutorial_video)
-      fd.append("tutorial_video", extraData.tutorial_video);
-    if (extraData.troubleshooting_video)
-      fd.append("troubleshooting_video", extraData.troubleshooting_video);
+    setExtraData((prev) => ({
+      ...prev,
+      [name]: files ? files[0] : value,
+    }));
+  };
+
+  // -------------------------------------------------------
+  // SAVE EXTRA DATA (PATCH)
+  // -------------------------------------------------------
+  const saveExtraData = async () => {
+    if (!selectedDrone) return;
 
     try {
-      setUploadStatus("Uploading…");
+      let res;
 
-      const res = await fetch(
-        `${config.baseURL}/drone_images/${selectedDrone.id}/`,
-        {
-          method: "PATCH",
-          body: fd,
-        }
-      );
-
-      if (res.ok) {
-        setUploadStatus("Uploaded Successfully ✔");
-
-        setTimeout(() => {
-          setUploadPopup(false);
-          setUploadStatus("");
-        }, 1200);
-
-        setExtraData({
-          specification: {
-            weight: "",
-            dimensions: "",
-            speed: "",
-            takeoff_altitude: "",
-            flight_time: "",
-            flight_distance: "",
-          },
-          tutorial_video: null,
-          troubleshooting_video: null,
-        });
-
-        loadDroneList();
+      // If no files, send JSON
+      if (
+        !(
+          extraData.tutorial_video instanceof File ||
+          extraData.troubleshooting_video instanceof File ||
+          extraData.images.length > 0
+        )
+      ) {
+        // PATCH with JSON
+        res = await fetch(
+          `${config.baseURL}/drone_images/${selectedDrone.id}/`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              specification: extraData.specification,
+            }),
+          }
+        );
       } else {
-        setUploadStatus("Upload Failed ✘");
-        console.error("Response Status:", res.status);
+        // PATCH with FormData if files exist
+        const fd = new FormData();
+        fd.append("specification", JSON.stringify(extraData.specification));
+
+        if (extraData.tutorial_video instanceof File) {
+          fd.append("tutorial_video", extraData.tutorial_video);
+        }
+
+        if (extraData.troubleshooting_video instanceof File) {
+          fd.append("troubleshooting_video", extraData.troubleshooting_video);
+        }
+
+        extraData.images.forEach((file) => fd.append("images_upload[]", file));
+
+        res = await fetch(
+          `${config.baseURL}/drone_images/${selectedDrone.id}/`,
+          {
+            method: "PATCH",
+            body: fd,
+          }
+        );
       }
-    } catch (error) {
+
+      if (!res.ok) {
+        console.log(await res.text());
+        setUploadStatus("Upload Failed ✘");
+        return;
+      }
+
+      setUploadStatus("Uploaded Successfully ✔");
+      await loadDroneList();
+
+      setTimeout(() => {
+        setUploadPopup(false);
+        setUploadStatus("");
+      }, 600);
+    } catch (err) {
+      console.error("PATCH error:", err);
       setUploadStatus("Upload Failed ✘");
-      console.error("Upload Error:", error);
     }
   };
 
+  // -------------------------------------------------------
+  // OPEN POPUP WITH MATCHING DATA
+  // -------------------------------------------------------
+  const openUploadPopup = async (item) => {
+    try {
+      const res = await fetch(`${config.baseURL}/drone_images/${item.id}/`);
+      const drone = await res.json();
+
+      const spec =
+        typeof drone.specification === "string"
+          ? JSON.parse(drone.specification)
+          : drone.specification || {};
+
+      setSelectedDrone(drone);
+
+      setExtraData({
+        specification: {
+          weight: spec.weight || "",
+          dimensions: spec.dimensions || "",
+          speed: spec.speed || "",
+          takeoff_altitude: spec.takeoff_altitude || "",
+          flight_time: spec.flight_time || "",
+          flight_distance: spec.flight_distance || "",
+        },
+        tutorial_video: null,
+        troubleshooting_video: null,
+        images: [],
+      });
+
+      setUploadPopup(true);
+    } catch (err) {
+      console.error("Popup error:", err);
+    }
+  };
+
+  // -------------------------------------------------------
+  // UI
+  // -------------------------------------------------------
   return (
     <div className="kb-page">
       <div className="drone-breadcrumb-wrapper">
@@ -189,7 +258,7 @@ export default function KnowledgeBase() {
         </button>
       </div>
 
-      {/* Drone Cards */}
+      {/* DRONE CARDS */}
       <div className="kb-grid">
         {kbItems.map((item) => (
           <div key={item.id} className="kb-card glass-style">
@@ -197,24 +266,7 @@ export default function KnowledgeBase() {
               className="kb-card-add-btn"
               onClick={(e) => {
                 e.stopPropagation();
-                setSelectedDrone(item);
-
-                // Prefill extraData with existing specification
-                setExtraData({
-                  specification: {
-                    weight: item.specification?.weight || "",
-                    dimensions: item.specification?.dimensions || "",
-                    speed: item.specification?.speed || "",
-                    takeoff_altitude:
-                      item.specification?.takeoff_altitude || "",
-                    flight_time: item.specification?.flight_time || "",
-                    flight_distance: item.specification?.flight_distance || "",
-                  },
-                  tutorial_video: null,
-                  troubleshooting_video: null,
-                });
-
-                setUploadPopup(true);
+                openUploadPopup(item);
               }}
             >
               <FaPlus />
@@ -239,7 +291,7 @@ export default function KnowledgeBase() {
         ))}
       </div>
 
-      {/* ADD NEW DRONE POPUP */}
+      {/* ADD DRONE POPUP */}
       {showPopup && (
         <div className="kb-popup-overlay">
           <div className="kb-popup">
@@ -277,55 +329,153 @@ export default function KnowledgeBase() {
         </div>
       )}
 
-      {/* UPLOAD EXTRA INFO POPUP */}
       {uploadPopup && (
         <div className="kb-popup-overlay">
           <div className="kb-popup">
             <h3>Upload Extra Info for {selectedDrone?.name}</h3>
 
-            <div className="spec-inputs">
-              {Object.keys(extraData.specification).map((key) => (
-                <input
-                  key={key}
-                  type="text"
-                  name={key}
-                  value={extraData.specification[key]}
-                  onChange={(e) => handleExtraChange(e, true)}
-                  placeholder={key.replace("_", " ")}
-                  className="kb-input"
-                />
-              ))}
+            <div className="slider-wrapper">
+              <div className="nav-arrows-wrapper">
+                {sliderIndex > 0 && (
+                  <FaChevronLeft
+                    className="nav-arrow left"
+                    onClick={() => setSliderIndex((prev) => prev - 1)}
+                  />
+                )}
+                {sliderIndex < 1 && (
+                  <FaChevronRight
+                    className="nav-arrow right"
+                    onClick={() => setSliderIndex((prev) => prev + 1)}
+                  />
+                )}
+              </div>
+              <div className="slide-container">
+                {sliderIndex === 0 && (
+                  <div className="slide">
+                    {Object.keys(extraData.specification).map((key) => (
+                      <div key={key} className="spec-input-wrapper">
+                        <label className="spec-label">
+                          {key
+                            .replace("_", " ")
+                            .replace(/\b\w/g, (l) => l.toUpperCase())}
+                        </label>
+                        <input
+                          type="text"
+                          name={key}
+                          value={extraData.specification[key]}
+                          onChange={(e) => handleExtraChange(e, true)}
+                          placeholder={key.replace("_", " ")}
+                          className="kb-input"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {sliderIndex === 1 && (
+                  <div className="slide">
+                    {/* Tutorial Video */}
+                    <label className="kb-file-label">
+                      Upload Tutorial Video
+                      <input
+                        type="file"
+                        name="tutorial_video"
+                        accept="video/*"
+                        onChange={handleExtraChange}
+                        className="kb-file-input"
+                      />
+                    </label>
+                    {extraData.tutorial_video && (
+                      <ul className="file-name">
+                        <li>
+                          {extraData.tutorial_video.name ||
+                            extraData.tutorial_video.url.split("/").pop()}
+                          <span
+                            className="remove-file"
+                            onClick={() =>
+                              setExtraData((prev) => ({
+                                ...prev,
+                                tutorial_video: null,
+                              }))
+                            }
+                          >
+                            ✖
+                          </span>
+                        </li>
+                      </ul>
+                    )}
+
+                    {/* Troubleshooting Video */}
+                    <label className="kb-file-label">
+                      Upload Troubleshooting Video
+                      <input
+                        type="file"
+                        name="troubleshooting_video"
+                        accept="video/*"
+                        onChange={handleExtraChange}
+                        className="kb-file-input"
+                      />
+                    </label>
+                    {extraData.troubleshooting_video && (
+                      <ul className="file-name">
+                        <li>
+                          {extraData.troubleshooting_video.name ||
+                            extraData.troubleshooting_video.url
+                              .split("/")
+                              .pop()}
+                          <span
+                            className="remove-file"
+                            onClick={() =>
+                              setExtraData((prev) => ({
+                                ...prev,
+                                troubleshooting_video: null,
+                              }))
+                            }
+                          >
+                            ✖
+                          </span>
+                        </li>
+                      </ul>
+                    )}
+
+                    {/* Extra Images */}
+                    <label className="kb-file-label">
+                      Upload Extra Images
+                      <input
+                        type="file"
+                        name="images"
+                        accept="image/*"
+                        multiple
+                        onChange={handleExtraChange}
+                        className="kb-file-input"
+                      />
+                    </label>
+                    {extraData.images.length > 0 && (
+                      <ul className="file-name">
+                        {extraData.images.map((img, i) => (
+                          <li key={i}>
+                            {img.name || img.url.split("/").pop()}
+                            <span
+                              className="remove-file"
+                              onClick={() =>
+                                setExtraData((prev) => ({
+                                  ...prev,
+                                  images: prev.images.filter(
+                                    (_, index) => index !== i
+                                  ),
+                                }))
+                              }
+                            >
+                              ✖
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-
-            <label className="kb-file-label">
-              Upload Tutorial Video
-              <input
-                type="file"
-                name="tutorial_video"
-                accept="video/*"
-                onChange={handleExtraChange}
-                className="kb-file-input"
-              />
-              {extraData.tutorial_video && (
-                <p className="file-name">{extraData.tutorial_video.name}</p>
-              )}
-            </label>
-
-            <label className="kb-file-label">
-              Upload Troubleshooting Video
-              <input
-                type="file"
-                name="troubleshooting_video"
-                accept="video/*"
-                onChange={handleExtraChange}
-                className="kb-file-input"
-              />
-              {extraData.troubleshooting_video && (
-                <p className="file-name">
-                  {extraData.troubleshooting_video.name}
-                </p>
-              )}
-            </label>
 
             {uploadStatus && <p className="upload-status">{uploadStatus}</p>}
 
@@ -338,6 +488,7 @@ export default function KnowledgeBase() {
                 onClick={() => {
                   setUploadPopup(false);
                   setUploadStatus("");
+                  setSliderIndex(0);
                 }}
               >
                 Cancel

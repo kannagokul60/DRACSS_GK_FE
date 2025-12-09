@@ -33,7 +33,6 @@ export default function ViewKnowledge() {
         <BreadCrumbs />
       </div>
 
-  {/* ===== HERO SECTION ===== */}
    {/* ===== HERO SECTION ===== */}
       <section className="hero-section">
         <div className="hero-content">

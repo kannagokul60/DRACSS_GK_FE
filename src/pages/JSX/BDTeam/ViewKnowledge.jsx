@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../../CSS/BDTeam/viewknowledge.css";
-import { FaPlay, FaDownload, FaCogs, FaWifi, FaMicrochip } from "react-icons/fa";
 import BreadCrumbs from "../BreadCrumbs";
 import config from "../../../config";
+import { FaPlay, FaDownload, FaCogs, FaWifi, FaMicrochip } from "react-icons/fa";
+
 
 export default function ViewKnowledge() {
   const { drone } = useParams();
@@ -12,6 +13,7 @@ export default function ViewKnowledge() {
   const [droneInfo, setDroneInfo] = useState(null);
   const [current, setCurrent] = useState(0);
 
+  // Fetch drone details
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -21,12 +23,15 @@ export default function ViewKnowledge() {
         const matched = data.find((item) => item.name === decodedName);
 
         if (matched) {
-          const imagesArray = [];
-          if (matched.image) imagesArray.push(matched.image);
+          // Correct merging: main image + extra images
+          const allImages = [
+            matched.image,                   // main image (string)
+            ...(matched.images?.map((i) => i.image) || []) // extract URLs
+          ];
 
           setDroneInfo({
             ...matched,
-            images: imagesArray,
+            allImages, // store final array for slideshow
           });
         }
       } catch (error) {
@@ -37,11 +42,12 @@ export default function ViewKnowledge() {
     fetchData();
   }, [decodedName]);
 
+  // Auto slideshow
   useEffect(() => {
-    if (!droneInfo || !droneInfo.images || droneInfo.images.length <= 1) return;
+    if (!droneInfo || droneInfo.allImages.length <= 1) return;
 
     const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % droneInfo.images.length);
+      setCurrent((prev) => (prev + 1) % droneInfo.allImages.length);
     }, 4000);
 
     return () => clearInterval(interval);
@@ -64,11 +70,12 @@ export default function ViewKnowledge() {
           <p className="hero-subtitle">Drone Information</p>
         </div>
 
+        {/* FIXED IMAGE SLIDER */}
         <div className="hero-image-wrapper">
-          {droneInfo.images.map((img, index) => (
+          {droneInfo.allImages.map((url, index) => (
             <img
               key={index}
-              src={img}
+              src={url}
               className={`hero-image ${index === current ? "active" : ""}`}
               alt={droneInfo.name}
             />
@@ -86,57 +93,23 @@ export default function ViewKnowledge() {
         <img src={droneInfo.image} className="about-image" alt="About drone" />
       </section>
 
-      {/* HOW IT WORKS */}
-      <section className="how-it-works">
-        <h2>How It Works</h2>
-        <div className="steps-grid">
-          <div className="step-card">
-            <FaWifi className="step-icon" />
-            <h4>1. Connect</h4>
-            <p>Connect your controller or mobile app.</p>
+      {/* SPECIFICATIONS */}
+      {droneInfo.specification && (
+        <section className="spec-section">
+          <h2 className="spec-title">Drone Specifications</h2>
+
+          <div className="spec-cards">
+            {Object.entries(droneInfo.specification).map(([key, value]) => (
+              <div key={key} className="spec-card">
+                <h3 className="spec-key">{key.replace("_", " ")}</h3>
+                <p className="spec-value">{value}</p>
+              </div>
+            ))}
           </div>
+        </section>
+      )}
 
-          <div className="step-card">
-            <FaMicrochip className="step-icon" />
-            <h4>2. Calibrate</h4>
-            <p>Drone auto-calibrates sensors.</p>
-          </div>
-
-          <div className="step-card">
-            <FaPlay className="step-icon" />
-            <h4>3. Launch</h4>
-            <p>Start autonomous missions.</p>
-          </div>
-
-          <div className="step-card">
-            <FaCogs className="step-icon" />
-            <h4>4. Analyze</h4>
-            <p>View flight data & reports.</p>
-          </div>
-        </div>
-      </section>
-
-{droneInfo.specification && (
-  <section className="spec-section">
-    <h2 className="spec-title">
-      Drone Specifications
-    </h2>
-    <div className="spec-cards">
-      {(typeof droneInfo.specification === "string"
-        ? Object.entries(JSON.parse(droneInfo.specification))
-        : Object.entries(droneInfo.specification)
-      ).map(([key, value]) => (
-        <div key={key} className="spec-card">
-          <h3 className="spec-key">{key.replace("_", " ")}</h3>
-          <p className="spec-value">{value}</p>
-        </div>
-      ))}
-    </div>
-  </section>
-)}
-
-
-      {/* MANUAL + VIDEOS SECTION */}
+      {/* MANUAL + VIDEOS */}
       <section className="manual-section">
         <div className="manual-content">
           <h2>Drone Manual & Guide</h2>
