@@ -175,7 +175,7 @@
   padding: 8px 18px;
   font-size: 1rem;
   font-weight: 600;
-  border-radius: 8px;
+  border-radius: 20px;
   cursor: pointer;
   transition: 0.3s ease;
   position: absolute;
@@ -186,6 +186,43 @@
   background: #0d47a1;
   transform: translateY(-2px);
 }
+
+.kb-card {
+  position: relative; /* Make card a positioned parent */
+  overflow: hidden; /* Optional: prevents the button from overflowing if needed */
+}
+
+.kb-card-add-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, #1e88e5, #6ab7ff);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(30, 136, 229, 0.4);
+  transition: 0.3s ease;
+}
+
+.kb-card-add-btn:hover {
+  transform: scale(1.12);
+  box-shadow: 0 6px 15px rgba(30, 136, 229, 0.6);
+}
+
+.file-name {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+}
+
 
 /* Popup overlay */
 .kb-popup-overlay {

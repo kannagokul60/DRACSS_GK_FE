@@ -186,7 +186,7 @@ const handleMoveToSold = (client) => {
       {loading && <p>Loading clients...</p>}
       {loadError && <p className="error-text">{loadError}</p>}
 
-      {/* Clients grid */}
+      {/* Clients grjid */}
       <div className="client-card-grid">
         {!loading &&
           clients.map((c) => (

@@ -122,13 +122,23 @@
   margin-bottom: 10px;
 }
 
+.spec-section {
+  padding: 80px 10%;
+  text-align: center;
+}
+
+.spec-section h2 {
+  color: #1e3a8a;
+  margin-bottom: 30px;
+}
+
 /* MANUAL SECTION */
 .manual-section {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 80px 10%;
-  gap: 40px;
+  gap: 25rem;
 }
 .manual-content h2 {
   color: #1e3a8a;
@@ -151,13 +161,88 @@
 .download-btn:hover {
   background: #547caa;
 }
-.manual-video iframe {
-  width: 100%;
-  height: 300px;
-  border: none;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+/* ---------- VIDEO PLAYER ---------- */
+.manual-video {
+  flex: 3;
 }
+
+.manual-video video {
+  width: 100%;
+  max-width: 480px;        /* 🔥 Medium width */
+  height: 280px;           /* 🔥 Medium height */
+  border-radius: 12px;
+  object-fit: cover;
+  background: #000;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.2);
+}
+
+.manual-video h3 {
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Specification Section */
+.spec-section {
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.spec-title h2 {
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+  margin-bottom: 16px;
+  color: #333;
+  text-align: center;
+}
+
+.spec-icon {
+  margin-left: 8px;
+  font-size: 1.1rem;
+  color: #555;
+  transition: transform 0.3s ease;
+}
+
+/* Cards container */
+.spec-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Individual Spec Card */
+.spec-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px 20px;
+  flex: 1 1 120px; /* responsive width */
+  min-width: 120px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.spec-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.spec-key {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 6px;
+  text-transform: capitalize;
+}
+
+.spec-value {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222;
+}
+
 
 /* CONTROLS */
 .controls-section {

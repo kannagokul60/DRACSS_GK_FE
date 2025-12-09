@@ -72,15 +72,17 @@
 
 .bd-drone-card {
   position: relative;
+  width: 450px;        /* FIXED WIDTH */
+  height: 300px;       /* FIXED HEIGHT */
   border-radius: 18px;
   overflow: hidden;
   background: #f1f1f1;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.18);
   transition: transform 0.3s ease;
-  height: 300px; /* FIXED HEIGHT */
   display: flex;
   flex-direction: column;
 }
+
 
 .bd-drone-image-wrapper {
   flex: 1;
