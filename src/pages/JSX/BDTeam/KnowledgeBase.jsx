@@ -23,14 +23,13 @@ export default function KnowledgeBase() {
 
   const [uploadStatus, setUploadStatus] = useState("");
   const [sliderIndex, setSliderIndex] = useState(0);
+  const [newImages, setNewImages] = useState([]);
 
-  // ---------------- NEW DRONE -----------------
   const [newDrone, setNewDrone] = useState({
     name: "",
     image: null,
   });
 
-  // ---------------- EXTRA DATA POPUP ----------------
   const [extraData, setExtraData] = useState({
     specification: {
       weight: "",
@@ -45,9 +44,6 @@ export default function KnowledgeBase() {
     images: [],
   });
 
-  // -------------------------------------------------------
-  // LOAD DRONES LIST
-  // -------------------------------------------------------
   useEffect(() => {
     loadDroneList();
   }, []);
@@ -71,9 +67,6 @@ export default function KnowledgeBase() {
     }
   };
 
-  // -------------------------------------------------------
-  // ADD DRONE
-  // -------------------------------------------------------
   const handleNewDroneChange = (e) => {
     const { name, value, files } = e.target;
 
@@ -108,9 +101,6 @@ export default function KnowledgeBase() {
     }
   };
 
-  // -------------------------------------------------------
-  // EXTRA DATA CHANGE HANDLERS
-  // -------------------------------------------------------
   const handleExtraChange = (e, isSpec = false) => {
     const { name, value, files } = e.target;
 
@@ -123,10 +113,10 @@ export default function KnowledgeBase() {
     }
 
     if (name === "images") {
-      setExtraData((prev) => ({
-        ...prev,
-        images: [...files],
-      }));
+      const newFiles = Array.from(files); // File objects
+
+      setNewImages((prev) => [...prev, ...newFiles]);
+
       return;
     }
 
@@ -136,24 +126,19 @@ export default function KnowledgeBase() {
     }));
   };
 
-  // -------------------------------------------------------
-  // SAVE EXTRA DATA (PATCH)
-  // -------------------------------------------------------
   const saveExtraData = async () => {
     if (!selectedDrone) return;
 
     try {
       let res;
 
-      // If no files, send JSON
       if (
         !(
           extraData.tutorial_video instanceof File ||
           extraData.troubleshooting_video instanceof File ||
-          extraData.images.length > 0
+          newImages.length > 0
         )
       ) {
-        // PATCH with JSON
         res = await fetch(
           `${config.baseURL}/drone_images/${selectedDrone.id}/`,
           {
@@ -165,19 +150,17 @@ export default function KnowledgeBase() {
           }
         );
       } else {
-        // PATCH with FormData if files exist
         const fd = new FormData();
         fd.append("specification", JSON.stringify(extraData.specification));
 
-        if (extraData.tutorial_video instanceof File) {
+        if (extraData.tutorial_video instanceof File)
           fd.append("tutorial_video", extraData.tutorial_video);
-        }
 
-        if (extraData.troubleshooting_video instanceof File) {
+        if (extraData.troubleshooting_video instanceof File)
           fd.append("troubleshooting_video", extraData.troubleshooting_video);
-        }
 
-        extraData.images.forEach((file) => fd.append("images_upload[]", file));
+        // Only new images uploaded now
+        newImages.forEach((file) => fd.append("images_upload[]", file));
 
         res = await fetch(
           `${config.baseURL}/drone_images/${selectedDrone.id}/`,
@@ -207,9 +190,6 @@ export default function KnowledgeBase() {
     }
   };
 
-  // -------------------------------------------------------
-  // OPEN POPUP WITH MATCHING DATA
-  // -------------------------------------------------------
   const openUploadPopup = async (item) => {
     try {
       const res = await fetch(`${config.baseURL}/drone_images/${item.id}/`);
@@ -231,9 +211,27 @@ export default function KnowledgeBase() {
           flight_time: spec.flight_time || "",
           flight_distance: spec.flight_distance || "",
         },
-        tutorial_video: null,
-        troubleshooting_video: null,
-        images: [],
+        tutorial_video: drone.tutorial_video
+          ? {
+              name: getFileName(drone.tutorial_video),
+              url: drone.tutorial_video,
+            }
+          : null,
+        troubleshooting_video: drone.troubleshooting_video
+          ? {
+              name: getFileName(drone.troubleshooting_video),
+              url: drone.troubleshooting_video,
+            }
+          : null,
+
+        images: drone.images
+  ? drone.images.map((img) => ({
+      id: img.id,       // ⭐ ADD THIS
+      name: getFileName(img.image),
+      url: img.image,
+    }))
+  : [],
+
       });
 
       setUploadPopup(true);
@@ -242,9 +240,18 @@ export default function KnowledgeBase() {
     }
   };
 
-  // -------------------------------------------------------
-  // UI
-  // -------------------------------------------------------
+  const getFileName = (url) => {
+    return url.split("/").pop();
+  };
+
+  const confirmDelete = (message) => {
+  return new Promise((resolve) => {
+    const yes = window.confirm(message);
+    resolve(yes);
+  });
+};
+
+
   return (
     <div className="kb-page">
       <div className="drone-breadcrumb-wrapper">
@@ -332,7 +339,7 @@ export default function KnowledgeBase() {
       {uploadPopup && (
         <div className="kb-popup-overlay">
           <div className="kb-popup">
-            <h3>Upload Extra Info for {selectedDrone?.name}</h3>
+            <h3>Additional Info for {selectedDrone?.name}</h3>
 
             <div className="slider-wrapper">
               <div className="nav-arrows-wrapper">
@@ -392,12 +399,20 @@ export default function KnowledgeBase() {
                             extraData.tutorial_video.url.split("/").pop()}
                           <span
                             className="remove-file"
-                            onClick={() =>
-                              setExtraData((prev) => ({
-                                ...prev,
-                                tutorial_video: null,
-                              }))
-                            }
+                           onClick={async () => {
+  const ok = await confirmDelete("Are you sure you want to delete this tutorial video?");
+  if (!ok) return;
+
+  // Backend delete
+  await fetch(
+    `${config.baseURL}/drone_images/${selectedDrone.id}/delete_file/?type=tutorial`,
+    { method: "DELETE" }
+  );
+
+  // Frontend delete
+  setExtraData((prev) => ({ ...prev, tutorial_video: null }));
+}}
+
                           >
                             ✖
                           </span>
@@ -425,12 +440,18 @@ export default function KnowledgeBase() {
                               .pop()}
                           <span
                             className="remove-file"
-                            onClick={() =>
-                              setExtraData((prev) => ({
-                                ...prev,
-                                troubleshooting_video: null,
-                              }))
-                            }
+                            onClick={async () => {
+  const ok = await confirmDelete("Delete this troubleshooting video?");
+  if (!ok) return;
+
+  await fetch(
+    `${config.baseURL}/drone_images/${selectedDrone.id}/delete_file/?type=troubleshoot`,
+    { method: "DELETE" }
+  );
+
+  setExtraData((prev) => ({ ...prev, troubleshooting_video: null }));
+}}
+
                           >
                             ✖
                           </span>
@@ -457,14 +478,23 @@ export default function KnowledgeBase() {
                             {img.name || img.url.split("/").pop()}
                             <span
                               className="remove-file"
-                              onClick={() =>
-                                setExtraData((prev) => ({
-                                  ...prev,
-                                  images: prev.images.filter(
-                                    (_, index) => index !== i
-                                  ),
-                                }))
-                              }
+onClick={async () => {
+  const ok = await confirmDelete("Delete this image?");
+  if (!ok) return;
+
+  // Backend delete using correct API
+  await fetch(
+    `${config.baseURL}/drone_images/${selectedDrone.id}/images/${img.id}/`,
+    { method: "DELETE" }
+  );
+
+  // Remove from frontend state
+  setExtraData((prev) => ({
+    ...prev,
+    images: prev.images.filter((_, index) => index !== i),
+  }));
+}}
+
                             >
                               ✖
                             </span>
