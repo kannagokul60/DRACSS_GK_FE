@@ -12,6 +12,9 @@ export default function ViewKnowledge() {
 
   const [droneInfo, setDroneInfo] = useState(null);
   const [current, setCurrent] = useState(0);
+  const [showManualPopup, setShowManualPopup] = useState(false);
+const [manualFiles, setManualFiles] = useState([]);
+
 
   // Fetch drone details
   useEffect(() => {
@@ -115,9 +118,24 @@ export default function ViewKnowledge() {
           <h2>Drone Manual & Guide</h2>
           <p>Watch tutorial or troubleshooting video, or download manual.</p>
 
-          <a href={droneInfo.manualPDF || "#"} className="download-btn">
-            <FaDownload /> Download Manual
-          </a>
+<a
+  className="download-btn"
+  onClick={() => {
+    const files = droneInfo.attachments || []; // <-- FIXED HERE
+
+    if (files.length === 1) {
+      window.open(files[0].file, "_blank");
+    } else if (files.length > 1) {
+      setManualFiles(files);
+      setShowManualPopup(true);
+    } else {
+      alert("No manual available");
+    }
+  }}
+>
+  <FaDownload /> Drone Manual
+</a>
+
         </div>
 
         <div className="manual-video">
@@ -136,6 +154,35 @@ export default function ViewKnowledge() {
           )}
         </div>
       </section>
+{showManualPopup && (
+  <div className="manual-popup-overlay">
+    <div className="manual-popup">
+
+      {/* X Close Button */}
+      <button
+        className="popup-close-x"
+        onClick={() => setShowManualPopup(false)}
+      >
+        ✕
+      </button>
+
+      <h3>Select Manual</h3>
+
+      {manualFiles.map((file, idx) => (
+        <div key={idx} className="manual-item">
+          <button
+            onClick={() => window.open(file.file, "_blank")}
+            className="manual-link"
+          >
+            {file.title || `Manual ${idx + 1}`}
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 }

@@ -55,14 +55,13 @@
   border-radius: 20px;
   transition: transform 0.4s ease;
   height: 320px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12); /* corrected */
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
 
 .kb-card:hover {
   transform: translateY(-6px);
 }
 
-/* IMAGE */
 .kb-image-wrapper {
   position: relative;
   width: 100%;
@@ -89,18 +88,14 @@
   bottom: 0;
   left: 0;
   right: 0;
-
   height: 0;
   padding: 20px;
-
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(8px);
-
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   color: #fff;
   opacity: 0;
   border-radius: 0 0 20px 20px;
@@ -112,7 +107,7 @@
   opacity: 1;
 }
 
-/* OVERLAY TEXT */
+/* Overlay Text */
 .kb-card-title {
   font-size: 1.3rem;
   font-weight: 600;
@@ -138,27 +133,8 @@
 }
 
 /* ===============================
-   RESPONSIVE
+   HEADER & ADD BUTTON
 ================================*/
-@media (max-width: 768px) {
-  .kb-page {
-    padding: 20px;
-  }
-
-  .kb-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .kb-card {
-    height: 260px;
-  }
-
-  .kb-card-title {
-    font-size: 1.1rem;
-  }
-}
-
-/* Header section */
 .kb-header {
   display: flex;
   justify-content: center;
@@ -167,7 +143,6 @@
   margin-bottom: 25px;
 }
 
-/* Add Button */
 .kb-add-btn {
   background: #1565c0;
   color: #fff;
@@ -185,11 +160,6 @@
 .kb-add-btn:hover {
   background: #0d47a1;
   transform: translateY(-2px);
-}
-
-.kb-card {
-  position: relative; /* Make card a positioned parent */
-  overflow: hidden; /* Optional: prevents the button from overflowing if needed */
 }
 
 .kb-card-add-btn {
@@ -216,15 +186,9 @@
   box-shadow: 0 6px 15px rgba(30, 136, 229, 0.6);
 }
 
-.file-name {
-  max-width: 100%;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  white-space: normal;
-}
-
-
-/* Popup overlay */
+/* ===============================
+   POPUP
+================================*/
 .kb-popup-overlay {
   position: fixed;
   top: 0;
@@ -239,14 +203,16 @@
   z-index: 9999;
 }
 
-/* Popup box */
 .kb-popup {
   background: #ffffff;
   padding: 1rem;
   width: 480px;
+  max-height: 90vh;
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .kb-popup h3 {
@@ -257,7 +223,7 @@
   font-size: 1.5rem;
 }
 
-/* Popup input / textarea styling */
+/* Popup Inputs */
 .kb-input,
 .kb-textarea {
   width: 100%;
@@ -278,16 +244,16 @@
   box-shadow: 0 0 5px rgba(21, 101, 192, 0.3);
 }
 
-/* Textarea height */
 .kb-textarea {
   height: 100px;
   resize: vertical;
 }
 
-/* File upload label */
+/* File Upload */
 .kb-file-label {
   margin-top: 15px;
-  display: block;
+  display: flex;
+  flex-direction: column;
   font-weight: 600;
   background: #e3f2fd;
   color: #1565c0;
@@ -297,6 +263,7 @@
   cursor: pointer;
   border: 1px dashed #1565c0;
   transition: 0.3s;
+  width: 100%;
 }
 
 .kb-file-label:hover {
@@ -305,9 +272,10 @@
 
 .kb-file-input {
   display: none;
+  margin-top: 5px;
 }
 
-/* Bottom right button row */
+/* Popup Buttons */
 .kb-btn-row {
   display: flex;
   justify-content: flex-end;
@@ -347,34 +315,33 @@
   transform: translateY(-2px);
 }
 
-
+/* ===============================
+   SPECIFICATION INPUTS
+================================*/
 .spec-inputs {
   display: flex;
   flex-direction: column;
-  gap: 12px; /* space between each input wrapper */
+  gap: 12px;
   margin-bottom: 15px;
 }
 
-/* ------------------ Each Input Wrapper ------------------ */
 .spec-input-wrapper {
   display: flex;
   flex-direction: column;
 }
 
-/* ------------------ Label ------------------ */
 .spec-label {
   font-weight: 600;
-  margin-bottom: 2px; /* reduced space */
+  margin-bottom: 5px;
   font-size: 14px;
   color: #333;
 }
 
-
-/* ------------------ Text Input ------------------ */
 .kb-input {
   padding: 8px 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  width: 100%;
   font-size: 14px;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -384,73 +351,46 @@
   border-color: #007bff;
   box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
 }
-/* Slider wrapper */
+
+/* Slider wrapper: scrollable content */
 .slider-wrapper {
-  position: relative; /* needed for arrows positioning */
+  position: relative; /* needed for arrows wrapper positioning */
   width: 100%;
 }
 
-/* Slide container */
+/* Scrollable container */
 .slide-container {
   width: 100%;
-  overflow: hidden;
+  max-height: 600px; /* or your popup height minus padding */
+  overflow-y: auto;   /* scroll only slides */
+  scroll-behavior: smooth;
 }
 
 /* Each slide */
 .slide {
-  width: 100%; /* full width of container */
+  width: 100%;
   padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* Input wrapper */
-.spec-input-wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
-.spec-label {
-  margin-bottom: 5px;
-  font-weight: 600;
-}
-
-.kb-input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100%; /* ensure input takes full width */
-}
-
-/* File labels */
-.kb-file-label {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 10px;
-  width: 100%; /* full width */
-}
-
-.kb-file-input {
-  margin-top: 5px;
-}
-
-/* Slide arrows */
+/* Navigation Arrows */
 .nav-arrows-wrapper {
   position: absolute;
-  top: 50%;
+  top: 50%; /* vertically center relative to popup */
   left: 0;
   right: 0;
   display: flex;
   justify-content: space-between;
   transform: translateY(-50%);
-  z-index: 10;
-  pointer-events: none; /* allow clicks through container */
+  z-index: 1000;
+  pointer-events: none; /* allow clicks only on arrows */
 }
 
 .nav-arrow {
-  pointer-events: all; /* enable arrow clicks */
-  font-size: 1.8rem;
+  pointer-events: all;
+  font-size: 2rem;
   background: #fff;
   border-radius: 50%;
   padding: 10px;
@@ -458,21 +398,24 @@
   color: #0b5394;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
   transition: 0.2s ease;
-  font-weight: 900;
 }
 
 .nav-arrow:hover {
   background: #eff6ff;
 }
 
+
 .nav-arrow.left {
-  margin-left: 0; /* optional spacing */
+  margin-left: 0;
 }
 
 .nav-arrow.right {
-  margin-right: 0; /* optional spacing */
+  margin-right: 0;
 }
 
+/* ===============================
+   FILE LIST
+================================*/
 .file-name {
   list-style: none;
   padding-left: 0;
@@ -499,4 +442,25 @@
 
 .remove-file:hover {
   color: #f44336;
+}
+
+/* ===============================
+   RESPONSIVE
+================================*/
+@media (max-width: 768px) {
+  .kb-page {
+    padding: 20px;
+  }
+
+  .kb-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kb-card {
+    height: 260px;
+  }
+
+  .kb-card-title {
+    font-size: 1.1rem;
+  }
 }

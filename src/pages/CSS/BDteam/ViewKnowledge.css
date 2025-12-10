@@ -1,8 +1,11 @@
 .kb-main-page.light-theme {
-  background: #f8fafc;
-  color: #1e293b;
-  font-family: 'Times New Roman', Times, serif;
+  background: #f7f7f7;
+  border-radius: 14px;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
   overflow-x: hidden;
+  margin-bottom: 70px;
 }
 
 /* HERO */
@@ -11,9 +14,9 @@
   align-items: center;
   justify-content: space-between;
   padding: 80px 10%;
-  background: linear-gradient(120deg, #ffffff 0%, #e6f0ff 100%);
+  background: linear-gradient(120deg, #ffffff 0%, #e5edf8 100%);
   border-radius: 20px;
-  margin: 40px auto;
+  margin: 40px 20px 60px 20px; /* top, right, bottom, left */
   box-shadow: 0 10px 40px rgba(37, 99, 235, 0.1);
 }
 .hero-content {
@@ -21,8 +24,11 @@
 }
 .hero-title {
   font-size: 3rem;
-  color: #1e3a8a;
-  font-weight: 700;
+text-align: center;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #1565c0;
+    text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4);
 }
 .hero-subtitle {
   font-size: 1.1rem;
@@ -52,7 +58,6 @@
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
-
 .hero-image {
   position: absolute;
   top: 0;
@@ -68,7 +73,6 @@
   opacity: 1;
 }
 
-
 /* ABOUT */
 .about-section {
   display: flex;
@@ -78,8 +82,11 @@
   gap: 40px;
 }
 .about-text h2 {
-  color: #1e3a8a;
-  margin-bottom: 10px;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #1565c0;
+    text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4);
 }
 .about-text p {
   color: #475569;
@@ -128,8 +135,12 @@
 }
 
 .spec-section h2 {
-  color: #1e3a8a;
-  margin-bottom: 30px;
+text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #1565c0;
+    text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4);
 }
 
 /* MANUAL SECTION */
@@ -141,7 +152,11 @@
   gap: 25rem;
 }
 .manual-content h2 {
-  color: #1e3a8a;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #1565c0;
+    text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4);
 }
 .manual-content p {
   color: #475569;
@@ -157,9 +172,11 @@
   gap: 8px;
   margin-top: 15px;
   transition: 0.3s;
+  cursor: pointer;
 }
 .download-btn:hover {
-  background: #547caa;
+  background: linear-gradient(135deg, #0d5bb4, #3b7dcf);
+transform: translateY(-4px);
 }
 /* ---------- VIDEO PLAYER ---------- */
 .manual-video {
@@ -168,8 +185,8 @@
 
 .manual-video video {
   width: 100%;
-  max-width: 480px;        /* 🔥 Medium width */
-  height: 280px;           /* 🔥 Medium height */
+  max-width: 480px; /* 🔥 Medium width */
+  height: 280px; /* 🔥 Medium height */
   border-radius: 12px;
   object-fit: cover;
   background: #000;
@@ -221,13 +238,13 @@
   flex: 1 1 120px; /* responsive width */
   min-width: 120px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .spec-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .spec-key {
@@ -242,7 +259,6 @@
   font-weight: 600;
   color: #222;
 }
-
 
 /* CONTROLS */
 .controls-section {
@@ -316,4 +332,81 @@
   .about-image {
     width: 100%;
   }
+}
+
+/* Popup Background */
+.manual-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Popup Box */
+.manual-popup {
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  width: 450px;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.manual-popup h3 {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: #1565c0;
+  text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4);
+}
+
+/* X Button */
+.popup-close-x {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  color: #333;
+  font-weight: bold;
+}
+
+.popup-close-x:hover {
+  color: red;
+}
+
+/* Manual buttons */
+.manual-item {
+  margin: 10px 0;
+}
+
+.manual-link {
+margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    background: #e3f2fd;
+    color: #1565c0;
+    padding: 10px;
+    border-radius: 8px;
+    text-align:left;
+    cursor: pointer;
+    border: 1px dashed #1565c0;
+    transition: 0.3s;
+    width: 100%;
+}
+
+.manual-link:hover {
+  background:  #bbdefb;
+    border: none;
+
 }
