@@ -20,12 +20,12 @@
 
 /* ===== HEADER ===== */
 .drone-approve-header {
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1565c0;
-    margin-bottom: 30px;
-    text-shadow: 0 1px 3px rgba(21, 101, 192, 0.3)
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1565c0;
+  margin-bottom: 30px;
+  text-shadow: 0 1px 3px rgba(21, 101, 192, 0.3);
 }
 
 /* ===== DRONE TABLE ===== */
@@ -37,10 +37,42 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
+.drone-table-wrapper {
+  width: 100%;
+  max-height: 650px;
+  overflow-x: auto;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
 .drone-table table {
   width: 100%;
-  min-width: 900px;
+  max-width: 100%; /* Prevent overflow outside wrapper */
   border-collapse: collapse;
+}
+
+.drone-table-wrapper td {
+  background: #fafafa;
+}
+
+.drone-table-wrapper tr:hover td {
+  background-color: #e3f2fd;
+}
+
+/* Scrollbar */
+.drone-table-wrapper::-webkit-scrollbar {
+  height: 8px;
+  width: 6px;
+}
+.drone-table-wrapper::-webkit-scrollbar-thumb {
+  background: #90caf9;
+  border-radius: 4px;
+}
+.drone-table-wrapper::-webkit-scrollbar-track {
+  background: #e3f2fd;
 }
 
 .drone-table th,
@@ -306,6 +338,20 @@
   background: #f8d7da;
   color: #842029;
   border: 1px solid #f1aeb5;
+}
+
+/* DroneApprove.css */
+
+.approved-text {
+  display: inline-block;
+  padding: 8px 12px;
+  border: 1px solid #28a745; /* green border */
+  color: #28a745; /* green text */
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #e6f4ea; /* optional light green background */
+  cursor: default;
 }
 
 /* ===== RESPONSIVE DESIGN ===== */

@@ -10,27 +10,27 @@ export default function DroneApprove() {
   const [showApprovalModal, setShowApprovalModal] = useState(false);
   const [remarks, setRemarks] = useState("");
 
-  // Fetch all drones (from backend)
+  // ---------------- FETCH ALL DRONES ----------------
   useEffect(() => {
     const fetchDrones = async () => {
       try {
-        const res = await fetch(
-          `${config.baseURL}/drone_registration/`
-        );
+        const res = await fetch(`${config.baseURL}/drone_registration/`);
         const data = await res.json();
-        // Only keep drones which have client info
+
         const clientDrones = data.filter(
           (d) => d.client && d.client.length > 0
         );
+
         setDrones(clientDrones);
       } catch (err) {
         console.error("Error fetching drones:", err);
       }
     };
+
     fetchDrones();
   }, []);
 
-  // Fetch BD Team Drone info by drone serial
+  // ---------------- FETCH BD DRONE ----------------
   const fetchBdDrone = async (droneSerial) => {
     try {
       const res = await fetch(
@@ -44,53 +44,81 @@ export default function DroneApprove() {
     }
   };
 
-  // Open modal and fetch BD Drone
+  // ---------------- OPEN MODAL ----------------
   const handleDroneClick = (drone) => {
     setSelectedDrone(drone);
     fetchBdDrone(drone.client[0].drone_serial_number);
     setShowApprovalModal(true);
   };
 
+  // ---------------- APPROVE DRONE ----------------
   const handleApprove = async () => {
-    // Call backend API to approve drone
+    if (!selectedDrone) return;
+
     try {
-      // Example PATCH request to mark approved
-      await fetch(
+      const payload = { registered: true, status: "approved" };
+
+      const res = await fetch(
         `${config.baseURL}/drone_registration/${selectedDrone.id}/`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: "approved" }),
+          body: JSON.stringify(payload),
         }
       );
+
+      if (!res.ok) throw new Error("Approve failed");
+
+      setDrones(
+        drones.map((d) =>
+          d.id === selectedDrone.id
+            ? { ...d, registered: true, status: "approved" }
+            : d
+        )
+      );
+
       alert("Drone approved successfully!");
       setShowApprovalModal(false);
-      setDrones(drones.filter((d) => d.id !== selectedDrone.id));
+      setSelectedDrone(null);
     } catch (err) {
       console.error(err);
       alert("Error approving drone.");
     }
   };
 
+  // ---------------- REJECT DRONE ----------------
   const handleReject = async () => {
     if (!remarks.trim()) {
-      alert("Please enter remarks for rejection.");
+      alert("Please enter remarks.");
       return;
     }
+
     try {
-      // Example PATCH request to mark rejected with remarks
-      await fetch(
+      const payload = {
+        registered: false,
+        status: "rejected",
+        remarks,
+      };
+
+      const res = await fetch(
         `${config.baseURL}/drone_registration/${selectedDrone.id}/`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: "rejected", remarks }),
+          body: JSON.stringify(payload),
         }
       );
+
+      if (!res.ok) throw new Error("Reject failed");
+
+      const updated = await res.json();
+
+      setDrones(drones.map((d) => (d.id === updated.id ? updated : d)));
+
       alert("Drone rejected successfully!");
       setShowApprovalModal(false);
       setRemarks("");
-      setDrones(drones.filter((d) => d.id !== selectedDrone.id));
+      setSelectedDrone(null);
     } catch (err) {
       console.error(err);
       alert("Error rejecting drone.");
@@ -102,75 +130,84 @@ export default function DroneApprove() {
       <div className="drone-approve-breadcrumb-wrapper">
         <BreadCrumbs />
       </div>
+
       <h2 className="drone-approve-header">Client Drone Request Approval</h2>
 
-      {/* Drone List Table */}
-      <div className="drone-table">
-        <table>
-          <thead>
-            <tr>
-              <th>S.No</th>
-              <th>Client Name</th>
-              <th>Drone Serial</th>
-              <th>Model Name</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {drones.length > 0 ? (
-              drones.map((drone, index) => (
-                <tr key={drone.id}>
-                  <td>{index + 1}</td>
-
-                  {/* Client Name */}
-                  <td>{drone.client[0].model_name}</td>
-
-                  {/* Drone Serial (Clickable) */}
-                  <td>
-                    <button
-                      className="link-btn"
-                      onClick={() => handleDroneClick(drone)}
-                    >
-                      {drone.client[0].drone_serial_number}
-                    </button>
-                  </td>
-
-                  {/* Model Name */}
-                  <td>{drone.model_name}</td>
-
-                  <td>
-                    <span
-                      className={`bdapprove-status-badge ${
-                        drone.status
-                          ? `status-${drone.status
-                              .toLowerCase()
-                              .replace(/\s+/g, "-")}`
-                          : "status-pending"
-                      }`}
-                    >
-                      {drone.status ? drone.status.toLowerCase() : "pending"}
-                    </span>
-                  </td>
-                </tr>
-              ))
-            ) : (
+      {/* --------- DRONE LIST TABLE --------- */}
+      <div className="drone-table-wrapper">
+        <div className="drone-table">
+          <table>
+            <thead>
               <tr>
-                <td colSpan="5">No client drones pending approval</td>
+                <th>S.No</th>
+                <th>Client Name</th>
+                <th>Drone Serial</th>
+                <th>Model Name</th>
+                <th>Status</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {drones.length > 0 ? (
+                drones.map((drone, index) => (
+                  <tr key={drone.id}>
+                    <td>{index + 1}</td>
+
+                    {/* truncate text */}
+                    <td
+                      title={drone.client[0].model_name}
+                      className="truncate-text"
+                    >
+                      {drone.client[0].model_name}
+                    </td>
+
+                    <td>
+                      <button
+                        className="link-btn"
+                        onClick={() => handleDroneClick(drone)}
+                      >
+                        {drone.client[0].drone_serial_number}
+                      </button>
+                    </td>
+
+                    <td>{drone.model_name}</td>
+
+                    <td>
+                      <span
+                        className={`bdapprove-status-badge ${
+                          drone.status === "rejected"
+                            ? "status-rejected"
+                            : drone.registered
+                            ? "status-approved"
+                            : "status-pending"
+                        }`}
+                      >
+                        {drone.status === "rejected"
+                          ? "rejected"
+                          : drone.registered
+                          ? "approved"
+                          : "pending"}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5">No client drones pending approval</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {/* Approval Modal */}
+      {/* --------- APPROVAL MODAL --------- */}
       {showApprovalModal && selectedDrone && (
         <div
           className="modal-overlay"
           onClick={() => setShowApprovalModal(false)}
         >
           <div className="approval-modal" onClick={(e) => e.stopPropagation()}>
-            {/* CLOSE BUTTON (TOP RIGHT) */}
             <button
               className="close-btn"
               onClick={() => setShowApprovalModal(false)}
@@ -219,64 +256,81 @@ export default function DroneApprove() {
                     { label: "Attachments", key: "attachment" },
                   ].map((field) => (
                     <tr key={field.key}>
-                      {/* FIELD NAME */}
                       <td className="field-label">{field.label}</td>
 
-                      {/* BD DRONE INFO */}
                       <td>
-                        {field.key !== "attachment" ? (
-                          selectedDrone[field.key] || "-"
-                        ) : selectedDrone.attachment ? (
-                          <a
-                            href={selectedDrone.attachment}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            View Attachment
-                          </a>
-                        ) : (
-                          "-"
-                        )}
+                        {field.key !== "attachment"
+                          ? selectedDrone[field.key] || "-"
+                          : selectedDrone.attachment ? (
+                              <a
+                                href={selectedDrone.attachment}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                View Attachment
+                              </a>
+                            ) : (
+                              "-"
+                            )}
                       </td>
 
-                      {/* CLIENT DRONE INFO */}
                       <td>
-                        {field.key !== "attachment" ? (
-                          selectedDrone.client?.[0]?.[field.key] || "-"
-                        ) : selectedDrone.client?.[0]?.attachment ? (
-                          <a
-                            href={selectedDrone.client[0].attachment}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            View Attachment
-                          </a>
-                        ) : (
-                          "-"
-                        )}
+                        {field.key !== "attachment"
+                          ? selectedDrone.client?.[0]?.[field.key] || "-"
+                          : selectedDrone.client?.[0]?.attachment ? (
+                              <a
+                                href={selectedDrone.client[0].attachment}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                View Attachment
+                              </a>
+                            ) : (
+                              "-"
+                            )}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
 
-              {/* ACTIONS */}
+              {/* Remarks */}
               <div className="approval-actions">
-                <textarea
-                  placeholder="Enter rejection remarks"
-                  value={remarks}
-                  onChange={(e) => setRemarks(e.target.value)}
-                />
-              </div>
+  <textarea
+    placeholder="Enter rejection remarks"
+    value={
+      selectedDrone.status === "rejected"
+        ? selectedDrone.remarks || "No remarks added"
+        : remarks
+    }
+    onChange={(e) =>
+      selectedDrone.status === "rejected"
+        ? null
+        : setRemarks(e.target.value)
+    }
+    readOnly={selectedDrone.status === "rejected"}
+  />
+</div>
 
-              <div className="action-buttons">
-                <button className="approve-btn" onClick={handleApprove}>
-                  Approve
-                </button>
-                <button className="reject-btn" onClick={handleReject}>
-                  Reject
-                </button>
-              </div>
+
+              {/* Buttons */}
+             <div className="action-buttons">
+  {selectedDrone.status === "approved" ? (
+    <div className="approved-text">Approved</div>
+  ) : selectedDrone.status === "rejected" ? (
+    <div className="rejected-text">Rejected</div>
+  ) : (
+    <>
+      <button className="approve-btn" onClick={handleApprove}>
+        Approve
+      </button>
+      <button className="reject-btn" onClick={handleReject}>
+        Reject
+      </button>
+    </>
+  )}
+</div>
+
             </div>
           </div>
         </div>
