@@ -22,6 +22,7 @@ export default function DroneRegistrationForm({
     battery_serial_number_1: "",
     battery_serial_number_2: "",
     attachment: null,
+    remarks: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -55,6 +56,7 @@ export default function DroneRegistrationForm({
           drone.battery_serial_number_2 ||
           "",
         attachment: client?.attachment || drone.attachment || null,
+        remarks: drone?.remarks || "",
       });
     }
   }, [drone, client]);
@@ -307,6 +309,16 @@ export default function DroneRegistrationForm({
                 </div>
               )}
             </div>
+            {viewOnly && drone?.is_active === false && (
+              <div className="form-group full-width">
+                <label>Remarks</label>
+                <textarea
+                  name="remarks"
+                  value={formData.remarks}
+                  readOnly
+                ></textarea>
+              </div>
+            )}
           </div>
 
           {!viewOnly && (
@@ -314,6 +326,7 @@ export default function DroneRegistrationForm({
               <button type="submit" className="submit-btn" disabled={loading}>
                 {loading ? "Submitting..." : "Submit"}
               </button>
+
               <button type="button" className="cancel-btn" onClick={onClose}>
                 Cancel
               </button>

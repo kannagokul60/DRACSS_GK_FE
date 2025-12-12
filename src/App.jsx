@@ -60,7 +60,8 @@ export default function App() {
           <Route path="/client" element={<Layout />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="drone-details" element={<DroneDetails />} />
-            <Route path="view-drone/:droneName" element={<ViewDrone />} />
+<Route path="view-drone/:droneId" element={<ViewDrone />} />
+
             <Route path="drone-registration" element={<DroneRegistration />} />
             <Route path="knowledge-base" element={<KnowledgeBase />} />
             <Route

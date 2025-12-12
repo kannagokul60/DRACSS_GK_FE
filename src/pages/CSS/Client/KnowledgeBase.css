@@ -1,16 +1,19 @@
 /* ===== PAGE WRAPPER ===== */
 .kb-page {
-  padding: 2rem;
-  font-family: 'Times New Roman', Times, serif;
-  height: 100%;
-    background: #f7f7f7 !important;
-     border-radius: 10px;
-transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  position: relative; /* so breadcrumbs can be positioned absolutely */
+  flex: 1;
+  background: #f7f7f7;
+  padding: 2rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
+  overflow-y: auto;
+  position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  height: calc(100vh - 90px);
 }
 
 /* ===== BREADCRUMB WRAPPER ===== */
-.kb-page  .drone-breadcrumb-wrapper {
+.kb-page .drone-breadcrumb-wrapper {
   position: absolute;
   top: 1rem; /* space from top */
   left: 1rem; /* space from left */
@@ -18,13 +21,12 @@ transition: all 0.3s ease;
   z-index: 10; /* stay above other elements */
 }
 
-
 /* ===== PAGE TITLE ===== */
 .kb-title {
   font-size: 2rem;
   font-weight: 600;
   color: #1565c0 !important;
-    text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4) !important;
+  text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4) !important;
   margin-bottom: 2rem;
   text-align: center;
 }
@@ -98,10 +100,9 @@ transition: all 0.3s ease;
 .kb-card-title {
   font-size: 1.3rem;
   font-weight: bolder !important;
-    margin-bottom: 10px;
+  margin-bottom: 10px;
   text-align: center;
-      text-shadow: 0px 2px 4px rgba(59, 110, 151, 0.4) !important;
-
+  text-shadow: 0px 2px 4px rgba(59, 110, 151, 0.4) !important;
 }
 
 .kb-more {
@@ -110,8 +111,7 @@ transition: all 0.3s ease;
   gap: 8px;
   font-weight: 500;
   color: #0d5bb4 !important;
-        text-shadow: 0px 2px 4px rgba(59, 110, 151, 0.4) !important;
-
+  text-shadow: 0px 2px 4px rgba(59, 110, 151, 0.4) !important;
 }
 
 .kb-more-icon {
@@ -140,4 +140,3 @@ transition: all 0.3s ease;
     font-size: 1.1rem;
   }
 }
-

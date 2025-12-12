@@ -6,7 +6,7 @@
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   font-family: "Poppins", sans-serif;
-  height: 100%;
+  height: calc(100vh - 90px);
   box-sizing: border-box;
   position: relative;
 }
@@ -351,7 +351,19 @@
   font-weight: bold;
   text-align: center;
   background-color: #e6f4ea; /* optional light green background */
-  cursor: default;
+  cursor:not-allowed;
+}
+
+.rejected-text{
+    display: inline-block;
+  padding: 8px 12px;
+  border: 1px solid red; /* green border */
+  color: #e75252; /* green text */
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #f4e6e6; /* optional light green background */
+  cursor:not-allowed;
 }
 
 /* ===== RESPONSIVE DESIGN ===== */

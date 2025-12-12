@@ -17,7 +17,7 @@ export default function DroneRegistration() {
   const [drones, setDrones] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  //Fetch drones from backend
+  // ---------------- FETCH DRONES ----------------
   useEffect(() => {
     const fetchDrones = async () => {
       try {
@@ -34,7 +34,13 @@ export default function DroneRegistration() {
     fetchDrones();
   }, []);
 
-  // Status icon helper
+  // ---------------- STATUS HELPER ----------------
+  const getStatusFromActive = (isActive) => {
+    if (isActive === true) return "approved";
+    if (isActive === false) return "rejected";
+    return "pending";
+  };
+
   const getStatusIcon = (status) => {
     switch (status?.toLowerCase()) {
       case "approved":
@@ -47,7 +53,7 @@ export default function DroneRegistration() {
     }
   };
 
-  // Handle card click (View only)
+  // ---------------- HANDLE CARD CLICK ----------------
   const handleCardClick = (drone) => {
     setSelectedDrone(drone);
     setShowForm(true);
@@ -73,6 +79,7 @@ export default function DroneRegistration() {
         </button>
       </div>
 
+      {/* Drone Cards */}
       {loading ? (
         <p>Loading drones...</p>
       ) : drones.filter((d) => d.client && d.client.length > 0).length === 0 ? (
@@ -83,7 +90,9 @@ export default function DroneRegistration() {
             .filter((d) => d.client && d.client.length > 0)
             .map((drone) => {
               const clientList = drone.client;
-              const latestClient = clientList[clientList.length - 1]; // always use LAST entry
+              const latestClient = clientList[clientList.length - 1]; // Use last entry
+
+              const status = getStatusFromActive(drone.is_active);
 
               return (
                 <div
@@ -93,15 +102,9 @@ export default function DroneRegistration() {
                 >
                   <div className="drone-card-header">
                     <h3>{latestClient.model_name || drone.model_name}</h3>
-
-                    <span
-                      className={`status-badge ${
-                        drone.status
-                          ? drone.status.toLowerCase().trim()
-                          : "pending"
-                      }`}
-                    >
-                      {getStatusIcon(drone.status)} {drone.status || "Pending"}
+                    <span className={`status-badge ${status}`}>
+                      {getStatusIcon(status)}{" "}
+                      {status.charAt(0).toUpperCase() + status.slice(1)}
                     </span>
                   </div>
 
@@ -128,22 +131,15 @@ export default function DroneRegistration() {
         </div>
       )}
 
+      {/* Drone Registration / View Modal */}
       {showForm && (
         <div className="modal-overlay" onClick={() => setShowForm(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <DroneRegistrationForm
-              drone={
-                selectedDrone
-                  ? selectedDrone.client && selectedDrone.client.length > 0
-                    ? {
-                        ...selectedDrone.client[
-                          selectedDrone.client.length - 1
-                        ],
-                        registered_on:
-                          selectedDrone.client[selectedDrone.client.length - 1]
-                            .created_at || selectedDrone.created_at,
-                      }
-                    : selectedDrone
+              drone={selectedDrone} // full drone object
+              client={
+                selectedDrone?.client?.length > 0
+                  ? selectedDrone.client[selectedDrone.client.length - 1]
                   : null
               }
               onClose={() => setShowForm(false)}

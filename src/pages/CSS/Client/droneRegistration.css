@@ -6,7 +6,7 @@
   color: #0d2a4b;
   padding: 1rem 2rem 2rem 2rem; /* top padding increased for breadcrumb space */
   border-radius: 10px;
-  height: 100%;
+  height: calc(100vh - 90px);
   width: 100%;
   box-sizing: border-box;
   position: relative; /* ensures breadcrumb absolute position works */

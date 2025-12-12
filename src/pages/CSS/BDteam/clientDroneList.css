@@ -3,7 +3,7 @@
   font-family:'Times New Roman', Times, serif;
   background: #f7f7f7;
   padding: 60px 80px 50px;
- height: 100%;
+  height: calc(100vh - 90px);
   box-sizing: border-box;
   border-radius: 10px;
      transition: all 0.3s ease;

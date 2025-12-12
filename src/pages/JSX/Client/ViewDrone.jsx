@@ -1,125 +1,143 @@
-import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import {
-  FaEdit,
-  FaChevronRight,
-  FaChevronLeft,
-  FaArrowLeft,
-} from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import "../../CSS/Client/viewdrone.css";
 import BreadCrumbs from "../BreadCrumbs";
+import config from "../../../config";
 
 const ViewDrone = () => {
-  const { droneName } = useParams();
-  const navigate = useNavigate();
+  const { droneId } = useParams();
+  const [drone, setDrone] = useState(null);
+  const [image, setImage] = useState(null);
 
-  // Sample drone list
-  const drones = ["Bhumi V.1.0.1", "Vajra", "Agni"];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch drone details from drone_registration API
+        const resDrone = await fetch(
+          `${config.baseURL}/drone_registration/${droneId}/`
+        );
+        const droneData = await resDrone.json();
 
-  const currentIndex = drones.findIndex(
-    (name) => name.toLowerCase() === droneName.toLowerCase()
-  );
+        // Fetch main image from drone_images API
+        const resImage = await fetch(
+          `${config.baseURL}/drone_images/${droneId}/`
+        );
+        const imageData = await resImage.json();
 
-  const prevDrone = currentIndex > 0 ? drones[currentIndex - 1] : null;
-  const nextDrone =
-    currentIndex < drones.length - 1 ? drones[currentIndex + 1] : null;
+        setDrone(droneData);
+        setImage(imageData.image); // main image from drone-images API
+      } catch (err) {
+        console.error("Error fetching drone data:", err);
+      }
+    };
 
-  const handleNextClick = () => {
-    if (nextDrone) navigate(`/client/view-drone/${nextDrone}`);
-  };
+    fetchData();
+  }, [droneId]);
 
-  const handlePrevClick = () => {
-    if (prevDrone) navigate(`/client/view-drone/${prevDrone}`);
-  };
+  if (!drone) return <p>Loading drone...</p>;
+
+  const latestClient =
+    drone.client && drone.client.length > 0
+      ? drone.client[drone.client.length - 1]
+      : {};
 
   return (
     <div className="drone-details-page">
-      
       <div className="drone-breadcrumb-wrapper">
         <BreadCrumbs title="View Drone" />
       </div>
-      
-        {/* ==== Background Drone Image ==== */}
-        <img
-          src="https://droneentry.com/wp-content/uploads/2024/03/Agriculture-Spraying-Drone.png"
-          alt="Drone Background"
-          className="drone-bg-image"
-        />
 
-        {/* ==== Header ==== */}
+      {/* Main image from drone-images API */}
+      <img
+        src={image}
+        alt={latestClient.model_name || drone.model_name}
+        className="drone-bg-image"
+      />
 
-        <div className="drone-card-header">
-          <h2 className="drone-title">{droneName} - Drone Details</h2>
-          <FaEdit className="edit-icon" title="Edit Drone Info" />
-        </div>
+      <div className="drone-card-header">
+        <h2 className="drone-title">
+          {latestClient.model_name || drone.model_name} - Drone Details
+        </h2>
+      </div>
 
-        {/* ==== Drone Info Section ==== */}
-        <div className="drone-main-content">
-          <div className="drone-info-grid">
-            <div className="info-row">
-              <div>
-                <strong>Drone Type:</strong> Agriculture
-              </div>
-              <div>
-                <strong>Model Name:</strong> Bhumi
-              </div>
+      <div className="drone-main-content">
+        <div className="drone-info-grid">
+          <div className="info-row">
+            <div>
+              <strong>Drone Type:</strong>{" "}
+              {latestClient.drone_type || drone.drone_type}
             </div>
-
-            <div className="info-row">
-              <div>
-                <strong>UIN:</strong> 33ABCDE1234F5Z9
-              </div>
-              <div>
-                <strong>Drone Serial Number:</strong> BHUMI_2025_00001
-              </div>
-            </div>
-
-            <div className="info-row">
-              <div>
-                <strong>Flight Controller:</strong> FC202500001
-              </div>
-              <div>
-                <strong>Remote Controller:</strong> RC202500001
-              </div>
-            </div>
-
-            <div className="info-row">
-              <div>
-                <strong>Battery Serial Number 1:</strong> BATT202500001
-              </div>
-              <div>
-                <strong>Battery Serial Number 2:</strong> BATT202500002
-              </div>
-            </div>
-
-            <div className="info-row">
-              <div>
-                <strong>Battery Charger Serial Number:</strong> BATT_CH202500001
-              </div>
+            <div>
+              <strong>Model Name:</strong>{" "}
+              {latestClient.model_name || drone.model_name}
             </div>
           </div>
-{/* ==== Navigation Arrows Left & Right ==== */}
-<div className="nav-arrows-wrapper">
-  {currentIndex > 0 && (
-    <FaChevronLeft
-      className="nav-arrow left"
-      title={`Previous Drone: ${prevDrone}`}
-      onClick={handlePrevClick}
-    />
-  )}
 
-  {currentIndex < drones.length - 1 && (
-    <FaChevronRight
-      className="nav-arrow right"
-      title={`Next Drone: ${nextDrone}`}
-      onClick={handleNextClick}
-    />
-  )}
-</div>
+          <div className="info-row">
+            <div>
+              <strong>UIN:</strong>{" "}
+              {latestClient.uin_number || drone.uin_number}
+            </div>
+            <div>
+              <strong>Drone Serial Number:</strong>{" "}
+              {latestClient.drone_serial_number || drone.drone_serial_number}
+            </div>
+          </div>
 
+          <div className="info-row">
+            <div>
+              <strong>Flight Controller:</strong>{" "}
+              {latestClient.flight_controller_serial_number ||
+                drone.flight_controller_serial_number}
+            </div>
+            <div>
+              <strong>Remote Controller:</strong>{" "}
+              {latestClient.remote_controller || drone.remote_controller}
+            </div>
+          </div>
+
+          <div className="info-row">
+            <div>
+              <strong>Battery 1:</strong>{" "}
+              {latestClient.battery_serial_number_1 ||
+                drone.battery_serial_number_1}
+            </div>
+            <div>
+              <strong>Battery 2:</strong>{" "}
+              {latestClient.battery_serial_number_2 ||
+                drone.battery_serial_number_2}
+            </div>
+          </div>
+
+          <div className="info-row">
+            <div>
+              <strong>Battery Charger:</strong>{" "}
+              {latestClient.battery_charger_serial_number ||
+                drone.battery_charger_serial_number}
+            </div>
+          </div>
+
+          <div className="info-row">
+            <div>
+              <strong>Attachment:</strong>{" "}
+              {latestClient.attachment || drone.attachment ? (
+                <a
+                  href={latestClient.attachment || drone.attachment}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Attachment
+                </a>
+              ) : (
+                <span>No Attachment</span>
+              )}
+            </div>
+          </div>
         </div>
+      </div>
 
-        {/* ==== Flight Log Section ==== */}
+      {/* Flight Log Section */}
+      {drone.flight_logs?.length > 0 && (
         <div className="flight-log-section">
           <h3>Flight Log Data</h3>
           <table className="flight-log-table">
@@ -130,54 +148,22 @@ const ViewDrone = () => {
                 <th>Start Time</th>
                 <th>End Time</th>
                 <th>Total Duration</th>
-                <th>Remarks</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>20.09.2025</td>
-                <td>11:00 AM</td>
-                <td>11:20 AM</td>
-                <td>20 Min</td>
-                <td>Normal Operation</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>25.09.2025</td>
-                <td>10:30 AM</td>
-                <td>11:10 AM</td>
-                <td>40 Min</td>
-                <td>Survey Completed</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>25.09.2025</td>
-                <td>10:30 AM</td>
-                <td>11:10 AM</td>
-                <td>40 Min</td>
-                <td>Survey Completed</td>
-              </tr>{" "}
-              <tr>
-                <td>2</td>
-                <td>25.09.2025</td>
-                <td>10:30 AM</td>
-                <td>11:10 AM</td>
-                <td>40 Min</td>
-                <td>Survey Completed</td>
-              </tr>{" "}
-              <tr>
-                <td>2</td>
-                <td>25.09.2025</td>
-                <td>10:30 AM</td>
-                <td>11:10 AM</td>
-                <td>40 Min</td>
-                <td>Survey Completed</td>
-              </tr>
+              {drone.flight_logs.map((log, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{log.date}</td>
+                  <td>{log.start_time}</td>
+                  <td>{log.end_time}</td>
+                  <td>{log.duration}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
-      
+      )}
     </div>
   );
 };

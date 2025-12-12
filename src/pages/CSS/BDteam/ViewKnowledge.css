@@ -6,6 +6,8 @@
   box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
   overflow-x: hidden;
   margin-bottom: 70px;
+    height: calc(100vh - 90px);
+
 }
 
 /* HERO */

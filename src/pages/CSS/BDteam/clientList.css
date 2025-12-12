@@ -1,6 +1,6 @@
 .client-list-container {
   
-  height: 100%;
+  height: calc(100vh - 90px);
   background: #f7f7f7;
   padding: 60px 30px 40px;
   position: relative;

@@ -1,139 +1,112 @@
 /* ===== PAGE WRAPPER ===== */
-.drone-page {
+.approved-page {
   flex: 1;
   background: #f7f7f7;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: "Times New Roman", Times, serif;
-  color: #0d2a4b;
   padding: 2rem 1rem;
-  border-radius: 10px;
-  height: 100%;
   width: 100%;
   box-sizing: border-box;
-  overflow-y: auto; /* scroll only if content overflows */
-  position: relative; /* ensures breadcrumb absolute position works */
-  transition: all 0.3s ease;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  height: calc(100vh - 90px);
 }
 
-/* ===== BREADCRUMB WRAPPER ===== */
-.drone-page .drone-breadcrumb-wrapper {
+/* ===== BREADCRUMB ===== */
+.approved-breadcrumb-wrapper {
   position: absolute;
   top: 0.5rem;
   left: 0.2rem;
-  z-index: 10;
-}
-
-.drone-page .breadcrumb-nav {
-  margin: 0;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #004aad;
 }
 
 /* ===== TITLE ===== */
-.drone-title {
-  font-size: 2rem !important;
+.approved-title {
+  font-size: 2rem;
   font-weight: 600;
+  color: #1565c0;
+  text-align: center;
   margin-bottom: 2rem;
-  color: #1565c0 !important;
-    text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4) !important;
-  text-align: center;
-  letter-spacing: 0.4px;
+  text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4);
 }
 
-/* ===== DRONE CONTAINER ===== */
-.drone-container {
+/* ===== CONTAINER ===== */
+.approved-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  justify-content: start;
+  justify-items: start;
   width: 100%;
-  max-width: 1000px;
-}
-.drone-header {
-  margin-bottom: 1.5rem;
 }
 
-/* ===== DRONE CARD ===== */
-.drone-cards {
-  position: relative;
+/* ===== CARD ===== */
+.approved-card {
+  width: 350px;
   background: #ffffff;
-  border-radius: 12px;
   padding: 1.5rem;
-  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.drone-cards:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-}
-
-/* ===== CARD CONTENT ===== */
-.drone-card-content {
+  transition: 0.3s ease;
   position: relative;
 }
 
-.icon {
+.approved-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== ICON ===== */
+.approved-icon {
   position: absolute;
   top: 10px;
   right: 10px;
-  color: #1565c0;
-  font-size: 1.5rem;
   background: #e8f0ff;
+  color: #1565c0;
   padding: 6px;
   border-radius: 50%;
-  transition: all 0.3s ease;
+  font-size: 1.4rem;
 }
 
-.icon:hover {
-  color: #0b4db3;
-  background: #dbe9ff;
-}
-
-/* ===== DRONE IMAGE ===== */
-.drone-img {
+/* ===== IMAGE ===== */
+.approved-img {
   width: 100%;
   height: 160px;
   object-fit: contain;
   margin-bottom: 1rem;
 }
 
-/* ===== DRONE INFO ===== */
-.drone-info {
+/* ===== INFO ===== */
+.approved-info {
+  text-align: left;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* ensures all text aligns to the left */
-  justify-content: flex-start;
-  text-align: left;
-  gap: 1rem; /* small spacing between lines */
+  gap: 0.7rem;
 }
 
-.drone-info h3 {
+.approved-info h3 {
   margin: 0;
   font-size: 1.1rem;
   font-weight: 600;
 }
 
-.drone-info p {
+.approved-info p {
   margin: 0;
   font-size: 0.9rem;
-  color: #555;
+  color: #444;
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .drone-container {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1rem;
+  .approved-container {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   }
 
-  .drone-img {
+  .approved-card {
+    width: 100%;
+  }
+
+  .approved-img {
     height: 130px;
   }
 }
