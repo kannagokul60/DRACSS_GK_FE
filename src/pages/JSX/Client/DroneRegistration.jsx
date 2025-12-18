@@ -122,7 +122,7 @@ export default function DroneRegistration() {
 
                     <p>
                       <FaPaperPlane /> Drone Serial:{" "}
-                      <strong>{latestClient.drone_serial_number}</strong>
+                      <strong>{latestClient.c_drone_serial_number}</strong>
                     </p>
                   </div>
                 </div>

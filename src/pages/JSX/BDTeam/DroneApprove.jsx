@@ -181,7 +181,7 @@ export default function DroneApprove() {
                         className="link-btn"
                         onClick={() => handleDroneClick(drone)}
                       >
-                        {drone.client[0].drone_serial_number}
+                        {drone.client[0].c_drone_serial_number}
                       </button>
                     </td>
                     <td>{drone.model_name}</td>
@@ -225,7 +225,7 @@ export default function DroneApprove() {
             </button>
 
             <h3>
-              Drone Approval - {selectedDrone.client[0].drone_serial_number}
+              Drone Approval - {selectedDrone.client[0].c_drone_serial_number}
             </h3>
 
             <div className="approval-table-wrapper">
@@ -239,35 +239,65 @@ export default function DroneApprove() {
                 </thead>
                 <tbody>
                   {[
-                    { label: "Model Name", key: "model_name" },
-                    { label: "Drone Type", key: "drone_type" },
-                    { label: "Manufacturer", key: "manufacturer" },
-                    { label: "UIN Number", key: "uin_number" },
-                    { label: "Drone Serial", key: "drone_serial_number" },
+                    {
+                      label: "Model Name",
+                      bd: "model_name",
+                      client: "c_model_name",
+                    },
+                    {
+                      label: "Drone Type",
+                      bd: "drone_type",
+                      client: "c_drone_type",
+                    },
+                    { label: "Manufacturer", bd: "manufacturer", client: "-" },
+                    {
+                      label: "UIN Number",
+                      bd: "uin_number",
+                      client: "c_uin_number",
+                    },
+                    {
+                      label: "Drone Serial",
+                      bd: "drone_serial_number",
+                      client: "c_drone_serial_number",
+                    },
                     {
                       label: "Flight Controller Serial",
-                      key: "flight_controller_serial_number",
+                      bd: "flight_controller_serial_number",
+                      client: "c_flight_controller_serial_number",
                     },
-                    { label: "Remote Controller", key: "remote_controller" },
+                    {
+                      label: "Remote Controller",
+                      bd: "remote_controller",
+                      client: "c_remote_controller",
+                    },
                     {
                       label: "Battery Charger Serial",
-                      key: "battery_charger_serial_number",
+                      bd: "battery_charger_serial_number",
+                      client: "c_battery_charger_serial_number",
                     },
                     {
                       label: "Battery 1 Serial",
-                      key: "battery_serial_number_1",
+                      bd: "battery_serial_number_1",
+                      client: "c_battery_serial_number_1",
                     },
                     {
                       label: "Battery 2 Serial",
-                      key: "battery_serial_number_2",
+                      bd: "battery_serial_number_2",
+                      client: "c_battery_serial_number_2",
                     },
-                    { label: "Attachments", key: "attachment" },
-                  ].map((field) => (
-                    <tr key={field.key}>
-                      <td className="field-label">{field.label}</td>
+                    {
+                      label: "Attachments",
+                      bd: "attachment",
+                      client: "c_attachment",
+                    },
+                  ].map((row) => (
+                    <tr key={row.label}>
+                      <td className="field-label">{row.label}</td>
+
+                      {/* BD Drone */}
                       <td>
-                        {field.key !== "attachment" ? (
-                          selectedDrone[field.key] || "-"
+                        {row.bd !== "attachment" ? (
+                          selectedDrone[row.bd] || "-"
                         ) : selectedDrone.attachment ? (
                           <a
                             href={selectedDrone.attachment}
@@ -280,12 +310,14 @@ export default function DroneApprove() {
                           "-"
                         )}
                       </td>
+
+                      {/* Client Drone */}
                       <td>
-                        {field.key !== "attachment" ? (
-                          selectedDrone.client?.[0]?.[field.key] || "-"
-                        ) : selectedDrone.client?.[0]?.attachment ? (
+                        {row.client !== "c_attachment" ? (
+                          selectedDrone.client?.[0]?.[row.client] || "-"
+                        ) : selectedDrone.client?.[0]?.c_attachment ? (
                           <a
-                            href={selectedDrone.client[0].attachment}
+                            href={selectedDrone.client[0].c_attachment}
                             target="_blank"
                             rel="noreferrer"
                           >

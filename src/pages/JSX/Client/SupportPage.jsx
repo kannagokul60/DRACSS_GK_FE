@@ -15,8 +15,7 @@ export default function SupportPage() {
         "Connect instantly with our expert team for troubleshooting, guidance, or drone software issues.",
       icon: <FaHeadset />,
   color: "linear-gradient(90deg, #0d5bb4, #29568a)"
-    },
-    
+    },    
     {
       title: "On-Site Support",
       description:

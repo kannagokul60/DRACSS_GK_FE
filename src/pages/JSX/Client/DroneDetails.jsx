@@ -9,52 +9,56 @@ import { format } from "date-fns";
 export default function DroneDetails() {
   const navigate = useNavigate();
   const [drones, setDrones] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchApprovedDrones = async () => {
       try {
-        const res = await fetch(`${config.baseURL}/drone_registration/`);
-        const data = await res.json();
+        // 1️⃣ Fetch drone registrations
+        const droneRes = await fetch(`${config.baseURL}/drone_registration/`);
+        const droneData = await droneRes.json();
 
-        const approvedDrones = data.filter((d) => d.is_active === true);
+        // 2️⃣ Fetch drone images (LIST API)
+        const imageRes = await fetch(`${config.baseURL}/drone_images/`);
+        const imageData = await imageRes.json();
 
-        // Fetch drone images from drone-images API
-        const dronesWithImages = await Promise.all(
-          approvedDrones.map(async (d) => {
-            const latestClient =
-              d.client && d.client.length > 0
-                ? d.client[d.client.length - 1]
-                : null;
-
-            // Fetch image from drone-images API
-            let imageUrl = "";
-            try {
-              const resImage = await fetch(
-                `${config.baseURL}/drone_images/${d.id}/`
-              );
-              const imageData = await resImage.json();
-              imageUrl = imageData.image;
-            } catch (err) {
-              console.error(`Error fetching image for drone ${d.id}:`, err);
-            }
-
-            return {
-              id: d.id,
-              name: latestClient?.model_name || d.model_name,
-              purchaseDate: (
-                latestClient?.created_at ||
-                d.created_at ||
-                ""
-              ).split("T")[0],
-              count: d.client?.length || 1,
-              image: imageUrl,
-            };
-          })
+        // 3️⃣ Filter only active drones
+        const approvedDrones = droneData.filter(
+          (d) => d.is_active === true
         );
 
+        // 4️⃣ Map drones with correct image matching (BY NAME)
+        const dronesWithImages = approvedDrones.map((d) => {
+          const latestClient =
+            d.client && d.client.length > 0
+              ? d.client[d.client.length - 1]
+              : null;
+
+          const droneName =
+            latestClient?.model_name || d.model_name || "";
+
+          const matchedImage = imageData.find(
+            (img) => img.name === droneName
+          );
+
+          return {
+            id: d.id,
+            name: droneName,
+            purchaseDate: (
+              latestClient?.created_at ||
+              d.created_at ||
+              ""
+            ).split("T")[0],
+            count: d.client?.length || 1,
+            image: matchedImage?.image || "",
+          };
+        });
+
         setDrones(dronesWithImages);
-      } catch (err) {
-        console.error("Error fetching approved drones:", err);
+      } catch (error) {
+        console.error("Error fetching drone details:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -76,27 +80,38 @@ export default function DroneDetails() {
       </div>
 
       <div className="approved-container">
-        {drones.length > 0 ? (
-          drones.map((drone, i) => (
+        {loading ? (
+          <p>Loading drones...</p>
+        ) : drones.length > 0 ? (
+          drones.map((drone, index) => (
             <div
               className="approved-card"
-              key={i}
+              key={index}
               onClick={() => handleDroneClick(drone.id)}
             >
               <FaShare className="approved-icon" title="View Drone" />
+
               <div className="approved-card-content">
                 <img
-                  src={drone.image}
+                  src={drone.image || "/no-image.png"}
                   alt={drone.name}
                   className="approved-img"
+                  onError={(e) => {
+                    e.target.src = "/no-image.png";
+                  }}
                 />
+
                 <div className="approved-info">
                   <h3>{drone.name}</h3>
+
                   <p>
                     Purchase Date:{" "}
                     <strong>
                       {drone.purchaseDate
-                        ? format(new Date(drone.purchaseDate), "dd-MM-yyyy")
+                        ? format(
+                            new Date(drone.purchaseDate),
+                            "dd-MM-yyyy"
+                          )
                         : "N/A"}
                     </strong>
                   </p>

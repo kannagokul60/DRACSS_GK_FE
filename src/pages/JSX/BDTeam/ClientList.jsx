@@ -242,13 +242,13 @@ const handleMoveToSold = (client) => {
 
             <div className="popup-body">
               <p>
-                <strong>Name:</strong> {selectedClient.name}
+                <strong>Bank Name:</strong> {selectedClient.bankName}
               </p>
               <p>
-                <strong>Phone:</strong> {selectedClient.phone}
+                <strong>Account Number:</strong> {selectedClient.accountNumber}
               </p>
               <p>
-                <strong>Email:</strong> {selectedClient.email}
+                <strong>IFSC Code:</strong> {selectedClient.ifscCode}
               </p>
               <p>
                 <strong>Location:</strong> {selectedClient.location}

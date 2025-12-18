@@ -3,29 +3,44 @@ import { useParams } from "react-router-dom";
 import "../../CSS/Client/viewdrone.css";
 import BreadCrumbs from "../BreadCrumbs";
 import config from "../../../config";
+import { format } from "date-fns";
 
 const ViewDrone = () => {
   const { droneId } = useParams();
   const [drone, setDrone] = useState(null);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState("");
+  const [manualLogs, setManualLogs] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch drone details from drone_registration API
+        // 1️⃣ Fetch drone registration details
         const resDrone = await fetch(
           `${config.baseURL}/drone_registration/${droneId}/`
         );
         const droneData = await resDrone.json();
 
-        // Fetch main image from drone_images API
-        const resImage = await fetch(
-          `${config.baseURL}/drone_images/${droneId}/`
+        // 2️⃣ Fetch ALL drone images
+        const resImages = await fetch(
+          `${config.baseURL}/drone_images/`
         );
-        const imageData = await resImage.json();
+        const imagesData = await resImages.json();
+
+        const latestClient =
+          droneData.client && droneData.client.length > 0
+            ? droneData.client[droneData.client.length - 1]
+            : null;
+
+        const droneName =
+          latestClient?.model_name || droneData.model_name || "";
+
+        // 3️⃣ Match image by model name
+        const matchedImage = imagesData.find(
+          (img) => img.name === droneName
+        );
 
         setDrone(droneData);
-        setImage(imageData.image); // main image from drone-images API
+        setImage(matchedImage?.image || "");
       } catch (err) {
         console.error("Error fetching drone data:", err);
       }
@@ -41,17 +56,82 @@ const ViewDrone = () => {
       ? drone.client[drone.client.length - 1]
       : {};
 
+  const calculateDuration = (start, end) => {
+    if (!start || !end) return "";
+
+    const startTime = new Date(`1970-01-01T${start}`);
+    const endTime = new Date(`1970-01-01T${end}`);
+
+    if (endTime <= startTime) return "";
+
+    const diffMs = endTime - startTime;
+    const minutes = Math.floor(diffMs / 60000);
+    const hrs = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+
+    return `${hrs.toString().padStart(2, "0")}:${mins
+      .toString()
+      .padStart(2, "0")}`;
+  };
+
+  const getTodayDate = () => {
+    return new Date().toISOString().split("T")[0];
+  };
+
+  const addLogRow = () => {
+    setManualLogs((prev) => [
+      ...prev,
+      {
+        date: getTodayDate(),
+        start_time: "",
+        end_time: "",
+        duration: "",
+        remarks: "",
+      },
+    ]);
+  };
+
+  const handleLogChange = (index, field, value) => {
+    const updatedLogs = [...manualLogs];
+    updatedLogs[index][field] = value;
+
+    if (field === "start_time" || field === "end_time") {
+      updatedLogs[index].duration = calculateDuration(
+        updatedLogs[index].start_time,
+        updatedLogs[index].end_time
+      );
+    }
+
+    setManualLogs(updatedLogs);
+  };
+
+  const formatDate = (date) => {
+    return date ? format(new Date(date), "dd-MM-yyyy") : "";
+  };
+
+  const handleSaveLogs = () => {
+    console.log("Saved Flight Logs:", manualLogs);
+    alert("Flight logs saved (frontend only)");
+  };
+
+  const handleCancelLogs = () => {
+    setManualLogs([]);
+  };
+
   return (
     <div className="drone-details-page">
       <div className="drone-breadcrumb-wrapper">
         <BreadCrumbs title="View Drone" />
       </div>
 
-      {/* Main image from drone-images API */}
+      {/* ✅ Main Drone Image */}
       <img
-        src={image}
+        src={image || "/no-image.png"}
         alt={latestClient.model_name || drone.model_name}
         className="drone-bg-image"
+        onError={(e) => {
+          e.target.src = "/no-image.png";
+        }}
       />
 
       <div className="drone-card-header">
@@ -80,7 +160,8 @@ const ViewDrone = () => {
             </div>
             <div>
               <strong>Drone Serial Number:</strong>{" "}
-              {latestClient.drone_serial_number || drone.drone_serial_number}
+              {latestClient.drone_serial_number ||
+                drone.drone_serial_number}
             </div>
           </div>
 
@@ -92,7 +173,8 @@ const ViewDrone = () => {
             </div>
             <div>
               <strong>Remote Controller:</strong>{" "}
-              {latestClient.remote_controller || drone.remote_controller}
+              {latestClient.remote_controller ||
+                drone.remote_controller}
             </div>
           </div>
 
@@ -136,34 +218,106 @@ const ViewDrone = () => {
         </div>
       </div>
 
-      {/* Flight Log Section */}
-      {drone.flight_logs?.length > 0 && (
-        <div className="flight-log-section">
+      {/* FLIGHT LOG SECTION */}
+      <div className="flight-log-section">
+        <div className="flight-log-header">
           <h3>Flight Log Data</h3>
-          <table className="flight-log-table">
-            <thead>
+          <button className="add-log-btn" onClick={addLogRow}>
+            + Add Log
+          </button>
+        </div>
+
+        <table className="flight-log-table">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Date</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th>Total Duration</th>
+              <th>Remarks</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {manualLogs.length === 0 ? (
               <tr>
-                <th>S.No</th>
-                <th>Date</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Total Duration</th>
+                <td colSpan="7" style={{ textAlign: "center" }}>
+                  No flight logs added
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {drone.flight_logs.map((log, index) => (
+            ) : (
+              manualLogs.map((log, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{log.date}</td>
-                  <td>{log.start_time}</td>
-                  <td>{log.end_time}</td>
-                  <td>{log.duration}</td>
+                  <td>{formatDate(log.date)}</td>
+
+                  <td>
+                    <input
+                      type="time"
+                      value={log.start_time}
+                      onChange={(e) =>
+                        handleLogChange(
+                          index,
+                          "start_time",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </td>
+
+                  <td>
+                    <input
+                      type="time"
+                      value={log.end_time}
+                      onChange={(e) =>
+                        handleLogChange(
+                          index,
+                          "end_time",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </td>
+
+                  <td>{log.duration || "--"}</td>
+
+                  <td>
+                    <input
+                      type="text"
+                      placeholder="Remarks"
+                      value={log.remarks}
+                      onChange={(e) =>
+                        handleLogChange(
+                          index,
+                          "remarks",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </td>
+
+                  <td>
+                    <button
+                      className="save-log-btn"
+                      onClick={handleSaveLogs}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className="cancel-log-btn"
+                      onClick={handleCancelLogs}
+                    >
+                      Cancel
+                    </button>
+                  </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

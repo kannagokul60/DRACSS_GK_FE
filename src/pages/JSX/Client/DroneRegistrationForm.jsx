@@ -31,31 +31,31 @@ export default function DroneRegistrationForm({
   useEffect(() => {
     if (drone) {
       setFormData({
-        model_name: client?.model_name || drone.model_name || "",
-        drone_type: client?.drone_type || drone.drone_type || "",
+        model_name: client?.c_model_name || drone.model_name || "",
+        drone_type: client?.c_drone_type || drone.drone_type || "",
         manufacturer: drone.manufacturer || "AERO 360",
-        uin_number: client?.uin_number || drone.uin_number || "",
+        uin_number: client?.c_uin_number || "",
         drone_serial_number:
-          client?.drone_serial_number || drone.drone_serial_number || "",
+          client?.c_drone_serial_number || drone.drone_serial_number || "",
         flight_controller_serial_number:
-          client?.flight_controller_serial_number ||
+          client?.c_flight_controller_serial_number ||
           drone.flight_controller_serial_number ||
           "",
         remote_controller:
-          client?.remote_controller || drone.remote_controller || "",
+          client?.c_remote_controller || drone.remote_controller || "",
         battery_charger_serial_number:
-          client?.battery_charger_serial_number ||
+          client?.c_battery_charger_serial_number ||
           drone.battery_charger_serial_number ||
           "",
         battery_serial_number_1:
-          client?.battery_serial_number_1 ||
+          client?.c_battery_serial_number_1 ||
           drone.battery_serial_number_1 ||
           "",
         battery_serial_number_2:
-          client?.battery_serial_number_2 ||
+          client?.c_battery_serial_number_2 ||
           drone.battery_serial_number_2 ||
           "",
-        attachment: client?.attachment || drone.attachment || null,
+        attachment: client?.c_attachment || drone.attachment || null,
         remarks: drone?.remarks || "",
       });
     }
@@ -80,7 +80,7 @@ export default function DroneRegistrationForm({
       const res = await fetch(`${config.baseURL}/drone_registration/`);
       const existingDrones = await res.json();
 
-      // Find drone by serial number
+      // Match serial number
       const matchingDrone = existingDrones.find(
         (d) =>
           String(d.drone_serial_number).trim() ===
@@ -89,58 +89,84 @@ export default function DroneRegistrationForm({
 
       if (!matchingDrone) {
         alert("Drone Serial Number not found in master list!");
-        setLoading(false);
         return;
       }
 
-      // Check if client with this serial number already exists
+      // Prevent duplicate client
       const existingClient = (matchingDrone.client || []).find(
         (c) =>
-          String(c.drone_serial_number).trim() ===
+          String(c.c_drone_serial_number).trim() ===
           String(formData.drone_serial_number).trim()
       );
 
       if (existingClient) {
         alert("This Serial Number is already registered for a client!");
-        setLoading(false);
-        return; // Stop submission
+        return;
       }
 
-      // Prepare new client entry
+      // Prepare client object (NO FILE)
       const newClientEntry = {
-        model_name: formData.model_name,
-        drone_type: formData.drone_type || matchingDrone.drone_type,
-        uin_number: formData.uin_number,
-        drone_serial_number: formData.drone_serial_number,
-        flight_controller_serial_number:
+        c_model_name: formData.model_name,
+        c_drone_type: formData.drone_type || matchingDrone.drone_type,
+        c_uin_number: formData.uin_number,
+        c_drone_serial_number: formData.drone_serial_number,
+        c_flight_controller_serial_number:
           formData.flight_controller_serial_number,
-        remote_controller: formData.remote_controller,
-        battery_charger_serial_number: formData.battery_charger_serial_number,
-        battery_serial_number_1: formData.battery_serial_number_1,
-        battery_serial_number_2: formData.battery_serial_number_2,
-        attachment: formData.attachment || matchingDrone.attachment,
+        c_remote_controller: formData.remote_controller,
+        c_battery_charger_serial_number: formData.battery_charger_serial_number,
+        c_battery_serial_number_1: formData.battery_serial_number_1,
+        c_battery_serial_number_2: formData.battery_serial_number_2,
       };
 
-      // Update client array
+      // Merge clients
       const updatedClientArray = [
         ...(matchingDrone.client || []),
         newClientEntry,
       ];
 
-      // PATCH drone
-      const updateRes = await fetch(
+      // PATCH client JSON
+      const clientUpdateRes = await fetch(
         `${config.baseURL}/drone_registration/${matchingDrone.id}/`,
         {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({ client: updatedClientArray }),
         }
       );
 
-      if (!updateRes.ok) throw new Error("Failed to update client list");
+      if (!clientUpdateRes.ok) {
+        throw new Error("Failed to update client details");
+      }
 
-      const updatedDrone = await updateRes.json();
+      //READ RESPONSE
+      let updatedDrone = await clientUpdateRes.json();
+
+      // PATCH attachment separately
+      if (formData.attachment instanceof File) {
+        const attachmentPayload = new FormData();
+        attachmentPayload.append("c_attachment", formData.attachment);
+
+        const attachmentRes = await fetch(
+          `${config.baseURL}/drone_registration/${matchingDrone.id}/`,
+          {
+            method: "PATCH",
+            body: attachmentPayload,
+          }
+        );
+
+        if (!attachmentRes.ok) {
+          throw new Error("Failed to upload attachment");
+        }
+
+        // VERY IMPORTANT: override with latest response
+        updatedDrone = await attachmentRes.json();
+      }
+
+      // Success
       alert("Client registered successfully!");
+
       if (onSubmit) onSubmit(updatedDrone);
       onClose();
     } catch (error) {

@@ -5,7 +5,7 @@
   gap: 40px;
   padding: 60px; /* balanced spacing on all sides */
   background: #f7f7f7;
-  height: 100%;
+  height: calc(100vh - 90px);
   border-radius: 10px;
   box-sizing: border-box;
   position: relative;
@@ -25,38 +25,40 @@
   background: #fff;
   border-radius: 10px;
   width: 380px;
-  min-height: 70vh;
+  height: 70vh;              /* fixed height */
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin-top: 60px; /* leaves space for breadcrumbs above */
+  margin-top: 60px;
 }
 
-/* Chat header */
+/* Header */
 .chat-header {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 15px;
-  border-bottom: 1px solid #eee;
-  background: #f5f5f5;
-  border-radius: 10px 10px 0 0;
+  gap: 8px;
 }
 
-.chat-icon {
-  font-size: 22px;
-  color: #333;
-}
-
-/* Chat body */
+/* Messages area */
 .chat-body {
-  flex: 1;
-  padding: 15px;
-  overflow-y: auto;
+  flex: 1;                   /* takes remaining space */
+  padding: 12px;
+  overflow-y: auto;          /* scroll inside messages */
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
+
+/* Input section */
+.chat-input {
+  padding: 10px;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 8px;
+}
+
 
 .chat-message {
   max-width: 70%;
