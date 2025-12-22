@@ -2,34 +2,46 @@ import React, { useState, useEffect } from "react";
 import { FaPaperPlane, FaCommentDots } from "react-icons/fa";
 import "../../CSS/Client/onlineSupport.css";
 import BreadCrumbs from "../BreadCrumbs";
-import config from "../../../config"; // baseURL defined here
+import config from "../../../config";
 
 export default function OnlineSupport() {
-  const [ticket, setTicket] = useState(null); // single ticket for client
+  const [ticket, setTicket] = useState(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // ----------------- FETCH TICKET -----------------
+  const API = `${config.baseURL}/support/threads/`;
+
+  // ✅ GET LOGGED-IN USER NAME
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const userName = storedUser?.name || "Guest";
+
+  // ---------------- FETCH EXISTING TICKET ----------------
   const fetchTicket = async () => {
     try {
-      const res = await fetch(`${config.baseURL}/support/threads/`);
-      const tickets = await res.json();
-      if (tickets.length > 0) {
-        setTicket(tickets[0]); // assuming only one open ticket per client
-        fetchMessages(tickets[0].id);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+      const res = await fetch(API);
+      if (!res.ok) return;
 
-  // ----------------- FETCH MESSAGES -----------------
-  const fetchMessages = async (threadId) => {
-    try {
-      const res = await fetch(`${config.baseURL}/support/threads/${threadId}/messages/`);
-      const data = await res.json();
-      setMessages(data);
+      const tickets = await res.json();
+
+      if (tickets.length > 0) {
+        const t = tickets[0];
+        setTicket(t);
+
+        const msgsRes = await fetch(`${API}${t.id}/messages/`);
+        const msgs = msgsRes.ok ? await msgsRes.json() : [];
+
+        // ✅ SUBJECT ALWAYS FIRST MESSAGE
+        setMessages([
+          {
+            id: "subject",
+            message: t.subject,
+            sender_type: "client",
+            created_by_name: t.created_by_name || userName,
+          },
+          ...msgs,
+        ]);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -39,18 +51,61 @@ export default function OnlineSupport() {
     fetchTicket();
   }, []);
 
-  // ----------------- SEND MESSAGE -----------------
-  const handleSend = async () => {
-    if (!message.trim() || !ticket || ticket.status === "CLOSED") return;
+  // ---------------- RAISE TICKET ----------------
+  const handleRaiseTicket = async () => {
+    if (ticket || loading) return;
+    setLoading(true);
 
     try {
-      const res = await fetch(`${config.baseURL}/support/threads/${ticket.id}/messages/`, {
+      const res = await fetch(API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({
+          subject: "Hi, I have some issue",
+          created_by_name: userName,
+        }),
       });
 
-      if (!res.ok) throw new Error("Failed to send message");
+      if (!res.ok) throw new Error("Ticket creation failed");
+
+      const newTicket = await res.json();
+      setTicket(newTicket);
+
+      // ✅ SHOW SUBJECT AS FIRST CHAT MESSAGE
+      setMessages([
+        {
+          id: "subject",
+          message: newTicket.subject,
+          sender_type: "client",
+          created_by_name: userName,
+        },
+      ]);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ---------------- SEND MESSAGE ----------------
+  const handleSend = async () => {
+    if (!message.trim() || !ticket) return;
+
+    try {
+      const res = await fetch(
+        `${API}${ticket.id}/messages/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message,
+            created_by_name: userName,
+          }),
+        }
+      );
+
+      if (!res.ok) throw new Error("Message failed");
+
       const msg = await res.json();
       setMessages((prev) => [...prev, msg]);
       setMessage("");
@@ -59,50 +114,24 @@ export default function OnlineSupport() {
     }
   };
 
-  // ----------------- RAISE TICKET -----------------
-  const handleRaiseTicket = async () => {
-    if (ticket) return; // only one ticket per client
-    const subject = prompt("Enter issue subject:");
-
-    if (!subject) return;
-
-    setLoading(true);
-    try {
-      const res = await fetch(`${config.baseURL}/support/threads/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subject }),
-      });
-
-      if (!res.ok) throw new Error("Failed to raise ticket");
-      const newTicket = await res.json();
-      setTicket(newTicket);
-      setMessages([]);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="online-support-container">
-      <div className="online-breadcrumb-wrapper">
-        <BreadCrumbs />
-      </div>
+      <BreadCrumbs />
 
       <div className="chat-box">
         <div className="chat-header">
-          <FaCommentDots className="chat-icon" />
+          <FaCommentDots />
           <h3>Online Support</h3>
         </div>
 
         {!ticket && (
-          <div style={{ padding: "20px" }}>
-            <button onClick={handleRaiseTicket} disabled={loading}>
-              {loading ? "Raising..." : "Raise Ticket"}
-            </button>
-          </div>
+          <button
+            className="raise-ticket-btn"
+            onClick={handleRaiseTicket}
+            disabled={loading}
+          >
+            {loading ? "Creating Ticket..." : "Raise Ticket"}
+          </button>
         )}
 
         {ticket && (
@@ -111,9 +140,11 @@ export default function OnlineSupport() {
               {messages.map((msg, i) => (
                 <div
                   key={i}
-                  className={`chat-message ${msg.sender === "client" ? "user" : "bot"}`}
+                  className={`chat-message ${
+                    msg.sender_type === "client" ? "user" : "bot"
+                  }`}
                 >
-                  {msg.message}
+                  <strong>{msg.created_by_name}:</strong> {msg.message}
                 </div>
               ))}
             </div>
@@ -121,13 +152,12 @@ export default function OnlineSupport() {
             <div className="chat-input">
               <input
                 type="text"
-                placeholder={ticket.status === "CLOSED" ? "Ticket closed" : "Type here..."}
+                placeholder="Type here..."
                 value={message}
-                disabled={ticket.status === "CLOSED"}
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
               />
-              <button onClick={handleSend} disabled={ticket.status === "CLOSED"}>
+              <button onClick={handleSend}>
                 <FaPaperPlane />
               </button>
             </div>

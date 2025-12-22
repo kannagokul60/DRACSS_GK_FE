@@ -25,11 +25,41 @@
   background: #fff;
   border-radius: 10px;
   width: 380px;
-  height: 70vh;              /* fixed height */
+  height: 70vh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-top: 60px;
+  position: relative; /* REQUIRED */
+}
+
+/* Raise Ticket button INSIDE chat-box */
+.raise-ticket-btn {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+
+  padding: 12px 20px;
+  background-color: #0a66c2;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 5;
+}
+
+.raise-ticket-btn:hover {
+  background-color: #084d9c;
+}
+
+.raise-ticket-btn:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
 }
 
 /* Header */
