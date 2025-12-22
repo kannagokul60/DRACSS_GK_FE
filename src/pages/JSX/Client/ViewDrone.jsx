@@ -21,9 +21,7 @@ const ViewDrone = () => {
         const droneData = await resDrone.json();
 
         // 2️⃣ Fetch ALL drone images
-        const resImages = await fetch(
-          `${config.baseURL}/drone_images/`
-        );
+        const resImages = await fetch(`${config.baseURL}/drone_images/`);
         const imagesData = await resImages.json();
 
         const latestClient =
@@ -35,9 +33,7 @@ const ViewDrone = () => {
           latestClient?.model_name || droneData.model_name || "";
 
         // 3️⃣ Match image by model name
-        const matchedImage = imagesData.find(
-          (img) => img.name === droneName
-        );
+        const matchedImage = imagesData.find((img) => img.name === droneName);
 
         setDrone(droneData);
         setImage(matchedImage?.image || "");
@@ -114,8 +110,8 @@ const ViewDrone = () => {
     alert("Flight logs saved (frontend only)");
   };
 
-  const handleCancelLogs = () => {
-    setManualLogs([]);
+  const handleCancelLogs = (index) => {
+    setManualLogs((prevLogs) => prevLogs.filter((_, i) => i !== index));
   };
 
   return (
@@ -160,8 +156,7 @@ const ViewDrone = () => {
             </div>
             <div>
               <strong>Drone Serial Number:</strong>{" "}
-              {latestClient.drone_serial_number ||
-                drone.drone_serial_number}
+              {latestClient.drone_serial_number || drone.drone_serial_number}
             </div>
           </div>
 
@@ -173,8 +168,7 @@ const ViewDrone = () => {
             </div>
             <div>
               <strong>Remote Controller:</strong>{" "}
-              {latestClient.remote_controller ||
-                drone.remote_controller}
+              {latestClient.remote_controller || drone.remote_controller}
             </div>
           </div>
 
@@ -258,11 +252,7 @@ const ViewDrone = () => {
                       type="time"
                       value={log.start_time}
                       onChange={(e) =>
-                        handleLogChange(
-                          index,
-                          "start_time",
-                          e.target.value
-                        )
+                        handleLogChange(index, "start_time", e.target.value)
                       }
                     />
                   </td>
@@ -272,11 +262,7 @@ const ViewDrone = () => {
                       type="time"
                       value={log.end_time}
                       onChange={(e) =>
-                        handleLogChange(
-                          index,
-                          "end_time",
-                          e.target.value
-                        )
+                        handleLogChange(index, "end_time", e.target.value)
                       }
                     />
                   </td>
@@ -289,25 +275,18 @@ const ViewDrone = () => {
                       placeholder="Remarks"
                       value={log.remarks}
                       onChange={(e) =>
-                        handleLogChange(
-                          index,
-                          "remarks",
-                          e.target.value
-                        )
+                        handleLogChange(index, "remarks", e.target.value)
                       }
                     />
                   </td>
 
                   <td>
-                    <button
-                      className="save-log-btn"
-                      onClick={handleSaveLogs}
-                    >
+                    <button className="save-log-btn" onClick={handleSaveLogs}>
                       Save
                     </button>
                     <button
                       className="cancel-log-btn"
-                      onClick={handleCancelLogs}
+                      onClick={() => handleCancelLogs(index)}
                     >
                       Cancel
                     </button>

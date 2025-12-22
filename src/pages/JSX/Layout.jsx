@@ -3,7 +3,6 @@ import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import "../CSS/layout.css";
 import Profile from "../../assets/profile_icon.png";
-import Logout from "../../assets/logout.png";
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -11,7 +10,9 @@ export default function Layout() {
   const [showProfilePopup, setShowProfilePopup] = useState(false);
   const popupRef = useRef(null);
 
-  // ------------------- GET ROLE FROM URL -------------------
+  const [user, setUser] = useState(null); // store logged-in user
+
+  // Get role from URL path
   const getRoleFromPath = (path) => {
     if (path.startsWith("/bd")) return "BD Team";
     if (path.startsWith("/technical")) return "Technical";
@@ -19,23 +20,21 @@ export default function Layout() {
     return "Client";
   };
 
-  const [selectedRole, setSelectedRole] = useState(
-    getRoleFromPath(location.pathname)
-  );
-
+  const [selectedRole, setSelectedRole] = useState(getRoleFromPath(location.pathname));
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
+  // Load logged-in user from localStorage on mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) setUser(JSON.parse(storedUser));
+  }, []);
+
+  // Update selectedRole when URL changes
   useEffect(() => {
     setSelectedRole(getRoleFromPath(location.pathname));
   }, [location.pathname]);
 
-  // ------------------- LOGOUT -------------------
-  const logout = () => {
-    localStorage.removeItem("access");
-    navigate("/");
-  };
-
-  // ------------------- CLICK OUTSIDE CLOSE -------------------
+  // Close popup on click outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
@@ -52,14 +51,31 @@ export default function Layout() {
     };
   }, [showProfilePopup]);
 
-    const handleRoleChange = (e) => {
+  const logout = () => {
+    localStorage.removeItem("user"); // remove user from localStorage
+    navigate("/");
+  };
+
+  const handleRoleChange = (e) => {
     const newRole = e.target.value;
     setSelectedRole(newRole);
 
-    if (newRole === "Client") navigate("/client/dashboard");
-    else if (newRole === "BD Team") navigate("/bd/dashboard");
-    else if (newRole === "Technical") navigate("/technical/dashboard");
-    else if (newRole === "Pilot") navigate("/pilot/dashboard");
+    switch (newRole) {
+      case "Client":
+        navigate("/client/dashboard");
+        break;
+      case "BD Team":
+        navigate("/bd/dashboard");
+        break;
+      case "Technical":
+        navigate("/technical/dashboard");
+        break;
+      case "Pilot":
+        navigate("/pilot/dashboard");
+        break;
+      default:
+        navigate("/dashboard");
+    }
   };
 
   return (
@@ -69,9 +85,7 @@ export default function Layout() {
         <h1
           className="layout-title"
           onClick={() =>
-            navigate(
-              `/${selectedRole.toLowerCase().replace(" ", "")}/dashboard`
-            )
+            navigate(`/${selectedRole.toLowerCase().replace(" ", "")}/dashboard`)
           }
         >
           DRACSS
@@ -100,15 +114,14 @@ export default function Layout() {
               title="View Profile"
             />
 
-            {showProfilePopup && (
+            {showProfilePopup && user && (
               <div className="profile-dropdown">
                 <h4>Profile</h4>
-
                 <p>
-                  <strong>Name:</strong> Gokul Kanna
+                  <strong>Name:</strong> {user.name}
                 </p>
                 <p>
-                  <strong>User ID:</strong> 20ISR013
+                  <strong>Employee ID:</strong> {user.employee_id}
                 </p>
                 <p>
                   <strong>Role:</strong> {selectedRole}
@@ -120,15 +133,6 @@ export default function Layout() {
               </div>
             )}
           </div>
-
-          {/* LOGOUT ICON */}
-          {/* <img
-            src={Logout}
-            alt="logout"
-            className="logout-profile-icon"
-            onClick={logout}
-            title="Logout"
-          /> */}
         </div>
       </header>
 

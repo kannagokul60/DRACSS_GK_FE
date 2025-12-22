@@ -29,7 +29,7 @@ export default function Dashboard() {
     { title: "Drone Approve", image: DroneApprove, path: "/bd/drone-approve" },
   { title: "Knowledge Base", image: knowledgeImg, path: "/bd/knowledge-base" },
     { title: "Aero360 Store", image: storeImg },
-{ title: "Support Request", image: supportImg, path: "/client/support" },
+{ title: "Support Request", image: supportImg, path: "/bd/support" },
 { title: "Pending Task", image: pendingImg, path: "/bd/pending-tasks" },
 { title: "Profile Details", image: profileImg, path: "/bd/profile-details" },
 

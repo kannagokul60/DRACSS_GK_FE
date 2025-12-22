@@ -9,6 +9,7 @@ import {
   FaUsers,
   FaClipboardCheck,
   FaBars,
+  FaInfoCircle,
 } from "react-icons/fa";
 import "../CSS/sidebar.css";
 
@@ -36,9 +37,15 @@ export default function Sidebar({ setIsSidebarCollapsed }) {
         icon: <FaTachometerAlt />,
         path: `${basePath}/dashboard`,
       },
+
+      {
+        name: "Drone Registration",
+        icon: <FaBars />, // Best for registration / adding drone
+        path: `${basePath}/drone-registration`,
+      },
       {
         name: "Drone Details",
-        icon: <FaTachometerAlt />,
+        icon: <FaInfoCircle />, // Best for viewing drone information
         path: `${basePath}/drone-details`,
       },
       {
@@ -75,6 +82,7 @@ export default function Sidebar({ setIsSidebarCollapsed }) {
         icon: <FaTachometerAlt />,
         path: `${basePath}/drone-details`,
       },
+      { name: "Support", icon: <FaHeadset />, path: `${basePath}/support` },
       {
         name: "Knowledge Base",
         icon: <FaBook />,
@@ -102,7 +110,7 @@ export default function Sidebar({ setIsSidebarCollapsed }) {
         icon: <FaUser />,
         path: `${basePath}/assigned-drones`,
       },
-            {
+      {
         name: "Completed Work",
         icon: <FaUser />,
         path: `${basePath}/completed-work`,
@@ -124,12 +132,12 @@ export default function Sidebar({ setIsSidebarCollapsed }) {
         icon: <FaClipboardCheck />,
         path: `${basePath}/pending-delivery`,
       },
-       {
+      {
         name: "Pilot Delivered",
         icon: <FaClipboardCheck />,
         path: `${basePath}/pilot-delivered`,
       },
-     
+
       {
         name: "Profile",
         icon: <FaUser />,

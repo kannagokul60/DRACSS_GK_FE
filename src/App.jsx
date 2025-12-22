@@ -29,6 +29,8 @@ import PendingTasks from "./pages/JSX/BDTeam/PendingTasks";
 import Profile from "./pages/JSX/BDTeam/Profile";
 import DroneApprove from "./pages/JSX/BDTeam/DroneApprove";
 import UnsoldDroneList from "./pages/JSX/BDTeam/UnsoldDroneList.jsx";
+import BDOnlineSupport from "./pages/JSX/BDTeam/OnlineSupport.jsx";
+import BDSupportPage from "./pages/JSX/BDTeam/SupportPage.jsx";
 
 //Technical Team Imports
 import TechnicalLayout from "./pages/JSX/Layout";
@@ -60,8 +62,7 @@ export default function App() {
           <Route path="/client" element={<Layout />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="drone-details" element={<DroneDetails />} />
-<Route path="view-drone/:droneId" element={<ViewDrone />} />
-
+            <Route path="view-drone/:droneId" element={<ViewDrone />} />
             <Route path="drone-registration" element={<DroneRegistration />} />
             <Route path="knowledge-base" element={<KnowledgeBase />} />
             <Route
@@ -91,6 +92,9 @@ export default function App() {
             {/* FIXED: REMOVE leading slash */}
             <Route path="drone-approve" element={<DroneApprove />} />
             <Route path="orderform" element={<OrderFormPage />} />
+            <Route path="support" element={<BDSupportPage />} />
+
+            <Route path="online-support" element={<BDOnlineSupport />} />
           </Route>
 
           {/* TECHNICAL TEAM ROUTES */}

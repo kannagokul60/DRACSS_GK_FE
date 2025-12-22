@@ -8,16 +8,25 @@ export default function Register() {
   const [form, setForm] = useState({
     fullName: "",
     email: "",
-    employeeId: "",
     phone: "",
     designation: "",
     address: "",
-    clientType: null,
+    clientType: "",
     password: "",
     confirmPassword: "",
   });
 
   const [loading, setLoading] = useState(false);
+
+  // Match Django model choices (lowercase keys)
+  const clientOptions = [
+    { value: "client", label: "Client" },
+    { value: "admin", label: "Admin" },
+    { value: "technical", label: "Technical" },
+    { value: "pilot", label: "Pilot" },
+    { value: "inventory", label: "Inventory" },
+    { value: "bd", label: "BD Team" },
+  ];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -36,27 +45,23 @@ export default function Register() {
     try {
       const response = await fetch("http://127.0.0.1:8000/api/accounts/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: form.fullName,
           email: form.email,
-          employee_id: form.employeeId,
           phone: form.phone,
           designation: form.designation,
           address: form.address,
-          client_type: form.clientType, // can be null or a value
+          client_type: form.clientType || null, // must be lowercase key
           password: form.password,
           confirm_password: form.confirmPassword,
-          is_active: true, // optional — depends on backend defaults
+          is_active: true,
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        alert("✅ Account created successfully!");
-        console.log("Response:", data);
+        alert(`✅ Account created successfully! Employee ID: ${data.employee_id}`);
         navigate("/login");
       } else {
         const errorData = await response.json();
@@ -72,10 +77,7 @@ export default function Register() {
   };
 
   return (
-    <div
-      className="register-container"
-      style={{ backgroundImage: `url(${droneBg})` }}
-    >
+    <div className="register-container" style={{ backgroundImage: `url(${droneBg})` }}>
       <div className="register-overlay"></div>
 
       <form onSubmit={handleSubmit} className="register-card">
@@ -84,94 +86,49 @@ export default function Register() {
         <div className="register-grid">
           <div className="register-field">
             <label>Full Name</label>
-            <input
-              type="text"
-              name="fullName"
-              value={form.fullName}
-              onChange={handleChange}
-              placeholder="Enter full name"
-              required
-            />
+            <input type="text" name="fullName" value={form.fullName} onChange={handleChange} required />
           </div>
 
           <div className="register-field">
             <label>Email ID</label>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="Enter email"
-              required
-            />
-          </div>
-
-          <div className="register-field">
-            <label>Employee ID</label>
-            <input
-              type="text"
-              name="employeeId"
-              value={form.employeeId}
-              onChange={handleChange}
-              placeholder="Enter employee ID"
-            />
+            <input type="email" name="email" value={form.email} onChange={handleChange} required />
           </div>
 
           <div className="register-field">
             <label>Phone Number</label>
-            <input
-              type="tel"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              placeholder="Enter phone number"
-            />
+            <input type="tel" name="phone" value={form.phone} onChange={handleChange} />
           </div>
 
           <div className="register-field">
             <label>Designation</label>
-            <input
-              type="text"
-              name="designation"
-              value={form.designation}
-              onChange={handleChange}
-              placeholder="Enter designation"
-            />
+            <input type="text" name="designation" value={form.designation} onChange={handleChange} />
           </div>
 
           <div className="register-field">
             <label>Address</label>
-            <input
-              type="text"
-              name="address"
-              value={form.address}
-              onChange={handleChange}
-              placeholder="Enter address"
-            />
+            <input type="text" name="address" value={form.address} onChange={handleChange} />
+          </div>
+
+          <div className="register-field">
+            <label>Client Type</label>
+            <select name="clientType" value={form.clientType} onChange={handleChange} required>
+              <option value="">Select Type</option>
+              {clientOptions.map((c) => (
+                <option key={c.value} value={c.value}>
+                  {c.label}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="register-field">
             <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              placeholder="Enter password"
-              required
-            />
+            <input type="password" name="password" value={form.password} onChange={handleChange} required />
           </div>
 
           <div className="register-field">
             <label>Confirm Password</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm password"
-              required
-            />
+            <input type="password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} required />
           </div>
         </div>
 
@@ -180,8 +137,7 @@ export default function Register() {
         </button>
 
         <p className="register-link">
-          Already have an account?{" "}
-          <u onClick={() => navigate("/login")}>Login</u>
+          Already have an account? <u onClick={() => navigate("/login")}>Login</u>
         </p>
       </form>
     </div>
