@@ -93,8 +93,7 @@ export default function App() {
             <Route path="drone-approve" element={<DroneApprove />} />
             <Route path="orderform" element={<OrderFormPage />} />
             <Route path="support" element={<BDSupportPage />} />
-
-            <Route path="online-support" element={<BDOnlineSupport />} />
+            <Route path="support/:ticketId" element={<BDOnlineSupport />} />
           </Route>
 
           {/* TECHNICAL TEAM ROUTES */}
