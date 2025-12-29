@@ -72,11 +72,24 @@
 
 /* Header */
 .chat-header {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* left + right */
+  padding: 10px 14px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ccc;
+  position: relative;
+}
+
+.chat-header-left {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.chat-header-left h3 {
+  margin: 0;
+  font-size: 16px;
 }
 
 /* Messages area */
@@ -114,7 +127,7 @@
 
 .chat-message.user {
   align-self: flex-end;
-  background: #4e89ff;
+  background: #0d5bb4;
   color: #fff;
 }
 
@@ -137,7 +150,7 @@
 
 .chat-input button {
   border: none;
-  background: #4e89ff;
+  background: #0d5bb4;
   color: white;
   padding: 0 15px;
   border-radius: 50%;
@@ -148,6 +161,24 @@
 .chat-input button:hover {
   background: #3a6ee8;
 }
+
+.chat-ended-msg {
+  margin-top: 15px;
+  padding: 14px 18px;
+  text-align: center;
+  background-color: #fff3f3;
+  border: 1px solid #ffb3b3;
+  border-radius: 8px;
+  cursor: not-allowed;
+}
+
+.chat-ended-msg p {
+  margin: 0;
+  font-size: 14px;
+  color: #d9534f;
+  font-weight: 600;
+}
+
 
 /* Right side actions */
 .support-actions {
@@ -255,4 +286,61 @@
 .error-text {
   color: red;
   font-size: 13px;
+}
+
+.chat-message.bdteam {
+align-self: flex-start;
+    background: #f0f0f0;
+    color: #333;
+}
+
+.bd-status {
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.bd-status.open {
+  background-color: green;
+}
+
+.bd-status.closed {
+  background-color: red;
+}
+
+.bd-end-chat-btn {
+  background-color: #ff4d4d;
+  border: none;
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.bd-end-chat-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ticket-status {
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px; /* pill shape */
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+/* Open status in green */
+.ticket-status.open {
+  background-color: #ecfdf5; /* light green background */
+  color: #16a34a;           /* green text */
+  border: 1px solid #16a34a;
+}
+
+/* Closed status in red */
+.ticket-status.closed {
+  background-color: #fef2f2; /* light red background */
+  color: #dc2626;            /* red text */
+  border: 1px solid #dc2626;
 }

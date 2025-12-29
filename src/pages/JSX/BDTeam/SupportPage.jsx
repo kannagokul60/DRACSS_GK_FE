@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../CSS/BDteam/bdOnlineSupport.css";
+import "../../CSS/BDteam/bdSupportPage.css";
 import BreadCrumbs from "../BreadCrumbs";
 import config from "../../../config";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,9 @@ export default function SupportPage() {
 
   return (
     <div className="bd-online-container">
-      <BreadCrumbs />
+     <div className="bd-support-breadcrumb-wrapper">
+             <BreadCrumbs />
+           </div>
       <h2 className="bd-title">Client Tickets</h2>
 
       <div className="bd-online-list">

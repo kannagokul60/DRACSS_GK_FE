@@ -4,7 +4,7 @@ import "../../CSS/Client/onlineSupport.css";
 import BreadCrumbs from "../BreadCrumbs";
 import config from "../../../config";
 
-export default function OnlineSupport() {
+export default function ClientOnlineSupport() {
   const [ticket, setTicket] = useState(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -31,106 +31,68 @@ export default function OnlineSupport() {
     return [subjectMessage, ...backendMessages];
   };
 
-const fetchTicket = async () => {
-  try {
-    const res = await fetch(THREAD_API, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!res.ok) return;
-
-    const tickets = await res.json();
-    if (!tickets.length) return;
-
-    const t = tickets[0];
-    setTicket(t);
-
-    const msgRes = await fetch(MESSAGE_API, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (!msgRes.ok) return;
-
-    const data = await msgRes.json();
-
-    // ✅ FIX IS HERE
-    const threadObj = data.find((item) => item.id === t.id);
-    const replies = threadObj?.replies ?? [];
-
-    const normalizedReplies = replies.map((reply) => ({
-      id: reply.id,
-      message: reply.message,
-      sender_type:
-        reply.sender_name === t.created_by_name ? "client" : "bot",
-      created_by_name: reply.sender_name,
-      created_at: reply.created_at,
-    }));
-
-    setMessages(buildChatMessages(t, normalizedReplies));
-  } catch (err) {
-    console.error("Fetch ticket error:", err);
-  }
-};
-
-
-  useEffect(() => {
-    fetchTicket();
-  }, []);
-
-  const handleRaiseTicket = async () => {
-    if (!droneSerial.trim()) {
-      setError("Drone Serial Number is required");
-      return;
-    }
-    setLoading(true);
-    setError("");
-
+  const fetchTicket = async () => {
     try {
-      const clientRes = await fetch(`${config.baseURL}/clients/`);
-      if (!clientRes.ok) throw new Error("Failed to fetch clients");
-      const clients = await clientRes.json();
-
-      const client = clients.find((c) =>
-        c.drones.includes(droneSerial.trim())
-      );
-      if (!client) {
-        setError("You have not registered this drone.");
-        setLoading(false);
-        return;
-      }
-      const clientName = client.name;
-
       const res = await fetch(THREAD_API, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token ? `Bearer ${token}` : undefined,
-        },
-        body: JSON.stringify({
-          subject: "Hi, I have some issue",
-          drone_serial_number: droneSerial.trim(),
-          created_by_name: clientName,
-        }),
+        headers: { Authorization: `Bearer ${token}` },
       });
+      if (!res.ok) return;
 
-      const newTicket = await res.json();
-      if (!res.ok) {
-        setError(newTicket?.drone_serial_number_input?.[0] || "Failed to create ticket");
-        return;
-      }
+      const tickets = await res.json();
+      if (!tickets.length) return;
 
-      setTicket(newTicket);
-      setMessages(buildChatMessages(newTicket, []));
-      setShowModal(false);
-      setDroneSerial("");
+      const t = tickets[0]; // thread object
+      setTicket(t);
+
+      const msgRes = await fetch(MESSAGE_API, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!msgRes.ok) return;
+
+      const data = await msgRes.json();
+      const threadObj = data.find((item) => item.id === t.id);
+      const replies = threadObj?.replies ?? [];
+
+      const normalizedReplies = replies.map((reply) => ({
+        id: reply.id,
+        message: reply.message,
+        sender_type:
+          reply.sender_name === t.created_by_name
+            ? "client"
+            : reply.sender_name === "BDTeam"
+            ? "bdteam"
+            : "bot",
+        created_by_name: reply.sender_name,
+        created_at: reply.created_at,
+      }));
+
+setMessages((prev) => {
+  const existingIds = new Set(prev.map((m) => m.id));
+
+  const merged = buildChatMessages(t, normalizedReplies).filter(
+    (m) => !existingIds.has(m.id)
+  );
+
+  return [...prev, ...merged];
+});
     } catch (err) {
-      console.error(err);
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+      console.error("Fetch ticket error:", err);
     }
   };
 
+  useEffect(() => {
+  fetchTicket();
+
+  const interval = setInterval(() => {
+    fetchTicket();
+  }, 3000);
+
+  return () => clearInterval(interval);
+}, []);
+
+
   const handleSend = async () => {
-    if (!message.trim() || !ticket) return;
+    if (!message.trim() || !ticket || ticket.status === "CLOSED") return;
 
     try {
       const res = await fetch(MESSAGE_API, {
@@ -149,15 +111,18 @@ const fetchTicket = async () => {
       if (!res.ok) throw new Error("Send failed");
       const saved = await res.json();
 
-const newMsg = {
-  id: saved.id,
-  message: saved.message,
-  sender_type:
-    saved.sender_name === ticket.created_by_name ? "client" : "bot",
-  created_by_name: saved.sender_name,
-  created_at: saved.created_at,
-};
-
+      const newMsg = {
+        id: saved.id,
+        message: saved.message,
+        sender_type:
+          saved.sender_name === ticket.created_by_name
+            ? "client"
+            : saved.sender_name === "BDTeam"
+            ? "bdteam"
+            : "bot",
+        created_by_name: saved.sender_name,
+        created_at: saved.created_at,
+      };
 
       setMessages((prev) => [...prev, newMsg]);
       setMessage("");
@@ -176,6 +141,15 @@ const newMsg = {
         <div className="chat-header">
           <FaCommentDots />
           <h3>Online Support</h3>
+          {ticket && (
+            <span
+              className={`ticket-status ${
+                ticket.status === "OPEN" ? "open" : "closed"
+              }`}
+            >
+              Status: {ticket.status}
+            </span>
+          )}
         </div>
 
         {!ticket && (
@@ -195,53 +169,46 @@ const newMsg = {
                 <div
                   key={msg.id}
                   className={`chat-message ${
-                    msg.sender_type === "client" ? "user" : "bot"
+                    msg.sender_type === "client"
+                      ? "user"
+                      : msg.sender_type === "bdteam"
+                      ? "bdteam"
+                      : "bot"
                   }`}
                 >
                   <strong>
-                    {msg.sender_type === "client" ? "You" : `${msg.created_by_name}:`}
+                    {msg.sender_type === "client"
+                      ? "You:"
+                      : msg.sender_type === "bdteam"
+                      ? "BDTeam:"
+                      : `${msg.created_by_name}:`}
                   </strong>{" "}
                   {msg.message}
                 </div>
               ))}
             </div>
 
-            <div className="chat-input">
-              <input
-                type="text"
-                placeholder="Type here..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              />
-              <button onClick={handleSend}>
-                <FaPaperPlane />
-              </button>
-            </div>
+            {ticket.status === "OPEN" ? (
+              <div className="chat-input">
+                <input
+                  type="text"
+                  placeholder="Type here..."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                />
+                <button onClick={handleSend}>
+                  <FaPaperPlane />
+                </button>
+              </div>
+            ) : (
+              <div className="chat-ended-msg">
+                <p>Chat has ended. You cannot send messages anymore.</p>
+              </div>
+            )}
           </>
         )}
       </div>
-
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-box">
-            <h3>Raise Support Ticket</h3>
-            <input
-              type="text"
-              placeholder="Enter Drone Serial Number"
-              value={droneSerial}
-              onChange={(e) => setDroneSerial(e.target.value)}
-            />
-            {error && <p className="error-text">{error}</p>}
-            <div className="modal-actions">
-              <button onClick={() => setShowModal(false)}>Cancel</button>
-              <button onClick={handleRaiseTicket} disabled={loading}>
-                {loading ? "Creating..." : "Submit"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
