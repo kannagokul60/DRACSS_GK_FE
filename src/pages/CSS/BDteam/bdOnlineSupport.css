@@ -85,3 +85,58 @@
   border-radius: 8px;
   cursor: pointer;
 }
+/* Container on the right side of chat header */
+.bd-chat-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* space between status and button */
+}
+
+/* Status pill */
+.bd-status {
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 999px; /* pill shape */
+  font-size: 12px;
+  text-transform: uppercase;
+  display: inline-block;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Open status (green) */
+.bd-status.open {
+  background-color: #ecfdf5; /* light green background */
+  color: #16a34a;           /* green text */
+  border: 1px solid #16a34a;
+}
+
+/* Closed status (red) */
+.bd-status.closed {
+  background-color: #fef2f2; /* light red background */
+  color: #dc2626;            /* red text */
+  border: 1px solid #dc2626;
+}
+
+/* End Chat button */
+.bd-end-chat-btn {
+  background-color: #f35757; /* red */
+  border: none;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.bd-end-chat-btn:hover {
+  background-color: #e03b3b;
+  transform: translateY(-1px);
+}
+
+.bd-end-chat-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -11,12 +11,11 @@
 }
 
 .bd-online-container .bd-support-breadcrumb-wrapper {
-   position: absolute;
+  position: absolute;
   top: 0.5rem;
   left: 0.2rem;
   z-index: 10;
 }
-
 
 .bd-title {
   text-align: center;
@@ -39,17 +38,43 @@
   background: #ffffff;
   border-radius: 12px;
   padding: 16px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   transition: transform 0.2s ease;
   min-width: 280px;
-  max-width: 360px; 
+  max-width: 360px;
+  position: relative;
 }
 
-.bd-online-card:hover { transform: translateY(-3px); }
+.bd-ticket-date {
+  position: absolute;
+  top: 6px;
+  right: 1px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #6b7280;
+  background: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
 
-.bd-online-card h3 { font-size: 16px; margin-bottom: 6px; }
-.bd-online-card p { font-size: 14px; color: #6b7280; }
+.bd-ticket-date:hover {
+  background: #f3f4f6;
+}
+
+.bd-online-card:hover {
+  transform: translateY(-3px);
+}
+
+.bd-online-card h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+.bd-online-card p {
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 5px;
+}
 
 .bd-status {
   padding: 4px 10px;
@@ -57,10 +82,22 @@
   font-size: 12px;
   font-weight: 600;
   text-transform: capitalize;
+
 }
 
-.bd-status.Pending { background: #fff7ed; color: #ea580c; }
-.bd-status.New { background: #eff6ff; color: #2563eb; }
-.bd-status.In-Progress { background: #fefce8; color: #ca8a04; }
-.bd-status.Closed { background: #ecfdf5; color: #16a34a; }
-.bd-status.Rejected { background: #fef2f2; color: #dc2626; }
+.bd-status.In-Progress {
+  background: #fefce8;
+  color: #ca8a04;
+}
+.bd-ticket-status.open {
+  background: none;
+  color: #16a34a;
+  font-size: 12px;
+  font-weight: bold ;
+}
+.bd-ticket-status.closed {
+  background: none;
+  color: #dc2626;
+    font-size: 12px;
+  font-weight: bold ;
+}

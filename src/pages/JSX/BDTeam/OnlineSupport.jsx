@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { FaPaperPlane, FaArrowLeft } from "react-icons/fa";
 import "../../CSS/BDteam/bdOnlineSupport.css";
 import config from "../../../config";
@@ -13,14 +13,21 @@ export default function BDOnlineSupport() {
   const [message, setMessage] = useState("");
   const [closing, setClosing] = useState(false);
 
+  const messagesEndRef = useRef(null); //AUTO-SCROLL REF
   const token = localStorage.getItem("token");
 
-  // Fetch thread + messages
+  //AUTO SCROLL FUNCTION
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // ---------------- FETCH THREAD + MESSAGES ----------------
   const fetchThread = () => {
     fetch(`${config.baseURL}/support/threads/${ticketId}/`)
       .then((res) => res.json())
       .then((data) => {
         setTicket(data);
+
         setMessages((prev) => {
           const existingIds = new Set(prev.map((m) => m.id));
           const fresh = (data.messages || []).filter(
@@ -34,15 +41,16 @@ export default function BDOnlineSupport() {
 
   useEffect(() => {
     fetchThread();
-
-    const interval = setInterval(() => {
-      fetchThread();
-    }, 3000); // every 3 seconds
-
+    const interval = setInterval(fetchThread, 3000);
     return () => clearInterval(interval);
   }, [ticketId]);
 
-  // Send message
+  //AUTO SCROLL WHEN MESSAGES CHANGE
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  // ---------------- SEND MESSAGE ----------------
   const handleSend = async () => {
     if (!message.trim() || !ticket) return;
 
@@ -55,17 +63,13 @@ export default function BDOnlineSupport() {
         },
         body: JSON.stringify({
           thread: ticket.id,
-          message: message,
+          message,
           sender_type: "bdteam",
         }),
       });
 
       const saved = await res.json();
-
-      if (!res.ok) {
-        console.error(saved);
-        return;
-      }
+      if (!res.ok) return;
 
       setMessages((prev) => [
         ...prev,
@@ -84,7 +88,7 @@ export default function BDOnlineSupport() {
     }
   };
 
-  // End chat / Close ticket
+  // ---------------- END CHAT ----------------
   const handleEndChat = async () => {
     if (!ticket || ticket.status === "CLOSED") return;
     setClosing(true);
@@ -102,9 +106,7 @@ export default function BDOnlineSupport() {
         }
       );
 
-      const updated = await res.json();
       if (!res.ok) {
-        console.error(updated);
         setClosing(false);
         return;
       }
@@ -121,8 +123,12 @@ export default function BDOnlineSupport() {
     <div className="bd-chat-wrapper">
       {/* HEADER */}
       <div className="bd-chat-header">
-        <FaArrowLeft className="bd-back-icon" onClick={() => navigate(-1)} />
-        <h3>{ticket?.subject}</h3>
+        <div className="bd-chat-header-left">
+          <FaArrowLeft className="bd-back-icon" onClick={() => navigate(-1)} />
+          <span className="bd-ticket-id">{ticket?.ticket_id}</span>
+        </div>
+
+        <h3 className="bd-ticket-subject">{ticket?.subject}</h3>
 
         <div className="bd-chat-header-right">
           <span
@@ -151,12 +157,16 @@ export default function BDOnlineSupport() {
           <div
             key={msg.id}
             className={`bd-chat-msg ${
-              msg.sender_name?.toLowerCase() === "bdteam" ? "bd" : "client"
+              msg.sender_name?.toLowerCase() === "bdteam"
+                ? "bd"
+                : "client"
             }`}
           >
             <strong>{msg.sender_name}:</strong> {msg.message}
           </div>
         ))}
+
+        <div ref={messagesEndRef} />
       </div>
 
       {/* INPUT */}

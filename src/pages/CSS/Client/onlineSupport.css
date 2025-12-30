@@ -1,9 +1,10 @@
+/* Container */
 .online-support-container {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between; /* distribute chat box & icons */
+  justify-content: space-between;
   gap: 40px;
-  padding: 60px; /* balanced spacing on all sides */
+  padding: 60px;
   background: #f7f7f7;
   height: calc(100vh - 90px);
   border-radius: 10px;
@@ -12,12 +13,11 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Breadcrumb wrapper — inside container (top-left) */
-.online-breadcrumb-wrapper {
-  position: absolute;
-  top: 20px;
-  left: 0px; /* matches container padding for alignment */
-  z-index: 1;
+/* Breadcrumb wrapper */
+.online-breadcrumbs-wrapper {
+  position: relative;
+  top: -3rem;
+  left: -3rem;
 }
 
 /* Chat box */
@@ -30,25 +30,22 @@
   flex-direction: column;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   margin-top: 60px;
-  position: relative; /* REQUIRED */
+  position: relative;
 }
 
-/* Raise Ticket button INSIDE chat-box */
+/* Raise Ticket button */
 .raise-ticket-btn {
   position: absolute;
   bottom: 15px;
   right: 15px;
-
   padding: 12px 20px;
   background-color: #0a66c2;
   color: #fff;
   border: none;
   border-radius: 25px;
-
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   z-index: 5;
 }
@@ -62,19 +59,11 @@
   cursor: not-allowed;
 }
 
-.online-breadcrumbs-wrapper {
-  position: relative; /* fixed relative to container */
-  top: -50px;          /* adjust spacing from top */
-  left: -50px;         /* adjust spacing from left */
-  z-index: 1000;      /* above other elements if needed */
-}
-
-
-/* Header */
+/* Chat header */
 .chat-header {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* left + right */
+  justify-content: space-between;
   padding: 10px 14px;
   background-color: #f5f5f5;
   border-bottom: 1px solid #ccc;
@@ -94,42 +83,51 @@
 
 /* Messages area */
 .chat-body {
-  flex: 1;                   /* takes remaining space */
+  flex: 1;
   padding: 12px;
-  overflow-y: auto;          /* scroll inside messages */
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-/* Input section */
-.chat-input {
-  padding: 10px;
-  border-top: 1px solid #eee;
-  display: flex;
-  gap: 8px;
-}
-
-
+/* Chat messages */
 .chat-message {
   max-width: 70%;
   padding: 10px 14px;
   border-radius: 20px;
   font-size: 14px;
   line-height: 1.4;
+  word-break: break-word;
 }
 
-.chat-message.bot {
-  align-self: flex-start;
-  background: #f0f0f0;
-  color: #333;
-}
-
+/* Client messages -> right */
 .chat-message.user {
   align-self: flex-end;
   background: #0d5bb4;
   color: #fff;
 }
+
+/* BDTeam messages -> left */
+.chat-message.bdteam {
+  align-self: flex-start;
+  background: #f0f0f0;
+  color: #333;
+}
+
+/* Client message -> right end */
+.chat-message.client {
+  align-self: flex-end;          /* pushes message to right */
+  background-color: #0d5bb4;     /* blue background */
+  color: #fff;                   /* white text */
+  padding: 10px 14px;
+  border-radius: 20px;
+  max-width: 70%;
+  font-size: 14px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
 
 /* Input section */
 .chat-input {
@@ -162,6 +160,7 @@
   background: #3a6ee8;
 }
 
+/* Chat ended message */
 .chat-ended-msg {
   margin-top: 15px;
   padding: 14px 18px;
@@ -178,7 +177,6 @@
   color: #d9534f;
   font-weight: 600;
 }
-
 
 /* Right side actions */
 .support-actions {
@@ -210,38 +208,7 @@
   font-weight: 500;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .online-support-container {
-    flex-direction: column;
-    align-items: center;
-    padding: 30px 20px;
-  }
-
-  .online-breadcrumb-wrapper {
-    position: relative;
-    top: 0;
-    left: 0;
-    margin-bottom: 20px;
-    align-self: flex-start;
-  }
-
-  .chat-box {
-    width: 100%;
-    max-width: 400px;
-    margin-top: 0;
-  }
-
-  .support-actions {
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    margin: 30px 0 0;
-    padding-right: 0;
-  }
-}
-
+/* Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -288,59 +255,55 @@
   font-size: 13px;
 }
 
-.chat-message.bdteam {
-align-self: flex-start;
-    background: #f0f0f0;
-    color: #333;
-}
-
-.bd-status {
-  font-weight: bold;
-  padding: 3px 8px;
-  border-radius: 5px;
-  color: #fff;
-}
-
-.bd-status.open {
-  background-color: green;
-}
-
-.bd-status.closed {
-  background-color: red;
-}
-
-.bd-end-chat-btn {
-  background-color: #ff4d4d;
-  border: none;
-  color: #fff;
-  padding: 5px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.bd-end-chat-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
+/* Ticket status */
 .ticket-status {
   font-weight: 600;
   padding: 4px 10px;
-  border-radius: 999px; /* pill shape */
+  border-radius: 999px;
   font-size: 12px;
   text-transform: uppercase;
 }
 
-/* Open status in green */
 .ticket-status.open {
-  background-color: #ecfdf5; /* light green background */
-  color: #16a34a;           /* green text */
+  background-color: #ecfdf5;
+  color: #16a34a;
   border: 1px solid #16a34a;
 }
 
-/* Closed status in red */
 .ticket-status.closed {
-  background-color: #fef2f2; /* light red background */
-  color: #dc2626;            /* red text */
+  background-color: #fef2f2;
+  color: #dc2626;
   border: 1px solid #dc2626;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .online-support-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+  }
+
+  .online-breadcrumb-wrapper {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin-bottom: 20px;
+    align-self: flex-start;
+  }
+
+  .chat-box {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 0;
+  }
+
+  .support-actions {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin: 30px 0 0;
+    padding-right: 0;
+  }
 }

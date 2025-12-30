@@ -15,23 +15,47 @@ export default function SupportPage() {
       .catch(err => console.error(err));
   }, []);
 
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   return (
     <div className="bd-online-container">
-     <div className="bd-support-breadcrumb-wrapper">
-             <BreadCrumbs />
-           </div>
+      <div className="bd-support-breadcrumb-wrapper">
+        <BreadCrumbs />
+      </div>
+
       <h2 className="bd-title">Client Tickets</h2>
 
       <div className="bd-online-list">
-        {tickets.map(t => (
+        {tickets.map((t) => (
           <div
             key={t.id}
             className="bd-online-card"
             onClick={() => navigate(`/bd/support/${t.id}`)}
           >
-            <h3>{t.subject}</h3>
-            <p><strong>Client:</strong> {t.created_by_name}</p>
-            <p><strong>Status:</strong> {t.status}</p>
+            <span className="bd-ticket-date">
+              {formatDate(t.created_at)}
+            </span>
+
+            <h3 className="bd-ticket-subject">{t.ticket_id}</h3>
+
+            <p>
+              <strong>Client:</strong> {t.created_by_name}
+            </p>
+
+            <p>
+              <strong>Status: </strong>
+              <span className={`bd-ticket-status ${t.status === "OPEN" ? "open" : "closed"}`}>
+                {t.status}
+              </span>
+            </p>
           </div>
         ))}
       </div>
