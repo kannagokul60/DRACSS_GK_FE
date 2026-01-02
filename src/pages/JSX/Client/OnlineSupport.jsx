@@ -199,7 +199,9 @@ export default function ClientOnlineSupport() {
 
   return (
     <div className="online-support-container">
-      <BreadCrumbs />
+      <div className="online-breadcrumbs-wrapper">
+        <BreadCrumbs />
+      </div>
 
       <div className="chat-box">
         <div className="chat-header">
@@ -214,7 +216,10 @@ export default function ClientOnlineSupport() {
 
         {/* RAISE TICKET */}
         {(!ticket || ticket.status === "CLOSED") && !showModal && (
-          <button className="raise-ticket-btn" onClick={() => setShowModal(true)}>
+          <button
+            className="raise-ticket-btn"
+            onClick={() => setShowModal(true)}
+          >
             Raise Ticket
           </button>
         )}
@@ -225,7 +230,10 @@ export default function ClientOnlineSupport() {
             <div className="chat-body">
               {messages.map((msg) => (
                 <div key={msg.id} className={`chat-message ${msg.sender_type}`}>
-                  <strong>{msg.sender_type === "client" ? "You" : msg.created_by_name}:</strong>{" "}
+                  <strong>
+                    {msg.sender_type === "client" ? "You" : msg.created_by_name}
+                    :
+                  </strong>{" "}
                   {msg.message}
                 </div>
               ))}
@@ -251,7 +259,8 @@ export default function ClientOnlineSupport() {
         {/* CHAT ENDED */}
         {ticket && ticket.status === "CLOSED" && (
           <div className="chat-ended-msg">
-            Chat has ended by BD team. If you want to report a new issue, raise a new ticket.
+            <p>Chat has ended by BD team. If you want to report a new issue, raise
+            a new ticket.</p>
           </div>
         )}
       </div>
