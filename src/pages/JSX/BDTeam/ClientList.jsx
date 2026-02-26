@@ -165,194 +165,215 @@ const handleMoveToSold = (client) => {
   };
 
   return (
-    <div className="client-list-container">
-      <div className="clientlist-breadcrumb-wrapper">
-        <BreadCrumbs />
-      </div>
+   <div className="client-list-container">
+  <div className="clientlist-breadcrumb-wrapper">
+    <BreadCrumbs />
+  </div>
 
-      {/* Header with Add Client button */}
-      <div className="client-list-header">
-        <h2 className="client-list-title">Client Directory</h2>
+  {/* Header */}
+  <div className="client-list-header">
+    <h2 className="client-list-title">Client Directory</h2>
+    <button
+      className="add-client-btn"
+      onClick={() => setShowAddModal(true)}
+    >
+      <FaPlus className="add-client-icon" />
+      <span className="add-client-text">New Client</span>
+    </button>
+  </div>
 
-        <button
-          className="add-client-btn"
-          onClick={() => setShowAddModal(true)}
-        >
-          <FaPlus className="add-client-icon" />
-          <span className="add-client-text">New Client</span>
-        </button>
-      </div>
+  {loading && <p>Loading clients...</p>}
+  {loadError && <p className="error-text">{loadError}</p>}
 
-      {loading && <p>Loading clients...</p>}
-      {loadError && <p className="error-text">{loadError}</p>}
-
-      {/* Clients grjid */}
-      <div className="client-card-grid">
+  {/* Client Table */}
+  <div className="client-table-wrapper">
+    <table className="client-table">
+      <thead>
+        <tr>
+          <th>S.no</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>ID Proof</th>
+          <th>Joined On</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
         {!loading &&
-          clients.map((c) => (
-            <div
-              key={c.id}
-              className="client-card"
-              onClick={() => handleViewDetails(c)}
-            >
-              <span className={`status-badge ${c.status?.toLowerCase()}`}>
-                {c.status}
-              </span>
-
-              <h3 className="client-name">{c.name}</h3>
-
-              <div className="client-info-line">
-                <img src={phoneImg} alt="" className="info-icon" />
-                <span>{c.phone}</span>
-              </div>
-
-              <p>
-                <FaEnvelope className="info-icon" /> {c.email}
-              </p>
-
-              <p>
-                <FaHome className="info-icon" /> {c.location}
-              </p>
-
-              <FaInfoCircle
-                className="info-popup-icon"
-                onClick={(e) => handleInfoClick(c, e)}
-              />
-            </div>
-          ))}
-      </div>
-
-      {/* Client Details Popup */}
-      {selectedClient && (
-        <div className="popup-overlay" onClick={() => setSelectedClient(null)}>
-          <div className="popup-card" onClick={(e) => e.stopPropagation()}>
-            <div className="popup-header">
-              <h3>Client Details</h3>
-              <button
-                className="close-btn"
-                onClick={() => setSelectedClient(null)}
+          clients.map((c, index) => (
+            <tr key={c.id}>
+              <td>{index + 1}</td>
+              <td
+                className="client-name-link"
+                onClick={() => handleViewDetails(c)}
+                style={{ cursor: "pointer", color: "#1565c0" }}
               >
-                ✖
-              </button>
-            </div>
-
-            <div className="popup-image-wrapper">
-              <img src={selectedClient.photo} className="popup-profile-img" />
-            </div>
-
-            <div className="popup-body">
-              <p>
-                <strong>Bank Name:</strong> {selectedClient.bankName}
-              </p>
-              <p>
-                <strong>Account Number:</strong> {selectedClient.accountNumber}
-              </p>
-              <p>
-                <strong>IFSC Code:</strong> {selectedClient.ifscCode}
-              </p>
-              <p>
-                <strong>Location:</strong> {selectedClient.location}
-              </p>
-              <p>
-                <strong>ID Proof:</strong> {selectedClient.idProof}
-              </p>
-              <p>
-                <strong>Joined On:</strong>{" "}
-                {formatShortDate(selectedClient.createdAt)}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Add Client Modal */}
-      {showAddModal && (
-        <div className="popup-overlay" onClick={() => setShowAddModal(false)}>
-          <div className="popup-card" onClick={(e) => e.stopPropagation()}>
-            {/* Header */}
-            <div className="popup-header">
-              <h3>Add New Client</h3>
-              <button
-                className="close-btn"
-                onClick={() => setShowAddModal(false)}
-              >
-                ✖
-              </button>
-            </div>
-            
-            <form className="popup-body" onSubmit={handleAddClientSubmit}>
-              <input
-                type="text"
-                name="name"
-                placeholder="Client Name"
-                onChange={handleNewClientChange}
-              />
-              <input
-                type="text"
-                name="phone"
-                placeholder="Phone"
-                onChange={handleNewClientChange}
-              />
-              <input
-                type="text"
-                name="email"
-                placeholder="Email"
-                onChange={handleNewClientChange}
-              />
-              <input
-                type="text"
-                name="location"
-                placeholder="Location"
-                onChange={handleNewClientChange}
-              />
-              <input
-                type="text"
-                name="idProof"
-                placeholder="ID Proof"
-                onChange={handleNewClientChange}
-              />
-              <input
-                type="text"
-                name="bankName"
-                placeholder="Bank Name"
-                onChange={handleNewClientChange}
-              />
-              <input
-                type="text"
-                name="accountNumber"
-                placeholder="Account Number"
-                onChange={handleNewClientChange}
-              />
-              <input
-                type="text"
-                name="ifscCode"
-                placeholder="IFSC Code"
-                onChange={handleNewClientChange}
-              />
-              <input
-                type="text"
-                name="branchName"
-                placeholder="Branch Name"
-                onChange={handleNewClientChange}
-              />
-
-              {/* Footer Buttons */}
-              <div className="form-actions">
-                <button type="submit" className="save-btn">
-                  Save
-                </button>
+                {c.name}
+              </td>
+              <td>{c.phone}</td>
+              <td>{c.email}</td>
+              <td>{c.location}</td>
+              <td>
+                <span className={`status-badge ${c.status?.toLowerCase()}`}>
+                  {c.status}
+                </span>
+              </td>
+              <td>{c.idProof}</td>
+              <td>{formatShortDate(c.createdAt)}</td>
+              <td>
                 <button
-                  type="button"
-                  className="cancel-btn"
-                  onClick={() => setShowAddModal(false)}
+                  className="view-btn"
+                  onClick={(e) => handleInfoClick(c, e)}
                 >
-                  Cancel
+                  View
                 </button>
-              </div>
-            </form>
-          </div>
+              </td>
+            </tr>
+          ))}
+      </tbody>
+    </table>
+  </div>
+
+  {/* Client Details Popup */}
+  {selectedClient && (
+    <div className="popup-overlay" onClick={() => setSelectedClient(null)}>
+      <div className="popup-card" onClick={(e) => e.stopPropagation()}>
+        <div className="popup-header">
+          <h3>Client Details</h3>
+          <button
+            className="close-btn"
+            onClick={() => setSelectedClient(null)}
+          >
+            ✖
+          </button>
         </div>
-      )}
+
+        <div className="popup-image-wrapper">
+          <img src={selectedClient.photo} className="popup-profile-img" />
+        </div>
+
+        <div className="popup-body">
+          <p>
+            <strong>Bank Name:</strong> {selectedClient.bankName}
+          </p>
+          <p>
+            <strong>Account Number:</strong> {selectedClient.accountNumber}
+          </p>
+          <p>
+            <strong>IFSC Code:</strong> {selectedClient.ifscCode}
+          </p>
+          <p>
+            <strong>Branch Name:</strong> {selectedClient.branchName}
+          </p>
+          <p>
+            <strong>Location:</strong> {selectedClient.location}
+          </p>
+          <p>
+            <strong>ID Proof:</strong> {selectedClient.idProof}
+          </p>
+          <p>
+            <strong>Email:</strong> {selectedClient.email}
+          </p>
+          <p>
+            <strong>Phone:</strong> {selectedClient.phone}
+          </p>
+          <p>
+            <strong>Joined On:</strong> {formatShortDate(selectedClient.createdAt)}
+          </p>
+        </div>
+      </div>
     </div>
+  )}
+
+  {/* Add Client Modal */}
+  {showAddModal && (
+    <div className="popup-overlay" onClick={() => setShowAddModal(false)}>
+      <div className="popup-card" onClick={(e) => e.stopPropagation()}>
+        <div className="popup-header">
+          <h3>Add New Client</h3>
+          <button
+            className="close-btn"
+            onClick={() => setShowAddModal(false)}
+          >
+            ✖
+          </button>
+        </div>
+
+        <form className="popup-body" onSubmit={handleAddClientSubmit}>
+          <input
+            type="text"
+            name="name"
+            placeholder="Client Name"
+            onChange={handleNewClientChange}
+          />
+          <input
+            type="text"
+            name="phone"
+            placeholder="Phone"
+            onChange={handleNewClientChange}
+          />
+          <input
+            type="text"
+            name="email"
+            placeholder="Email"
+            onChange={handleNewClientChange}
+          />
+          <input
+            type="text"
+            name="location"
+            placeholder="Location"
+            onChange={handleNewClientChange}
+          />
+          <input
+            type="text"
+            name="idProof"
+            placeholder="ID Proof"
+            onChange={handleNewClientChange}
+          />
+          <input
+            type="text"
+            name="bankName"
+            placeholder="Bank Name"
+            onChange={handleNewClientChange}
+          />
+          <input
+            type="text"
+            name="accountNumber"
+            placeholder="Account Number"
+            onChange={handleNewClientChange}
+          />
+          <input
+            type="text"
+            name="ifscCode"
+            placeholder="IFSC Code"
+            onChange={handleNewClientChange}
+          />
+          <input
+            type="text"
+            name="branchName"
+            placeholder="Branch Name"
+            onChange={handleNewClientChange}
+          />
+
+          <div className="form-actions">
+            <button type="submit" className="save-btn">
+              Save
+            </button>
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={() => setShowAddModal(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )}
+</div>
   );
 }

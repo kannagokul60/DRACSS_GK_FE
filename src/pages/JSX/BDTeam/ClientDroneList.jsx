@@ -1,118 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import drone1 from "../../../assets/drone_image.png";
+import axios from "axios";
 import BreadCrumbs from "../BreadCrumbs";
 import "../../CSS/BDteam/clientDroneList.css";
+import config from "../../../config";
 
 export default function ClientDroneList() {
   const location = useLocation();
   const client = location.state;
 
-  const [showPopup, setShowPopup] = useState(false);
+  const [drones, setDrones] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedDrone, setSelectedDrone] = useState(null);
-  const [selectedUnit, setSelectedUnit] = useState(0);
-  const [formData, setFormData] = useState({
-    serial: "",
-    model: "",
-    flightController: "",
-    battery: "",
-    firmware: "",
-    remarks: "",
-  });
 
-  // Dummy drones data
-  const drones = [
-    {
-      id: 1,
-      name: "Phantom 4 Pro",
-      count: 2,
-      image: "https://www.bhphotovideo.com/images/fb/dji_cp_pt_00000244_01_phantom_4_pro_version_1406921.jpg",
-      units: [
-        {
-          serial: "P4P-001",
-          model: "Phantom 4 Pro",
-          flightController: "DJI N3",
-          battery: "5000 mAh",
-          firmware: "v1.2.3",
-          remarks: "No issues",
-        },
-        {
-          serial: "P4P-002",
-          model: "Phantom 4 Pro",
-          flightController: "DJI N3",
-          battery: "4900 mAh",
-          firmware: "v1.2.3",
-          remarks: "Minor scratches",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "DJI Mavic 3",
-      count: 3,
-      image: "https://cdn.shopify.com/s/files/1/1398/4647/files/DJI-Mavic-3-featured4-1300x750_1.jpg?v=1637060796",
-      units: [
-        {
-          serial: "M3-001",
-          model: "Mavic 3",
-          flightController: "DJI C2",
-          battery: "4500 mAh",
-          firmware: "v2.0.1",
-          remarks: "Newly purchased",
-        },
-        {
-          serial: "M3-002",
-          model: "Mavic 3",
-          flightController: "DJI C2",
-          battery: "4400 mAh",
-          firmware: "v2.0.1",
-          remarks: "Minor damage on prop",
-        },
-        {
-          serial: "M3-003",
-          model: "Mavic 3",
-          flightController: "DJI C2",
-          battery: "4300 mAh",
-          firmware: "v2.0.1",
-          remarks: "Battery replacement required",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "Autel EVO II",
-      count: 1,
-      image: "https://cdn.mos.cms.futurecdn.net/okaQysb5mN2Ck6uGiEKuhC.jpg",
-      units: [
-        {
-          serial: "EVO-001",
-          model: "EVO II",
-          flightController: "Autel AC",
-          battery: "6000 mAh",
-          firmware: "v3.1.0",
-          remarks: "Good condition",
-        },
-      ],
-    },
-  ];
+  useEffect(() => {
+    const fetchDrones = async () => {
+      try {
+        const res = await axios.get(`${config.baseURL}/drone_registration/`);
 
-  const handleCardClick = (drone, unitIndex = 0) => {
-    setSelectedDrone(drone);
-    setSelectedUnit(unitIndex);
-    setFormData({ ...drone.units[unitIndex] });
-    setShowPopup(true);
-  };
+        const allDrones = res.data;
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+        // Filter drones where serial matches client.drones array
+        const matchedDrones = allDrones.filter((drone) =>
+          client?.drones?.includes(drone.drone_serial_number),
+        );
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Saved Data:", formData);
-    setShowPopup(false);
-  };
+        console.log("Matched Drones:", matchedDrones);
+
+        setDrones(matchedDrones);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching drones:", error);
+        setLoading(false);
+      }
+    };
+
+    if (client?.drones?.length) {
+      fetchDrones();
+    } else {
+      setLoading(false);
+    }
+  }, [client]);
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="client-drone-container">
@@ -121,127 +51,200 @@ export default function ClientDroneList() {
       </div>
 
       <div className="client-drone-header">
-        <h2>{client?.name} - Purchased Drones </h2>
+        <h2>{client?.name} - Purchased Drones</h2>
       </div>
 
-      {/* Drone List */}
       <div className="drone-list">
-        {drones.map((d) => (
-          <div className="drone-card">
-            {/* Quantity Badge on top-right */}
-            <div
-              className="drone-qty-badge"
-              onClick={() => handleCardClick(d, 0)} // open popup for first unit
-            >
-              {d.count} Units
-            </div>
+        {drones.length === 0 && <p>No drones found for this client.</p>}
 
-            <img src={d.image} alt={d.name} className="drone-image" />
+        {drones.map((drone) => (
+          <div
+            className="drone-card"
+            key={drone.id}
+            onClick={() => setSelectedDrone(drone)}
+          >
+            {" "}
+            {/* Top Right Date */}
+            <div className="drone-created-date">
+              {new Date(drone.created_at).toLocaleDateString()}
+            </div>
+            {/* Drone Image */}
+            {drone.attachment && (
+              <img
+                src={drone.attachment}
+                alt={drone.model_name}
+                className="drone-image"
+              />
+            )}
             <div className="drone-info">
-              <h3>{d.name}</h3>
-            </div>
+              <h3>{drone.model_name}</h3>
 
-            {/* View Details Button */}
-            <button
-              className="view-details-btn"
-              onClick={() => handleCardClick(d, 0)} // same as badge
-            >
-              View Details
-            </button>
+              <p>
+                <strong>Serial:</strong> {drone.drone_serial_number}
+              </p>
+              <p>
+                <strong>UIN:</strong> {drone.uin_number}
+              </p>
+            </div>
           </div>
         ))}
       </div>
+      {selectedDrone && (
+        <div className="popup-overlay" onClick={() => setSelectedDrone(null)}>
+          <div
+            className="client-popup-box"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="client-popup-header">
+              <h3 className="client-popup-title">{selectedDrone.model_name}</h3>
 
-      {/* Popup Form */}
-      {showPopup && selectedDrone && (
-        <div className="popup-overlay">
-          <div className="client-popup-content">
-            <div className="popup-header">
-              <h3>{selectedDrone.name}</h3>
-
-              {selectedDrone.units.length > 1 && (
-                <div className="unit-dropdown-wrapper">
-                  <select
-                    value={selectedUnit}
-                    onChange={(e) => {
-                      const index = Number(e.target.value);
-                      setSelectedUnit(index);
-                      setFormData({ ...selectedDrone.units[index] });
-                    }}
-                    className="unit-dropdown-popup"
-                  >
-                    {selectedDrone.units.map((_, idx) => (
-                      <option key={idx} value={idx}>
-                        Unit {idx + 1}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
-              {/* <button className="close-btn" onClick={() => setShowPopup(false)}>
-                ✕
-              </button> */}
+              <span
+                className="client-popup-close"
+                onClick={() => setSelectedDrone(null)}
+              >
+                ×
+              </span>
             </div>
+            {/* FORM BODY */}
+            <div className="client-popup-form">
+              <div className="client-popup-row">
+                <div className="client-input-group">
+                  <label>Serial Number</label>
+                  <input
+                    type="text"
+                    value={selectedDrone.drone_serial_number || "-"}
+                    disabled
+                    className="client-readonly-input"
+                  />
+                </div>
 
-            <form className="popup-body" onSubmit={handleSubmit}>
-              <label>Serial Number</label>
-              <input
-                type="text"
-                name="serial"
-                value={formData.serial}
-                onChange={handleInputChange}
-                required
-              />
-
-              <label>Model</label>
-              <input
-                type="text"
-                name="model"
-                value={formData.model}
-                onChange={handleInputChange}
-                required
-              />
-
-              <label>Flight Controller</label>
-              <input
-                type="text"
-                name="flightController"
-                value={formData.flightController}
-                onChange={handleInputChange}
-                required
-              />
-
-              <label>Battery</label>
-              <input
-                type="text"
-                name="battery"
-                value={formData.battery}
-                onChange={handleInputChange}
-              />
-
-              <label>Firmware Version</label>
-              <input
-                type="text"
-                name="firmware"
-                value={formData.firmware}
-                onChange={handleInputChange}
-              />
-
-              <label>Remarks</label>
-              <textarea
-                rows="3"
-                name="remarks"
-                value={formData.remarks}
-                onChange={handleInputChange}
-              ></textarea>
-
-              <div style={{ marginTop: "15px", textAlign: "right" }}>
-                <button type="submit" className="view-details-btn">
-                  Cancel
-                </button>
+                <div className="client-input-group">
+                  <label>UIN Number</label>
+                  <input
+                    type="text"
+                    value={selectedDrone.uin_number || "-"}
+                    disabled
+                    className="client-readonly-input"
+                  />
+                </div>
               </div>
-            </form>
+
+              <div className="client-popup-row">
+                <div className="client-input-group">
+                  <label>Drone Type</label>
+                  <input
+                    type="text"
+                    value={selectedDrone.drone_type || "-"}
+                    disabled
+                    className="client-readonly-input"
+                  />
+                </div>
+
+                <div className="client-input-group">
+                  <label>Manufacturer</label>
+                  <input
+                    type="text"
+                    value={selectedDrone.manufacturer || "-"}
+                    disabled
+                    className="client-readonly-input"
+                  />
+                </div>
+              </div>
+
+              <div className="client-popup-row">
+                <div className="client-input-group">
+                  <label>Flight Controller</label>
+                  <input
+                    type="text"
+                    value={selectedDrone.flight_controller_serial_number || "-"}
+                    disabled
+                    className="client-readonly-input"
+                  />
+                </div>
+
+                <div className="client-input-group">
+                  <label>Remote Controller</label>
+                  <input
+                    type="text"
+                    value={selectedDrone.remote_controller || "-"}
+                    disabled
+                    className="client-readonly-input"
+                  />
+                </div>
+              </div>
+
+              <div className="client-popup-row">
+                <div className="client-input-group">
+                  <label>Battery Charger</label>
+                  <input
+                    type="text"
+                    value={selectedDrone.battery_charger_serial_number || "-"}
+                    disabled
+                    className="client-readonly-input"
+                  />
+                </div>
+
+                <div className="client-input-group">
+                  <label>Battery 1</label>
+                  <input
+                    type="text"
+                    value={selectedDrone.battery_serial_number_1 || "-"}
+                    disabled
+                    className="client-readonly-input"
+                  />
+                </div>
+              </div>
+
+              <div className="client-popup-row">
+                <div className="client-input-group">
+                  <label>Battery 2</label>
+                  <input
+                    type="text"
+                    value={selectedDrone.battery_serial_number_2 || "-"}
+                    disabled
+                    className="client-readonly-input"
+                  />
+                </div>
+
+                <div className="client-input-group">
+                  <label>Registered</label>
+                  <input
+                    type="text"
+                    value={selectedDrone.registered ? "Yes" : "No"}
+                    disabled
+                    className="client-readonly-input"
+                  />
+                </div>
+              </div>
+
+              <div className="client-popup-row">
+                <div className="client-input-group client-full-width">
+                  <label>Remarks</label>
+                  <input
+                    type="text"
+                    value={selectedDrone.remarks || "-"}
+                    disabled
+                    className="client-readonly-input"
+                  />
+                </div>
+              </div>
+
+              <div className="client-popup-row">
+                <div className="client-input-group client-full-width">
+                  <label>Created At</label>
+                  <input
+                    type="text"
+                    value={
+                      selectedDrone.created_at
+                        ? new Date(selectedDrone.created_at).toLocaleString()
+                        : "-"
+                    }
+                    disabled
+                    className="client-readonly-input"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
