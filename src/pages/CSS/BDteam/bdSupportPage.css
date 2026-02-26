@@ -1,3 +1,4 @@
+/* ===== FULL PAGE SUPPORT ===== */
 .bd-online-container {
   padding: 45px 40px;
   width: 100%;
@@ -10,94 +11,121 @@
   overflow-x: hidden;
 }
 
-.bd-online-container .bd-support-breadcrumb-wrapper {
-  position: absolute;
-  top: 0.5rem;
-  left: 0.2rem;
-  z-index: 10;
+/* Breadcrumbs */
+.bd-support-breadcrumb-wrapper {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
 }
 
+/* Page Title */
 .bd-title {
-  text-align: center;
-  font-size: 2rem;
+  font-size: 28px;
   font-weight: 700;
-  color: #1565c0;
-  margin-bottom: 30px;
-  text-shadow: 0 1px 3px rgba(21, 101, 192, 0.3);
+  color: #333;
+  margin-bottom: 25px;
 }
 
+/* Card List */
 .bd-online-list {
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 14px;
   flex-wrap: wrap;
+  gap: 20px;
 }
 
-.bd-online-card {
-  background: #ffffff;
+/* Base Card */
+.bd-card {
+  width: 320px;        /* FIXED WIDTH */
+  min-width: 320px;
+  max-width: 320px;
+
+  padding: 25px 20px;
   border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   cursor: pointer;
-  transition: transform 0.2s ease;
-  min-width: 280px;
-  max-width: 360px;
-  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  height: 160px;
+  background-color: #fff;
+  color: #000;
 }
 
-.bd-ticket-date {
-  position: absolute;
-  top: 6px;
-  right: 1px;
-  font-size: 10px;
+
+.bd-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Card Titles */
+.bd-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+/* Count wrapper */
+.bd-count-wrapper {
+  margin-top: auto;
+  display: flex;
+  gap: 12px;
+}
+
+.open-count,
+.closed-count {
+  color: #555; /* GRAY TEXT */
   font-weight: 600;
-  color: #6b7280;
-  background: none;
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-.bd-ticket-date:hover {
-  background: #f3f4f6;
-}
-
-.bd-online-card:hover {
-  transform: translateY(-3px);
-}
-
-.bd-online-card h3 {
-  font-size: 16px;
-  margin-bottom: 6px;
-}
-.bd-online-card p {
+  background-color: #e0e0e0; /* LIGHT GRAY BACKGROUND */
+  padding: 5px 12px;
+  border-radius: 20px;
   font-size: 14px;
-  color: #6b7280;
-  margin-top: 5px;
 }
 
-.bd-status {
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: capitalize;
-
+/* UNIQUE CARD STYLES - subtle border or shadow if needed */
+.online-card {
+  border-left: 5px solid #4facfe; /* blue accent */
 }
 
-.bd-status.In-Progress {
-  background: #fefce8;
-  color: #ca8a04;
+.onsite-card {
+  border-left: 5px solid #4facfe; /* blue accent */
 }
-.bd-ticket-status.open {
-  background: none;
-  color: #16a34a;
-  font-size: 12px;
-  font-weight: bold ;
+
+.return-card {
+  border-left: 5px solid #4facfe; /* blue accent */
 }
-.bd-ticket-status.closed {
-  background: none;
-  color: #dc2626;
-    font-size: 12px;
-  font-weight: bold ;
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .bd-online-list {
+    justify-content: center;
+  }
+
+  .bd-card {
+    flex: 1 1 80%;
+    height: auto;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 500px) {
+  .bd-card {
+    flex: 1 1 100%;
+    padding: 18px;
+  }
+
+  .bd-title {
+    font-size: 24px;
+  }
+
+  .bd-card h3 {
+    font-size: 18px;
+  }
+
+  .bd-count-wrapper {
+    flex-direction: column;
+    gap: 8px;
+  }
 }

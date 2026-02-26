@@ -1,8 +1,8 @@
 .orderform-page {
   width: 100%;
   height: calc(100vh - 90px);
-  margin: 0 auto; /* center the form */
-  padding: 3rem;
+  margin: 0 auto;
+  padding: 1.5rem;
   background: #f7f7f7;
   border-radius: 14px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -10,6 +10,10 @@
   transition: all 0.3s ease;
   position: relative;
   box-sizing: border-box;
+
+  display: flex;            /* ADD THIS */
+  flex-direction: column;   /* ADD THIS */
+  overflow: hidden;         /* OPTIONAL (clean scroll) */
 }
 
 .orderform-header-wrapper {
@@ -57,7 +61,7 @@
 
 .order-table-wrapper {
   width: 100%;
-  max-height: 650px; 
+  height: auto;
   overflow-x: auto;
   overflow-y: auto;
   background: #ffffff;

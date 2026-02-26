@@ -1,113 +1,127 @@
-/* ===== CLIENT LIST SECTION ===== */
-.client-list-section {
-  text-align: center;
-  padding: 40px;
-  animation: fadeIn 0.5s ease-in-out;
+/* ===========================
+   MAIN CONTAINER
+=========================== */
+
+.bd-drone-container {
+  padding: 45px 40px;
+  width: 100%;
+  height: calc(100vh - 90px);
+  background: #f7f7f7;
+  border-radius: 14px;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 6px 18px rgba(0,0,0,0.15);
+
+  display: flex;
+  flex-direction: column;
 }
+
+/* ================= HEADING ================= */
 
 .client-list-title {
-text-align: center;
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1565c0;
-    margin-bottom: 30px;
-    text-shadow: 0 1px 3px rgba(21, 101, 192, 0.3);
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1565c0;
+  margin-bottom: 25px;
+  text-shadow: 0 1px 3px rgba(21,101,192,0.3);
 }
 
-/* ===== CLIENT GRID ===== */
-.client-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-  gap: 25px;
-  justify-items: start; /* <-- change from center to start */
+/* ================= TABLE DESIGN ================= */
+
+.sold-drone-table-wrapper {
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: auto;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
+
+.sold-drone-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Sticky Header */
+
+.sold-drone-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* Cells */
+
+.sold-drone-table th,
+.sold-drone-table td {
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.sold-drone-table th {
+  background: #1565c0;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.sold-drone-table td {
+  background: #fafafa;
+}
+
+.sold-drone-table tbody tr:hover td {
+  background: #e3f2fd;
+}
+
+/* ================= BUTTONS ================= */
+
+.view-btn {
+  background: #42a5f5;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.view-btn:hover {
+  background: #1e88e5;
+  transform: translateY(-1px);
+}
+
+/* ================= NO DATA ================= */
 
 .no-data-message {
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #666;
   padding: 40px 0;
   font-weight: 600;
   animation: fadeIn 0.4s ease;
 }
 
+/* ================= POPUP OVERLAY ================= */
 
-
-.client-card {
-  position: relative; /* required for info icon positioning */
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  width: 90%;
-  max-width: 400px;
-}
-
-.client-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
-}
-
-/* ===== CLIENT CARD CONTENT ===== */
-.client-logo {
-  width: 70px;
-  height: 70px;
-  object-fit: contain;
-  margin-bottom: 15px;
-}
-
-.client-name {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #1a237e;
-  margin-bottom: 5px;
-}
-
-.client-location {
-  font-size: 0.9rem;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-/* Optional small serial/uin */
-.client-serial,
-.client-uin {
-  font-size: 0.8rem;
-  color: #444;
-  margin: 2px 0;
-}
-
-.bd-info-icon {
-  font-size: 22px;
-  color: #1565c0;
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-  cursor: pointer;
-  transition: color 0.3s ease, transform 0.2s ease;
-}
-
-.bd-info-icon:hover {
-  color: #0d47a1;
-  transform: scale(1.2);
-}
-
-/* ===== POPUP OVERLAY ===== */
 .client-popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.55);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   z-index: 1000;
 }
 
-/* ===== POPUP BOX ===== */
+/* ================= POPUP BOX ================= */
+
 .client-popup {
   background: #fff;
   border-radius: 12px;
@@ -131,20 +145,28 @@ text-align: center;
   margin: 0;
 }
 
-.client-popup .close-btn {
-  background: none;
+/* Close button */
+
+.client-popup-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
   border: none;
-  font-size: 22px;
+  font-size: 15px;
+  font-weight: bold;
   cursor: pointer;
-  color: #1565c0 !important;
+  color: #1565c0;
+  transition: 0.3s;
 }
 
-.client-popup .close-btn:hover{
-  color: #f44336 !important;
+.client-popup-close-btn:hover {
+  color: #f44336;
+  transform: rotate(90deg);
 }
-.close-btn:hover
 
-/* ===== POPUP BODY ===== */
+/* ================= POPUP BODY ================= */
+
 .popup-body {
   margin-top: 15px;
   color: #333;
@@ -160,28 +182,35 @@ text-align: center;
   margin: 0 auto 15px;
 }
 
+/* ================= SCROLLBAR ================= */
+
+.sold-drone-table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.sold-drone-table-wrapper::-webkit-scrollbar-thumb {
+  background: #90caf9;
+  border-radius: 4px;
+}
+
+/* ================= ANIMATIONS ================= */
+
 @keyframes popupFade {
   from { opacity: 0; transform: scale(0.9); }
   to { opacity: 1; transform: scale(1); }
 }
 
-/* ===== ANIMATION ===== */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== RESPONSIVE ===== */
+/* ================= RESPONSIVE ================= */
+
 @media (max-width: 768px) {
+
   .client-list-title {
     font-size: 1.6rem;
   }
 
-  .client-card {
-    width: 100%;
-  }
-
-  .info-icon {
-    font-size: 20px;
-  }
 }

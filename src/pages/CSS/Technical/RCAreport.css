@@ -1,0 +1,535 @@
+/* PAGE */
+.rca-page {
+  width: 100%;
+  height: calc(100vh - 90px);
+  margin: 0 auto;
+  padding: 1.5rem;
+  background: #f7f7f7;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s ease;
+}
+
+/* HEADER */
+.rca-header {
+text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1565c0;
+    margin-bottom: 30px;
+    text-shadow: 0 1px 3px rgba(21, 101, 192, 0.3);
+}
+
+/* TAB WRAPPER */
+.rca-tab-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.rca-tab {
+  background: #e5e5e5;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.25s ease;
+}
+
+/* ACTIVE TAB */
+.rca-tab.active {
+  background: #1976d2;
+  color: white;
+}
+
+/* HOVER EFFECT */
+.rca-tab:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* MAIN CARD */
+.rca-card {
+  max-width: 1100px;
+  margin: auto;
+  background: white;
+  padding: 50px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+
+  overflow-x: auto; /* ⭐ add this */
+}
+
+/* TABLE STYLE LAYOUT */
+.rca-table-layout {
+  display: flex;
+  justify-content: space-between;
+  gap: 60px;
+  min-width: 900px;
+}
+
+/* COLUMN */
+.rca-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* ROW */
+.rca-row {
+  display: grid;
+  grid-template-columns: 180px 20px minmax(250px, 1fr);
+  align-items: start;
+}
+
+.rca-row input {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #eaeaea;
+}
+
+/* NEXT BUTTON */
+.rca-next-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 40px;
+}
+
+/* NAVIGATION BUTTONS - FIXED BOTTOM RIGHT */
+.rca-navigation {
+  position: fixed;
+  bottom: 30px;
+  right: 60px;
+  display: flex;
+  gap: 15px;
+  z-index: 1000;
+}
+
+/* NEXT BUTTON (if using view-btn class) */
+.view-rca-btn {
+  background: #1976d2;
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.view-rca-btn:hover {
+  opacity: 0.7;
+}
+
+/* BACK BUTTON */
+.cancel-rca-btn {
+  background: #e0e0e0;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.cancel-rca-btn:hover {
+  background: #bdbdbd;
+}
+
+.submit-rca-btn {
+  background: #1976d2;
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.submit-rca-btn:hover {
+  opacity: 0.7;
+}
+
+.rca-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #eaeaea;
+  resize: vertical;
+}
+
+/* checkbox layout */
+.rca-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rca-checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+/* ================================
+   RCA TABLE WRAPPER (same style)
+================================ */
+.rca-table-wrapper {
+  width: 100%;
+  height: auto;
+  overflow-x: auto;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* TABLE */
+.rca-main-table {
+  width: 100%;
+  min-width: 880px;
+  border-collapse: collapse;
+}
+
+/* STICKY HEADER */
+.rca-main-table thead {
+  position: sticky;
+  top: 0;
+  background: #f5f5f5;
+  z-index: 10;
+}
+
+/* HEADER */
+.rca-main-table th {
+  background: #1565c0;
+  color: #fff;
+  text-transform: uppercase;
+  padding: 15px 14px;
+  text-align: left;
+}
+
+/* ROW */
+.rca-main-table td {
+  padding: 16px 12px; /* compact spacing */
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+  white-space: nowrap;
+  background: #fafafa;
+}
+
+/* HOVER */
+.rca-main-table tr:hover td {
+  background-color: #e3f2fd;
+}
+
+.rca-main-table tr:hover {
+  background: #f0f7ff;
+}
+
+/* SCROLLBAR */
+.rca-table-wrapper::-webkit-scrollbar {
+  height: 8px;
+  width: 6px;
+}
+
+.rca-table-wrapper::-webkit-scrollbar-thumb {
+  background: #90caf9;
+  border-radius: 4px;
+}
+
+.rca-table-wrapper::-webkit-scrollbar-track {
+  background: #e3f2fd;
+}
+
+.rca-card.no-padding {
+  padding: 0;
+  max-width: 100%;
+}
+
+.rca-main-table input {
+  width: 100%;
+  padding: 6px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.condition-radio {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.condition-radio label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.vertical-layout {
+  flex-direction: column;
+  gap: 40px;
+}
+
+.full-width {
+  grid-template-columns: 220px 20px 1fr;
+}
+
+.rca-bottom-right {
+  margin-top: 40px;
+  width: 420px;
+  margin-left: auto; /* pushes to right */
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* MAIN TABLE CONTAINER */
+.rca-table-container {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+/* REMOVE double background from wrapper */
+.rca-table-wrapper {
+  border: none;
+  box-shadow: none;
+}
+
+/* Bottom attached section */
+.rca-bottom-section {
+  padding: 30px;
+  border-top: 1px solid #e0e0e0;
+  background: white;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .rca-table-layout {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
+
+/* ================================
+   TABLET RESPONSIVE
+================================ */
+@media (max-width: 1024px) {
+  .rca-card {
+    padding: 30px;
+  }
+
+  .rca-tab-wrapper {
+    gap: 10px;
+  }
+
+  .rca-navigation {
+    right: 20px;
+    bottom: 20px;
+  }
+}
+
+/* ================================
+   MOBILE RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  /* Page padding reduce */
+  .rca-page {
+    padding: 1rem;
+    height: auto;
+  }
+
+  /* Tabs smaller */
+  .rca-tab {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  /* Form layout stack */
+  .rca-table-layout {
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  /* Label grid adjust */
+  .rca-row {
+    grid-template-columns: 140px 15px 1fr;
+  }
+
+  /* Table scroll horizontal */
+  .rca-table-wrapper {
+    overflow-x: auto;
+  }
+
+  /* Reduce table spacing */
+  .rca-main-table th {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .rca-main-table td {
+    padding: 10px;
+    font-size: 13px;
+  }
+}
+
+/* ================================
+   SMALL MOBILE (iphone size)
+================================ */
+@media (max-width: 480px) {
+  .rca-header {
+    font-size: 18px;
+  }
+
+  /* Tabs wrap nicely */
+  .rca-tab-wrapper {
+    justify-content: flex-start;
+  }
+
+  .rca-tab {
+    flex: 1;
+    text-align: center;
+  }
+
+  /* Label stack vertically */
+  .rca-row {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  /* Hide colon alignment for small screen */
+  .rca-row span:nth-child(2) {
+    display: none;
+  }
+
+  /* Floating buttons full width */
+  .rca-navigation {
+    right: 10px;
+    left: 10px;
+    justify-content: space-between;
+  }
+
+  .view-rca-btn,
+  .cancel-rca-btn,
+  .submit-rca-btn {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+.rca-row input[type="file"] + div {
+  margin-top: 6px;
+}
+
+.rca-row a {
+  display: block;
+  font-size: 13px;
+}
+
+.rca-row div {
+  margin-bottom: 4px;
+}
+
+
+/* Saved File Styled Box */
+.saved-file-box {
+  margin-top: 8px;
+  background: #eaeaea;
+  padding: 8px 12px;
+  border-radius: 8px;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.saved-file-box a {
+  color: #1565c0;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.saved-file-box a:hover {
+  text-decoration: underline;
+}
+
+.saved-file-box {
+  margin-top: 8px;
+  background: #eaeaea;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.saved-file-box a {
+  color: #1565c0;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.delete-file-btn {
+  cursor: pointer;
+  color: #d32f2f;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.delete-file-btn:hover {
+  color: #b71c1c;
+}
+
+/* ================= FILE PREVIEW BOX ================= */
+
+.file-preview {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Each file row */
+.saved-file-box {
+  background: #f1f3f5;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  word-break: break-all;
+  max-width: 350px;
+}
+
+/* File link */
+.saved-file-box a {
+  text-decoration: none;
+  color: #1565c0;
+  font-weight: 600;
+  font-size: 13px;
+  font-family: inherit;   /* ✅ Use parent font */
+}
+
+/* Delete button */
+.delete-file-btn {
+  color: red;
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 8px;
+}

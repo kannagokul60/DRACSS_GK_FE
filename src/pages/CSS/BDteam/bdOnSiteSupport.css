@@ -1,0 +1,490 @@
+/* =========================================
+   MAIN CONTAINER
+========================================= */
+
+.bd-onsite-container {
+    flex: 1;
+    background: #f7f7f7;
+    font-family: "Times New Roman", Times, serif;
+    color: #0d2a4b;
+    padding: 1rem 2rem 2rem 2rem;
+    border-radius: 10px;
+    height: calc(100vh - 90px);
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+}
+
+/* =========================================
+   TOP HEADER
+========================================= */
+
+.bd-onsite-header-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.bd-onsite-breadcrumb {
+  justify-self: start;
+}
+
+.bd-onsite-title {
+  margin: 0;
+  font-size: 25px;
+  font-weight: 700;
+  color: #1565c0;
+  justify-self: center;
+}
+
+.bd-onsite-add-btn {
+  justify-self: end;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  background: #1565c0;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.bd-onsite-add-btn:hover {
+  background: #0d47a1;
+  transform: scale(1.05);
+}
+
+/* =========================================
+   TABLE CONTAINER
+========================================= */
+
+.bd-onsite-table-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 65vh;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+}
+
+/* Table */
+.bd-onsite-table {
+  width: 100%;
+  min-width: 1200px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* Header */
+.bd-onsite-table-head {
+  background: #1565c0;
+  color: white;
+}
+
+.bd-onsite-table th {
+  padding: 12px;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+/* =========================================
+   SCROLLABLE BODY
+========================================= */
+
+.bd-onsite-table-body {
+  max-height: 55vh;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.bd-onsite-table td {
+  padding: 12px;
+  font-size: 15px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  background: #fafafa;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: ellipsis;
+}
+
+.bd-onsite-row:hover td {
+  background: #e3f2fd;
+}
+
+/* =========================================
+   STATUS BADGES
+========================================= */
+
+.bd-onsite-status-badge {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  display: inline-block;
+}
+
+.bd-onsite-status-badge.pending {
+  background: #fff3cd;
+  color: #b8860b;
+}
+
+.bd-onsite-status-badge.assigned-to-tech {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.bd-onsite-status-badge.completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.view-button,
+.review-button {
+  padding: 6px 14px;
+  background: #1565c0;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.view-button:hover,
+.review-button:hover {
+  background: #0d47a1;
+}
+
+/* =========================================
+   NO DATA & LOADING
+========================================= */
+
+.bd-onsite-no-data,
+.bd-onsite-loading {
+  text-align: center;
+  padding: 30px;
+  font-weight: 600;
+  color: #999;
+  background: #fafafa;
+}
+
+/* =========================================
+   CUSTOM SCROLLBAR
+========================================= */
+
+.bd-onsite-table-body::-webkit-scrollbar {
+  width: 6px;
+  height: 5px;
+}
+
+.bd-onsite-table-body::-webkit-scrollbar-thumb {
+  background: #90caf9;
+  border-radius: 6px;
+}
+
+.bd-onsite-table-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+  .bd-onsite-header-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .bd-onsite-breadcrumb,
+  .bd-onsite-title,
+  .bd-onsite-add-btn {
+    justify-self: center;
+  }
+
+  .bd-onsite-table {
+    min-width: 900px;
+  }
+}
+
+/* ================================
+   OVERLAY
+================================ */
+
+.Onsite-popup1,
+.onsite-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+/* ================================
+   MAIN POPUP BOX
+================================ */
+
+.Onsite-popup2,
+.onsite-popup {
+  background: #ffffff;
+  width: 600px;
+  max-width: 95%;
+  max-height: 85vh;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.25s ease-in-out;
+}
+
+/* ================================
+   HEADER
+================================ */
+
+.Onsite-popup3,
+.onsite-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 22px;
+  background: #1565c0;
+  color: #ffffff;
+}
+
+.Onsite-popup3 h3,
+.onsite-popup-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Close Button */
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.close-btn:hover {
+  transform: scale(1.2);
+}
+
+/* ================================
+   FORM SCROLL AREA
+================================ */
+
+.onsite-form-scroll {
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Scrollbar */
+.onsite-form-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.onsite-form-scroll::-webkit-scrollbar-thumb {
+  background: #90caf9;
+  border-radius: 6px;
+}
+
+/* ================================
+   LABELS
+================================ */
+
+.onsite-form-scroll label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #0d2a4b;
+}
+
+/* ================================
+   INPUTS & TEXTAREA
+================================ */
+
+.onsite-form-scroll input,
+.onsite-form-scroll textarea {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #d0d0d0;
+  font-size: 14px;
+  background: #f9f9f9;
+  resize: none;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.onsite-form-scroll input:focus,
+.onsite-form-scroll textarea:focus {
+  border-color: #1565c0;
+  background: #ffffff;
+}
+
+/* Disabled fields */
+.onsite-form-scroll input:disabled,
+.onsite-form-scroll textarea:disabled {
+  background: #f1f1f1;
+  color: #666;
+}
+
+/* ================================
+   BD TEAM FIELD
+================================ */
+
+.bd-team-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bd-team-box {
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #e3f2fd;
+  border: 1px solid #bbdefb;
+  font-weight: 600;
+  color: #0d47a1;
+}
+
+/* ================================
+   ACTION BUTTONS
+================================ */
+
+.onsite-popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.submit-btn {
+  background: #1565c0;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  font-weight: 600;
+}
+
+.submit-btn:hover {
+  background: #0d47a1;
+}
+
+.cancel-btn {
+  background: #e0e0e0;
+  color: #333;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background: #c2c2c2;
+}
+
+/* Select Field */
+.onsite-form-scroll select {
+  width: 100%;
+  padding: 10px 14px;
+  margin-top: 6px;
+  margin-bottom: 16px;
+
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+
+  background-color: #ffffff;
+  font-size: 14px;
+  color: #333;
+
+  outline: none;
+  transition: all 0.3s ease;
+
+  appearance: none; /* remove default arrow */
+  cursor: pointer;
+}
+
+.onsite-form-scroll select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23666' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 18px;
+}
+
+.onsite-form-scroll select:focus {
+  border-color: #bbdefb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+
+
+/* ================================
+   ANIMATIONS
+================================ */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 600px) {
+  .Onsite-popup2,
+  .onsite-popup {
+    width: 95%;
+    max-height: 90vh;
+  }
+
+  .onsite-popup-actions {
+    flex-direction: column;
+  }
+
+  .submit-btn,
+  .cancel-btn {
+    width: 100%;
+  }
+}

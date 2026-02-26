@@ -3,9 +3,8 @@
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  height: 75vh;
+  height: 100%;
   box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-  margin-top: 20px;
 }
 
 /* CHAT HEADER */
@@ -139,4 +138,32 @@
 .bd-end-chat-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.bd-onsite-btn {
+  background: #ff9800;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  margin-right: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.bd-onsite-btn:hover {
+  background: #e68a00;
+}
+
+.bd-return-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  margin-right: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.bd-return-btn:hover {
+  background: #388e3c;
 }

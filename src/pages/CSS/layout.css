@@ -59,7 +59,7 @@
   flex-grow: 1;
   padding: 10px 30px;
   margin-left: 240px;
-  min-height: calc(100vh - 70px);
+  /* min-height: calc(100vh - 70px); */
   overflow-y: auto;
   transition: margin-left 0.3s ease;
 }

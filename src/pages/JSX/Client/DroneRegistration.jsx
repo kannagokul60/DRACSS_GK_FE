@@ -85,49 +85,51 @@ export default function DroneRegistration() {
       ) : drones.filter((d) => d.client && d.client.length > 0).length === 0 ? (
         <p>No drones registered yet.</p>
       ) : (
-        <div className="drone-cards-grid">
-          {drones
-            .filter((d) => d.client && d.client.length > 0)
-            .map((drone) => {
-              const clientList = drone.client;
-              const latestClient = clientList[clientList.length - 1]; // Use last entry
+        <div className="drone-cards-wrapper">
+          <div className="drone-cards-grid">
+            {drones
+              .filter((d) => d.client && d.client.length > 0)
+              .map((drone) => {
+                const clientList = drone.client;
+                const latestClient = clientList[clientList.length - 1]; // Use last entry
 
-              const status = getStatusFromActive(drone.is_active);
+                const status = getStatusFromActive(drone.is_active);
 
-              return (
-                <div
-                  key={drone.id}
-                  className="drone-card"
-                  onClick={() => handleCardClick(drone)}
-                >
-                  <div className="drone-card-header">
-                    <h3>{latestClient.model_name || drone.model_name}</h3>
-                    <span className={`status-badge ${status}`}>
-                      {getStatusIcon(status)}{" "}
-                      {status.charAt(0).toUpperCase() + status.slice(1)}
-                    </span>
+                return (
+                  <div
+                    key={drone.id}
+                    className="drone-register-card"
+                    onClick={() => handleCardClick(drone)}
+                  >
+                    <div className="drone-card-header">
+                      <h3>{latestClient.model_name || drone.model_name}</h3>
+                      <span className={`status-badge ${status}`}>
+                        {getStatusIcon(status)}{" "}
+                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                      </span>
+                    </div>
+
+                    <div className="drone-card-body">
+                      <p>
+                        <FaCalendarAlt /> Registered On:{" "}
+                        <strong>
+                          {latestClient.updated_at
+                            ? new Date(
+                                latestClient.updated_at,
+                              ).toLocaleDateString()
+                            : new Date(drone.updated_at).toLocaleDateString()}
+                        </strong>
+                      </p>
+
+                      <p>
+                        <FaPaperPlane /> Drone Serial:{" "}
+                        <strong>{latestClient.c_drone_serial_number}</strong>
+                      </p>
+                    </div>
                   </div>
-
-                  <div className="drone-card-body">
-                    <p>
-                      <FaCalendarAlt /> Registered On:{" "}
-                      <strong>
-                        {latestClient.updated_at
-                          ? new Date(
-                              latestClient.updated_at
-                            ).toLocaleDateString()
-                          : new Date(drone.updated_at).toLocaleDateString()}
-                      </strong>
-                    </p>
-
-                    <p>
-                      <FaPaperPlane /> Drone Serial:{" "}
-                      <strong>{latestClient.c_drone_serial_number}</strong>
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+          </div>
         </div>
       )}
 

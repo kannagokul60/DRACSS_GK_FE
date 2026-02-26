@@ -1,36 +1,60 @@
-/* Overlay background */
+/* ===== FULL SCREEN OVERLAY ===== */
+
 .drone-registration-wrapper {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: calc(100vh - 90px);
-  background: rgba(25, 25, 25, 0.6);
-  backdrop-filter: blur(4px);
+  inset: 0; /* top:0 left:0 right:0 bottom:0 (BEST PRACTICE) */
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 9999;
   animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Popup card */
+/* Prevent body scroll when modal open (optional advanced UX) */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* ===== POPUP CARD ===== */
+
 .drone-registration-card {
-  background: #fff;
+  background: #ffffff;
   width: 80%;
   max-width: 900px;
+  max-height: 90vh; /* IMPORTANT prevent overflow */
+  overflow-y: auto;
+
   border-radius: 16px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+
   padding: 2rem;
   position: relative;
-  animation: slideUp 0.4s ease;
+
+  animation: slideUp 0.35s ease;
 }
+
+/* Smooth scrollbar (premium feel) */
+
+.drone-registration-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.drone-registration-card::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+/* ===== HEADER ===== */
 
 .form-header {
   display: flex;
-  justify-content: center; /* Center the title */
+  justify-content: center;
   align-items: center;
-  position: relative; /* So we can absolutely position the close icon */
+  position: relative;
+
   border-bottom: 2px solid #e0e0e0;
   padding-bottom: 0.8rem;
   margin-bottom: 1.2rem;
@@ -40,28 +64,27 @@
   font-size: 1.5rem;
   font-weight: 600;
   color: #2b2b2b;
-  display: flex;
-  align-items: center;
-  gap: 8px;
   margin: 0 auto;
 }
 
-/* Close icon stays on right side */
+/* Close icon right aligned */
+
 .close-icon {
   position: absolute;
   right: 0;
   font-size: 1.3rem;
   color: #666;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .close-icon:hover {
   color: #000;
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
-/* Form grid */
+/* ===== FORM ===== */
+
 .drone-form {
   display: flex;
   flex-direction: column;
@@ -74,7 +97,8 @@
   gap: 1.2rem;
 }
 
-/* Input fields */
+/* ===== INPUT FIELDS ===== */
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -86,36 +110,24 @@
   margin-bottom: 0.4rem;
 }
 
-.form-group input {
-  padding: 0.6rem 0.8rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  outline: none;
-  font-size: 0.95rem;
-  transition: 0.2s;
-}
-
-.form-group input:focus {
-  border-color: #0078ff;
-  box-shadow: 0 0 0 2px rgba(0, 120, 255, 0.1);
-}
-
+.form-group input,
 .form-group textarea {
   padding: 0.6rem 0.8rem;
   border-radius: 8px;
   border: 1px solid #ccc;
   outline: none;
   font-size: 0.95rem;
-  transition: 0.2s;
+  transition: all 0.2s ease;
 }
 
+.form-group input:focus,
 .form-group textarea:focus {
   border-color: #0078ff;
   box-shadow: 0 0 0 2px rgba(0, 120, 255, 0.1);
 }
 
+/* ===== ATTACHMENT ===== */
 
-/* Attachment input */
 .attachment .attach-field {
   display: flex;
   align-items: center;
@@ -143,34 +155,16 @@
   color: #fff;
 }
 
-/* Buttons */
+/* ===== BUTTONS ===== */
+
 .form-actions {
   display: flex;
-  justify-content: flex-end; /* move buttons to the right */
-  align-items: center; /* center vertically */
+  justify-content: flex-end;
+  align-items: center;
   margin-top: 1.5rem;
   border-top: 1px solid #e0e0e0;
   padding-top: 1rem;
-  gap: 10px; /* spacing between buttons */
-}
-
-
-.add-btn {
-  background-color: #0078ff;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: 0.3s;
-}
-
-.add-btn:hover {
-  background-color: #005ecc;
+  gap: 10px;
 }
 
 .form-actions .submit-btn {
@@ -180,7 +174,6 @@
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
   cursor: pointer;
-  margin-right: 0.8rem;
   font-weight: 500;
   transition: 0.3s;
 }
@@ -204,7 +197,8 @@
   background-color: #afafaf;
 }
 
-/* Animations */
+/* ===== ANIMATIONS ===== */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -216,7 +210,7 @@
 
 @keyframes slideUp {
   from {
-    transform: translateY(30px);
+    transform: translateY(25px);
     opacity: 0;
   }
   to {
@@ -225,10 +219,11 @@
   }
 }
 
-/* Responsive */
+/* ===== RESPONSIVE ===== */
+
 @media (max-width: 600px) {
   .drone-registration-card {
-    width: 90%;
+    width: 92%;
     padding: 1.2rem;
   }
 

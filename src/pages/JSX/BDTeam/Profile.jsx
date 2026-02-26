@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../CSS/BDTeam/profile.css";
-import { FaUser, FaPhone, FaHome, FaSave, FaEdit, FaTimesCircle } from "react-icons/fa";
+import { FaUser, FaSave, FaEdit, FaTimesCircle } from "react-icons/fa";
 import BreadCrumbs from "../BreadCrumbs";
 
 export default function Profile() {
@@ -33,19 +33,19 @@ export default function Profile() {
   };
 
   return (
-    <div className="profile-page">
-      <div className="profile-breadcrumb-wrapper">
+    <div className="bd-profile-page">
+      <div className="bd-profile-breadcrumb-wrapper">
         <BreadCrumbs />
       </div>
 
-      <div className="profile-card">
-        <div className="profile-header-row">
-          <h2 className="profile-header">
+      <div className="bd-profile-card">
+        <div className="bd-profile-header-row">
+          <h2 className="bd-profile-header">
             <FaUser /> BD Team Profile
           </h2>
           {!isEditing && (
             <button
-              className="edit-btn"
+              className="bd-edit-btn"
               onClick={() => setIsEditing(true)}
               title="Edit Profile"
             >
@@ -56,7 +56,7 @@ export default function Profile() {
 
         {/* ===== VIEW MODE ===== */}
         {!isEditing ? (
-          <div className="profile-view">
+          <div className="bd-profile-view">
             <p><strong>Full Name:</strong> {profile.name}</p>
             <p><strong>Email:</strong> {profile.email}</p>
             <p><strong>Phone Number:</strong> {profile.phone}</p>
@@ -66,7 +66,7 @@ export default function Profile() {
           </div>
         ) : (
           // ===== EDIT MODE =====
-          <div className="form-section">
+          <div className="bd-form-section">
             <label>
               Full Name
               <input
@@ -126,11 +126,11 @@ export default function Profile() {
               ></textarea>
             </label>
 
-            <div className="profile-btn-group">
-              <button className="save-btn" onClick={handleSave}>
+            <div className="bd-profile-btn-group">
+              <button className="bd-save-btn" onClick={handleSave}>
                 <FaSave /> Save Changes
               </button>
-              <button className="cancel-btn" onClick={handleCancel}>
+              <button className="bd-cancel-btn" onClick={handleCancel}>
                 <FaTimesCircle /> Cancel
               </button>
             </div>

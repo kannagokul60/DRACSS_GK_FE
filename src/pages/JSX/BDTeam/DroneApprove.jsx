@@ -8,6 +8,21 @@ export default function DroneApprove() {
   const [selectedDrone, setSelectedDrone] = useState(null);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
   const [remarks, setRemarks] = useState("");
+  const [clients, setClients] = useState([]);
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const res = await fetch(`${config.baseURL}/clients/`);
+        const data = await res.json();
+        setClients(data);
+      } catch (err) {
+        console.error("Error fetching clients:", err);
+      }
+    };
+
+    fetchClients();
+  }, []);
 
   // ---------------- FETCH ALL DRONES ----------------
   useEffect(() => {
@@ -18,20 +33,27 @@ export default function DroneApprove() {
 
         const clientDrones = data
           .filter((d) => d.client && d.client.length > 0)
-          .map((d) => ({
-            ...d,
-            // derive status from is_active if missing
-            status:
-              d.status ??
-              (d.is_active === true
-                ? "approved"
-                : d.is_active === false
-                ? "rejected"
-                : null),
-            is_active: d.is_active,
-            remarks: d.remarks ?? "",
-            registered: d.registered ?? null,
-          }));
+          .map((d) => {
+            const serial = d.client?.[0]?.c_drone_serial_number;
+
+            // find client using serial
+            const matchedClient = clients.find((c) =>
+              c.drones?.includes(serial),
+            );
+
+            return {
+              ...d,
+              clientName: matchedClient?.name || "Unknown",
+              status:
+                d.status ??
+                (d.is_active === true
+                  ? "approved"
+                  : d.is_active === false
+                    ? "rejected"
+                    : null),
+              remarks: d.remarks ?? "",
+            };
+          });
 
         setDrones(clientDrones);
       } catch (err) {
@@ -39,8 +61,10 @@ export default function DroneApprove() {
       }
     };
 
-    fetchDrones();
-  }, []);
+    if (clients.length > 0) {
+      fetchDrones();
+    }
+  }, [clients]);
 
   // ---------------- OPEN MODAL ----------------
   const handleDroneClick = (drone) => {
@@ -64,7 +88,7 @@ export default function DroneApprove() {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       if (!res.ok) throw new Error("Approve failed");
@@ -75,8 +99,8 @@ export default function DroneApprove() {
         drones.map((d) =>
           d.id === updated.id
             ? { ...d, is_active: true, status: "approved" }
-            : d
-        )
+            : d,
+        ),
       );
 
       setSelectedDrone((prev) => ({
@@ -113,7 +137,7 @@ export default function DroneApprove() {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       if (!res.ok) throw new Error("Reject failed");
@@ -124,8 +148,8 @@ export default function DroneApprove() {
         drones.map((d) =>
           d.id === updated.id
             ? { ...d, is_active: false, status: "rejected", remarks }
-            : d
-        )
+            : d,
+        ),
       );
 
       setSelectedDrone((prev) => ({
@@ -170,12 +194,8 @@ export default function DroneApprove() {
                 drones.map((drone, index) => (
                   <tr key={drone.id}>
                     <td>{index + 1}</td>
-                    <td
-                      title={drone.client[0].model_name}
-                      className="truncate-text"
-                    >
-                      {drone.client[0].model_name}
-                    </td>
+                    <td>{drone.clientName}</td>
+
                     <td>
                       <button
                         className="link-btn"
@@ -191,8 +211,8 @@ export default function DroneApprove() {
                           drone.status === "rejected"
                             ? "status-rejected"
                             : drone.status === "approved"
-                            ? "status-approved"
-                            : "status-pending"
+                              ? "status-approved"
+                              : "status-pending"
                         }`}
                       >
                         {drone.status ?? "pending"}
@@ -218,7 +238,7 @@ export default function DroneApprove() {
         >
           <div className="approval-modal" onClick={(e) => e.stopPropagation()}>
             <button
-              className="close-btn"
+              className="approve-close-btn"
               onClick={() => setShowApprovalModal(false)}
             >
               ×

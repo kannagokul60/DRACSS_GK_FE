@@ -3,15 +3,15 @@ import "../../CSS/Client/profiledetails.css";
 import {
   FaUser,
   FaUniversity,
-  FaSave,
-  FaPhone,
   FaHome,
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import BreadCrumbs from "../BreadCrumbs";
 
 export default function ProfileDetails() {
+
   const [activeTab, setActiveTab] = useState("personal");
+
   const [profile, setProfile] = useState({
     name: "John Doe",
     email: "john@example.com",
@@ -29,194 +29,126 @@ export default function ProfileDetails() {
 
   const handleSave = () => {
     alert("Profile details saved successfully ✅");
-    setIsEditing(false);
-  };
-  const handleCancel = () => {
-    setProfile({ ...originalProfile });
-    setIsEditing(false);
-    alert("Changes canceled ❌");
   };
 
   return (
-    <div className="profile-page">
-      <div className="profile-breadcrumb-wrapper">
+    <div className="client-profile-page">
+
+      <div className="client-profile-breadcrumb-wrapper">
         <BreadCrumbs />
       </div>
-      <div className="profile-card">
-        <h2 className="profile-header">
+
+      <div className="client-profile-card">
+
+        <h2 className="client-profile-header">
           <FaUser /> My Profile
         </h2>
 
-        <div className="tab-buttons">
+        <div className="client-profile-tabs">
+
           <button
             className={activeTab === "personal" ? "active" : ""}
             onClick={() => setActiveTab("personal")}
           >
             <FaHome /> Personal Info
           </button>
+
           <button
             className={activeTab === "bank" ? "active" : ""}
             onClick={() => setActiveTab("bank")}
           >
             <FaUniversity /> Bank Details
           </button>
+
           <button
             className={activeTab === "shipping" ? "active" : ""}
             onClick={() => setActiveTab("shipping")}
           >
             <FaMapMarkerAlt /> Shipping Address
           </button>
+
         </div>
 
-        <div className="tab-content">
+        <div className="client-profile-tab-content">
+
           {activeTab === "personal" && (
-            <div className="form-section">
-              <label>
-                Full Name
-                <input
-                  type="text"
-                  name="name"
-                  value={profile.name}
-                  onChange={handleChange}
-                />
+            <div className="client-form-section">
+
+              <label>Full Name
+                <input name="name" value={profile.name} onChange={handleChange}/>
               </label>
-              <label>
-                Email
-                <input
-                  type="email"
-                  name="email"
-                  value={profile.email}
-                  onChange={handleChange}
-                />
+
+              <label>Email
+                <input name="email" value={profile.email} onChange={handleChange}/>
               </label>
-              <label>
-                Phone
-                <input
-                  type="text"
-                  name="phone"
-                  value={profile.phone}
-                  onChange={handleChange}
-                />
+
+              <label>Phone
+                <input name="phone" value={profile.phone} onChange={handleChange}/>
               </label>
-              <label>
-                Address
-                <textarea
-                  name="address"
-                  value={profile.address}
-                  onChange={handleChange}
-                ></textarea>
+
+              <label>Address
+                <textarea name="address" value={profile.address} onChange={handleChange}/>
               </label>
+
             </div>
           )}
 
           {activeTab === "bank" && (
-            <div className="form-section">
-              <label>
-                Bank Name
-                <input
-                  type="text"
-                  name="accountNumber"
-                  value={profile.bankName}
-                  onChange={handleChange}
-                />
+            <div className="client-form-section">
+
+              <label>Bank Name
+                <input name="bankName" value={profile.bankName} onChange={handleChange}/>
               </label>
-              <label>
-                Account Number
-                <input
-                  type="text"
-                  name="accountNumber"
-                  value={profile.accountNumber}
-                  onChange={handleChange}
-                />
+
+              <label>Account Number
+                <input name="accountNumber" value={profile.accountNumber} onChange={handleChange}/>
               </label>
-              <label>
-                IFSC Code
-                <input
-                  type="text"
-                  name="ifsc"
-                  value={profile.ifsc}
-                  onChange={handleChange}
-                />
+
+              <label>IFSC Code
+                <input name="ifsc" value={profile.ifsc} onChange={handleChange}/>
               </label>
-              <label>
-                Branch Name
-                <input
-                  type="text"
-                  name="branch"
-                  value={profile.branch}
-                  onChange={handleChange}
-                />
+
+              <label>Branch Name
+                <input name="branch" value={profile.branch} onChange={handleChange}/>
               </label>
+
             </div>
           )}
 
           {activeTab === "shipping" && (
-            <div className="form-section">
-              <label>
-                Pin Code
-                <input
-                  type="text"
-                  name="name"
-                  value={profile.name}
-                  onChange={handleChange}
-                />
+            <div className="client-form-section">
+
+              <label>Pin Code
+                <input />
               </label>
-              <label>
-                House No/Tower/Block
-                <input
-                  type="email"
-                  name="email"
-                  value={profile.email}
-                  onChange={handleChange}
-                />
+
+              <label>House / Block
+                <input />
               </label>
-              <label>
-                Address(building,street)
-                <textarea
-                  name="address"
-                  value={profile.address}
-                  onChange={handleChange}
-                ></textarea>
+
+              <label>Address
+                <textarea />
               </label>
-              <label>
-                Locality/Town
-                <input
-                  type="text"
-                  name="phone"
-                  value={profile.phone}
-                  onChange={handleChange}
-                />
+
+              <label>City
+                <input />
               </label>
-              <label>
-                City/District{" "}
-                <input
-                  type="text"
-                  name="phone"
-                  value={profile.phone}
-                  onChange={handleChange}
-                />
+
+              <label>State
+                <input />
               </label>
-              <label>
-                State{" "}
-                <input
-                  type="text"
-                  name="phone"
-                  value={profile.phone}
-                  onChange={handleChange}
-                />
-              </label>
+
             </div>
           )}
+
         </div>
 
-        <div className="profile-btn-group">
-          <button className="save-btn" onClick={handleSave}>
+        <div className="client-profile-btn-group">
+          <button className="client-save-btn" onClick={handleSave}>
             Save Changes
           </button>
-          {/* <button className="cancel-btn" onClick={handleCancel}>
-            Cancel
-          </button> */}
         </div>
+
       </div>
     </div>
   );

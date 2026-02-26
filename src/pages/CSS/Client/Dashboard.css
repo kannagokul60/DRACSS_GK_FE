@@ -3,24 +3,37 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: calc(100vh - 90px);
+  max-height: calc(100vh - 90px);
   overflow-y: auto;
   box-sizing: border-box;
-  padding: 10rem 5rem;
+  padding: clamp(2rem, 6vw, 6rem) clamp(1.5rem, 5vw, 5rem);
   border-radius: 10px;
-background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
+  background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
 }
 
-/* ===== MAIN AREA ===== */
 .client-dash-main {
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   padding: 1rem 2rem;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
+.client-dash-main::-webkit-scrollbar {
+  height: 8px;
+  width: 6px;
+}
+
+.client-dash-main::-webkit-scrollbar-thumb {
+  background: #90caf9;
+  border-radius: 4px;
+}
+
+.client-dash-main::-webkit-scrollbar-track {
+  background: #e3f2fd;
+}
 /* ===== CLIENT TILE GRID ===== */
 .client-tile-grid {
   display: grid;
@@ -29,6 +42,7 @@ background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
   justify-items: center;
   width: 100%;
   max-width: 1200px;
+  margin: auto;
 }
 
 /* ===== TILE CARD ===== */

@@ -1,14 +1,20 @@
 /* ===== DRONE APPROVE PAGE ===== */
 .drone-approve-page {
+  width: 100%;
+  height: calc(100vh - 90px);
+  margin: 0 auto;
+  padding: 1.5rem;
   background: #f7f7f7;
-  padding: 3rem;
   border-radius: 14px;
-  transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   font-family: "Poppins", sans-serif;
-  height: calc(100vh - 90px);
-  box-sizing: border-box;
+  transition: all 0.3s ease;
   position: relative;
+  box-sizing: border-box;
+
+  display: flex; /* ADD THIS */
+  flex-direction: column; /* ADD THIS */
+  overflow: hidden;
 }
 
 .drone-approve-breadcrumb-wrapper {
@@ -39,7 +45,7 @@
 
 .drone-table-wrapper {
   width: 100%;
-  max-height: 650px;
+  height: auto;
   overflow-x: auto;
   overflow-y: auto;
   background: #ffffff;
@@ -186,12 +192,11 @@
   position: relative;
   background: #fff;
   padding: 20px;
-  padding-top: 40px;
   border-radius: 12px;
-  width: 90%;
+  width: 100%;
   max-width: 1000px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  max-height: 90vh;
+  max-height: 100vh;
   overflow-y: auto;
 }
 
@@ -283,7 +288,9 @@
   font-weight: 600;
   text-decoration: underline;
   display: inline-block;
-  transition: color 0.3s ease, transform 0.3s ease;
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
 }
 
 .manufacture-links:hover {
@@ -292,21 +299,31 @@
 }
 
 /* ===== CLOSE BUTTON (TOP-RIGHT) ===== */
-.close-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: none;
+.approve-close-btn {
+  position: sticky;   /* IMPORTANT */
+  top: 0;
+  margin-left: auto;
+  display: block;
+
+  background: white; /* prevent overlap while scrolling */
+  z-index: 50;
+
   border: none;
   font-size: 28px;
   cursor: pointer;
   color: #333;
-  transition: color 0.2s;
+    transition: all 0.25s ease; /* animation */
+
 }
 
-.close-btn:hover {
+
+.approve-close-btn:hover {
   color: #d32f2f;
+
+  transform: scale(1);   /* makes thicker/bigger */
+  font-weight: 900;        /* thicker look */
 }
+
 
 .bdapprove-status-badge {
   padding: 6px 10px;
@@ -351,11 +368,11 @@
   font-weight: bold;
   text-align: center;
   background-color: #e6f4ea; /* optional light green background */
-  cursor:not-allowed;
+  cursor: not-allowed;
 }
 
-.rejected-text{
-    display: inline-block;
+.rejected-text {
+  display: inline-block;
   padding: 8px 12px;
   border: 1px solid red; /* green border */
   color: #e75252; /* green text */
@@ -363,7 +380,7 @@
   font-weight: bold;
   text-align: center;
   background-color: #f4e6e6; /* optional light green background */
-  cursor:not-allowed;
+  cursor: not-allowed;
 }
 
 /* ===== RESPONSIVE DESIGN ===== */

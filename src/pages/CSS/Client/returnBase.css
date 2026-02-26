@@ -329,7 +329,34 @@ height: 100%;
   background: #0056b3;
 }
 
+.add-btn-wrapper {
+  position: relative;
+  display: inline-block;
+}
 
+.tooltip-text {
+  visibility: hidden;
+  position: absolute;
+  top: 120%;
+  left: 50%;
+  transform: translateX(-70%);
+  background: #333;
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.add-btn-wrapper:hover .tooltip-text {
+  visibility: visible;
+}
+
+.add-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;   /* optional — makes it look disabled */
+}
 
 /* ===== ANIMATION ===== */
 @keyframes fadeIn {

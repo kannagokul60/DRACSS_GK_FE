@@ -1,16 +1,15 @@
 /* ===== DASHBOARD WRAPPER ===== */
 .pilot-dash-wrap {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #eeeeee, #b6bcc2, #eeeeee);
-  color: #1a2a4b;
-  height: 100%;
+  height: calc(100vh - 90px);
+  max-height: calc(100vh - 90px);
   overflow-y: auto;
   box-sizing: border-box;
-  padding: 10rem 5rem;
+  padding: clamp(2rem, 6vw, 6rem) clamp(1.5rem, 5vw, 5rem);
   border-radius: 10px;
-  position: relative;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(135deg, #708aa8, #9fa5aa, #c3ddf0);
 
 }
 
@@ -62,9 +61,23 @@
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   padding: 1rem 2rem;
-  overflow: hidden;
+  overflow-y: auto;
+}
+
+.pilot-dash-main::-webkit-scrollbar {
+  height: 8px;
+  width: 6px;
+}
+
+.pilot-dash-main::-webkit-scrollbar-thumb {
+  background: #90caf9;
+  border-radius: 4px;
+}
+
+.pilot-dash-main::-webkit-scrollbar-track {
+  background: #e3f2fd;
 }
 
 /* ===== TILE GRID ===== */
@@ -75,6 +88,7 @@
   justify-items: center;
   width: 100%;
   max-width: 1200px;
+  margin: auto;
 }
 
 /* ===== TILE CARD ===== */

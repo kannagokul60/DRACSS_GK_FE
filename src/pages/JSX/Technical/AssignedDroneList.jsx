@@ -14,8 +14,10 @@ export default function AssignedDroneList() {
   useEffect(() => {
     fetch(`${config.baseURL}/orders/`)
       .then((res) => res.json())
-      .then((data) => setOrders(data))
-      .catch((err) => console.error("Failed to load orders:", err));
+.then((data) => {
+  const orderArray = Array.isArray(data) ? data : data.results || [];
+  setOrders(orderArray);
+})      .catch((err) => console.error("Failed to load orders:", err));
   }, []);
 
   // Fetch Template Items (same as OrderFormPage)
@@ -23,9 +25,10 @@ export default function AssignedDroneList() {
     fetch(`${config.baseURL}/checklist-items/`)
       .then((res) => res.json())
       .then((data) => {
-        data.sort((a, b) => a.sort_order - b.sort_order);
-        setBackendItems(data);
-      })
+  const items = Array.isArray(data) ? data : data.results || [];
+  items.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+  setBackendItems(items);
+})
       .catch((err) => console.error("Failed to load template items:", err));
   }, []);
 

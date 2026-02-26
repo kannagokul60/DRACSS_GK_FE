@@ -110,6 +110,11 @@ export default function Sidebar({ setIsSidebarCollapsed }) {
         icon: <FaUser />,
         path: `${basePath}/assigned-drones`,
       },
+            {
+        name: "Support Tickets",
+        icon: <FaHeadset />,
+        path: `${basePath}/support-tech`,
+      },
       {
         name: "Completed Work",
         icon: <FaUser />,

@@ -33,7 +33,7 @@ export default function SoldDroneList() {
           const droneDetails = dronesData.find(
             (d) =>
               d.drone_serial_number === serial &&
-              (!droneName || d.model_name === droneName) // filter by selected drone
+              (!droneName || d.model_name === droneName), // filter by selected drone
           );
           if (droneDetails) {
             soldList.push({
@@ -69,33 +69,48 @@ export default function SoldDroneList() {
       </h2>
 
       {soldDrones.length === 0 && (
-  <div className="no-data-message">
-    No sold drones found for {droneName || "this model"}.
-  </div>
-)}
+        <div className="no-data-message">
+          No sold drones found for {droneName || "this model"}.
+        </div>
+      )}
 
+      {/* ===== TABLE VIEW ===== */}
+      <div className="sold-drone-table-wrapper">
+        <table className="sold-drone-table">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Client Name</th>
+              <th>Serial Number</th>
+              <th>UIN Number</th>
+              <th>Email</th>
+              <th>Location</th>
+              <th>View</th>
+            </tr>
+          </thead>
 
-      {/* CLIENT GRID */}
-      <div className="client-grid">
-        {soldDrones.map((drone, index) => (
-          <div key={index} className="client-card">
-            <img src={drone.logo} alt={drone.clientName} className="client-logo" />
-            <h4 className="client-name">{drone.clientName}</h4>
-            <p className="client-location">{drone.location}</p>
-            <p className="client-serial">
-              <strong>Serial:</strong> {drone.drone_serial_number}
-            </p>
-            <p className="client-uin">
-              <strong>UIN:</strong> {drone.uin_number}
-            </p>
+          <tbody>
+            {soldDrones.map((drone, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{drone.clientName}</td>
+                <td>{drone.drone_serial_number}</td>
+                <td>{drone.uin_number}</td>
+                <td>{drone.email}</td>
+                <td>{drone.location}</td>
 
-            <FaInfoCircle
-              className="bd-info-icon"
-              title="View More Details"
-              onClick={() => setSelectedDrone(drone)}
-            />
-          </div>
-        ))}
+                <td>
+                  <button
+                    className="view-btn"
+                    onClick={() => setSelectedDrone(drone)}
+                  >
+                    View
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* POPUP */}
@@ -104,7 +119,10 @@ export default function SoldDroneList() {
           <div className="client-popup">
             <div className="popup-header">
               <h3>{selectedDrone.clientName} - Drone Details</h3>
-              <button className="close-btn" onClick={() => setSelectedDrone(null)}>
+              <button
+                className="client-popup-close-btn"
+                onClick={() => setSelectedDrone(null)}
+              >
                 ✖
               </button>
             </div>
@@ -115,16 +133,41 @@ export default function SoldDroneList() {
                 alt={selectedDrone.clientName}
                 className="popup-logo"
               />
-              <p><strong>Phone:</strong> {selectedDrone.phone}</p>
-              <p><strong>Email:</strong> {selectedDrone.email}</p>
-              <p><strong>Location:</strong> {selectedDrone.location}</p>
-              <p><strong>Serial:</strong> {selectedDrone.drone_serial_number}</p>
-              <p><strong>UIN:</strong> {selectedDrone.uin_number}</p>
-              <p><strong>Flight Controller:</strong> {selectedDrone.flight_controller_serial_number}</p>
-              <p><strong>Remote Controller:</strong> {selectedDrone.remote_controller}</p>
-              <p><strong>Battery Charger:</strong> {selectedDrone.battery_charger_serial_number}</p>
-              <p><strong>Battery 1:</strong> {selectedDrone.battery_serial_number_1}</p>
-              <p><strong>Battery 2:</strong> {selectedDrone.battery_serial_number_2}</p>
+              <p>
+                <strong>Phone:</strong> {selectedDrone.phone}
+              </p>
+              {/* <p>
+                <strong>Email:</strong> {selectedDrone.email}
+              </p>
+              <p>
+                <strong>Location:</strong> {selectedDrone.location}
+              </p>
+              <p>
+                <strong>Serial:</strong> {selectedDrone.drone_serial_number}
+              </p>
+              <p>
+                <strong>UIN:</strong> {selectedDrone.uin_number}
+              </p> */}
+              <p>
+                <strong>Flight Controller:</strong>{" "}
+                {selectedDrone.flight_controller_serial_number}
+              </p>
+              <p>
+                <strong>Remote Controller:</strong>{" "}
+                {selectedDrone.remote_controller}
+              </p>
+              <p>
+                <strong>Battery Charger:</strong>{" "}
+                {selectedDrone.battery_charger_serial_number}
+              </p>
+              <p>
+                <strong>Battery 1:</strong>{" "}
+                {selectedDrone.battery_serial_number_1}
+              </p>
+              <p>
+                <strong>Battery 2:</strong>{" "}
+                {selectedDrone.battery_serial_number_2}
+              </p>
               {selectedDrone.attachment && (
                 <p>
                   <strong>Attachment:</strong>{" "}

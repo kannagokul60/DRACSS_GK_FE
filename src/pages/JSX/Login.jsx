@@ -16,8 +16,11 @@ export default function Login() {
 
     try {
       // Fetch all accounts
-      const response = await fetch("http://127.0.0.1:8000/api/accounts/");
-      const accounts = await response.json();
+   const response = await fetch("http://127.0.0.1:8000/api/accounts/");
+const accounts = await response.json();
+
+console.log("Accounts:", accounts);
+console.log("Form:", form);
 
       // Find account by email
       const user = accounts.find(
@@ -40,8 +43,10 @@ export default function Login() {
               navigate("/client/dashboard");
               break;
             case "admin":
-              navigate("/admin/dashboard");
-              break;
+  console.log("Navigating to admin");
+  navigate("/admin/dashboard");
+  break;
+
             case "bd":
               navigate("/bd/dashboard");
               break;
@@ -79,25 +84,28 @@ export default function Login() {
 
         {error && <p className="login-error">{error}</p>}
 
-        <label className="login-label">Email</label>
-        <input
-          className="login-input"
-          type="email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          placeholder="Enter email"
-          required
-        />
+<label className="login-label">Email</label>
+<input
+  className="login-input"
+  type="email"
+  value={form.email}
+  onChange={(e) => setForm({ ...form, email: e.target.value })}
+  placeholder="Enter email"
+  autoComplete="username"
+  required
+/>
 
-        <label className="login-label">Password</label>
-        <input
-          className="login-input"
-          type="password"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-          placeholder="Enter password"
-          required
-        />
+<label className="login-label">Password</label>
+<input
+  className="login-input"
+  type="password"
+  value={form.password}
+  onChange={(e) => setForm({ ...form, password: e.target.value })}
+  placeholder="Enter password"
+  autoComplete="current-password"
+  required
+/>
+
 
         <p>
           <u style={{ cursor: "pointer" }}>Forgot Password?</u>

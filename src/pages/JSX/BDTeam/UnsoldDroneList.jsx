@@ -41,7 +41,7 @@ export default function UnsoldDroneList() {
       const unsold = data.filter(
         (d) =>
           d.registered === false &&
-          (!selectedModel || d.model_name === selectedModel)
+          (!selectedModel || d.model_name === selectedModel),
       );
 
       const mapped = unsold.map((d) => ({
@@ -140,7 +140,7 @@ export default function UnsoldDroneList() {
     if (!moveDrone) return;
 
     const selectedClient = clients.find(
-      (c) => c.client_id === selectedClientId
+      (c) => c.client_id === selectedClientId,
     );
     if (!selectedClient) {
       alert("Please select a valid client.");
@@ -149,35 +149,29 @@ export default function UnsoldDroneList() {
 
     try {
       const updatedDrones = Array.from(
-        new Set([...(selectedClient.drones || []), formData.serialNumber])
+        new Set([...(selectedClient.drones || []), formData.serialNumber]),
       );
 
       // Update client
-      await fetch(
-        `${config.baseURL}/clients/${selectedClient.client_id}/`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ drones: updatedDrones }),
-        }
-      );
+      await fetch(`${config.baseURL}/clients/${selectedClient.client_id}/`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ drones: updatedDrones }),
+      });
 
       // Update drone to sold
-      await fetch(
-        `${config.baseURL}/drone_registration/${moveDrone.id}/`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            registered: true,
-            client_id: selectedClient.client_id,
-          }),
-        }
-      );
+      await fetch(`${config.baseURL}/drone_registration/${moveDrone.id}/`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          registered: true,
+          client_id: selectedClient.client_id,
+        }),
+      });
 
       // Remove from list
       setUnsoldDrones((prev) =>
-        prev.filter((d) => d.serialNumber !== moveDrone.serialNumber)
+        prev.filter((d) => d.serialNumber !== moveDrone.serialNumber),
       );
 
       closeMovePopup();
@@ -195,98 +189,106 @@ export default function UnsoldDroneList() {
         <BreadCrumbs />
       </div>
 
-      <h2 className="unsold-drone-heading">Unsold Drones Inventory  {selectedModel ? `- ${selectedModel}` : ""}</h2>
+      <h2 className="unsold-drone-heading">
+        Unsold Drones Inventory {selectedModel ? `- ${selectedModel}` : ""}
+      </h2>
 
+      {/* TABLE VIEW */}
       {unsoldDrones.length === 0 ? (
         <div className="no-data-message">
           No unsold drones found for {selectedModel || "this model"}.
         </div>
       ) : (
-        <div className="unsold-drone-grid">
-          {unsoldDrones.map((drone) => (
-            <div className="unsold-drone-card" key={drone.id}>
-              <span
-                className="unsold-drone-date"
-                onClick={() => handleOpenDetails(drone)}
-              >
-                {drone.date}
-              </span>
+        <div className="unsold-table-wrapper">
+          <table className="unsold-table">
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Date</th>
+                <th>Serial Number</th>
+                <th>UIN Number</th>
+                <th>View</th>
+                <th>Move to Sold</th>
+              </tr>
+            </thead>
 
-              <h3 className="unsold-drone-name">{drone.name}</h3>
+            <tbody>
+              {unsoldDrones.map((drone, index) => (
+                <tr key={drone.id}>
+                  <td>{index + 1}</td>
+                  <td>{drone.date}</td>
 
-              <div className="unsold-drone-scroll">
-                <div className="section-title">General Info</div>
-                <div className="unsold-drone-info">
-                  <p>
-                    <strong>Serial No:</strong> {drone.serialNumber}
-                  </p>
-                  <p>
-                    <strong>UIN:</strong> {drone.uinNumber}
-                  </p>
-                </div>
+                  <td>{drone.serialNumber}</td>
 
-                <div className="section-title">Parts</div>
-                <div className="unsold-drone-info">
-                  <p>
-                    <strong>Flight Controller:</strong> {drone.flightController}
-                  </p>
-                  <p>
-                    <strong>Remote Controller:</strong> {drone.remoteController}
-                  </p>
-                </div>
-              </div>
+                  <td>{drone.uinNumber}</td>
 
-              <button
-                className="unsold-move-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleMoveToSoldClick(drone);
-                }}
-              >
-                Move to Sold
-              </button>
-            </div>
-          ))}
+                  <td>
+                    <button
+                      className="view-btn"
+                      onClick={() => handleOpenDetails(drone)}
+                    >
+                      View
+                    </button>
+                  </td>
+
+                  <td>
+                    <button
+                      className="move-btn"
+                      onClick={() => handleMoveToSoldClick(drone)}
+                    >
+                      Move to Sold
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 
       {/* DETAILS POPUP */}
       {detailsPopupOpen && detailsDrone && (
         <div className="drone-details-overlay" onClick={closeDetailsPopup}>
-          <div
-            className="drone-details-popup"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2>Drone Details</h2>
-            <p>
-              <strong>Battery Charger:</strong> {detailsDrone.batteryCharger}
-            </p>
-            <p>
-              <strong>Battery 1:</strong> {detailsDrone.battery1}
-            </p>
-            <p>
-              <strong>Battery 2:</strong> {detailsDrone.battery2}
-            </p>
-            {detailsDrone.attachment && (
-              <p>
-                <strong>Attachment:</strong>{" "}
-                <a
-                  href={detailsDrone.attachment}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {detailsDrone.attachment.split("/").pop()}
-                </a>
-              </p>
-            )}
+      <div
+  className="drone-details-popup"
+  onClick={(e) => e.stopPropagation()}
+>
+  {/* TOP RIGHT CLOSE BUTTON */}
+  <button
+    className="drone-details-close-icon"
+    onClick={closeDetailsPopup}
+  >
+    ✕
+  </button>
 
-            <button
-              className="drone-details-close-btn"
-              onClick={closeDetailsPopup}
-            >
-              Close
-            </button>
-          </div>
+  <h2>Drone Details</h2>
+
+  <p>
+    <strong>Battery Charger:</strong> {detailsDrone.batteryCharger}
+  </p>
+
+  <p>
+    <strong>Battery 1:</strong> {detailsDrone.battery1}
+  </p>
+
+  <p>
+    <strong>Battery 2:</strong> {detailsDrone.battery2}
+  </p>
+
+  {detailsDrone.attachment && (
+    <p>
+      <strong>Attachment:</strong>{" "}
+      <a
+        href={detailsDrone.attachment}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {detailsDrone.attachment.split("/").pop()}
+      </a>
+    </p>
+  )}
+</div>
+
         </div>
       )}
 

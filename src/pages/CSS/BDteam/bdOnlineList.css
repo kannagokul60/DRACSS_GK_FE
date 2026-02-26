@@ -1,0 +1,104 @@
+.bd-online-container {
+  padding: 45px 40px;
+  width: 100%;
+  height: calc(100vh - 90px);
+  background: #f7f7f7;
+  border-radius: 14px;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
+  overflow-x: hidden;
+}
+
+.bd-online-container .bd-support-breadcrumb-wrapper {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.2rem;
+  z-index: 10;
+}
+
+.bd-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1565c0;
+  margin-bottom: 30px;
+  text-shadow: 0 1px 3px rgba(21, 101, 192, 0.3);
+}
+
+.bd-online-list {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.bd-online-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  min-width: 280px;
+  max-width: 360px;
+  position: relative;
+}
+
+.bd-ticket-date {
+  position: absolute;
+  top: 6px;
+  right: 1px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #6b7280;
+  background: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.bd-ticket-date:hover {
+  background: #f3f4f6;
+}
+
+.bd-online-card:hover {
+  transform: translateY(-3px);
+}
+
+.bd-online-card h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+.bd-online-card p {
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 5px;
+}
+
+.bd-status {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+
+}
+
+.bd-status.In-Progress {
+  background: #fefce8;
+  color: #ca8a04;
+}
+.bd-ticket-status.open {
+  background: none;
+  color: #16a34a;
+  font-size: 12px;
+  font-weight: bold ;
+}
+.bd-ticket-status.closed {
+  background: none;
+  color: #dc2626;
+    font-size: 12px;
+  font-weight: bold ;
+}
+

@@ -1,10 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/JSX/Login";
 import Register from "./pages/JSX/Register";
+
+import Layout from "./pages/JSX/Layout";
+
+// CLIENT IMPORTS
 import Dashboard from "./pages/JSX/Client/Dashboard";
 import DroneDetails from "./pages/JSX/Client/DroneDetails";
 import ViewDrone from "./pages/JSX/Client/ViewDrone";
-import Layout from "./pages/JSX/Layout";
 import DroneRegistration from "./pages/JSX/Client/DroneRegistration";
 import KnowledgeBase from "./pages/JSX/Client/KnowledgeBase";
 import ViewKnowledge from "./pages/JSX/Client/ViewKnowledge";
@@ -14,13 +17,10 @@ import OnlineSupport from "./pages/JSX/Client/OnlineSupport";
 import OnsiteSupport from "./pages/JSX/Client/OnSiteSupport";
 import ReturnToBase from "./pages/JSX/Client/Return_base";
 
-//BD Team Imports
-import BDLayout from "./pages/JSX/Layout";
+// BD TEAM IMPORTS
 import BDDashboard from "./pages/JSX/BDTeam/Dashboard";
 import ClientList from "./pages/JSX/BDTeam/ClientList";
 import ClientDetails from "./pages/JSX/BDTeam/ClientDroneList";
-
-import "./App.css";
 import BDDroneDetails from "./pages/JSX/BDTeam/BDDroneDetails";
 import SoldDroneList from "./pages/JSX/BDTeam/soldDroneList.jsx";
 import BDKnowledgeBase from "./pages/JSX/BDTeam/KnowledgeBase";
@@ -29,27 +29,33 @@ import PendingTasks from "./pages/JSX/BDTeam/PendingTasks";
 import Profile from "./pages/JSX/BDTeam/Profile";
 import DroneApprove from "./pages/JSX/BDTeam/DroneApprove";
 import UnsoldDroneList from "./pages/JSX/BDTeam/UnsoldDroneList.jsx";
-import BDOnlineSupport from "./pages/JSX/BDTeam/OnlineSupport.jsx";
-import BDSupportPage from "./pages/JSX/BDTeam/SupportPage.jsx";
-
-//Technical Team Imports
-import TechnicalLayout from "./pages/JSX/Layout";
-import TechiDashboard from "./pages/JSX/Technical/Dashboard";
 import OrderFormPage from "./pages/JSX/BDTeam/OrderFormPage";
+
+import BDSupportPage from "./pages/JSX/BDTeam/SupportPage.jsx";
+import BDOnlineSupportList from "./pages/JSX/BDTeam/OnlineSupportList.jsx";
+import BDOnlineSupportPage from "./pages/JSX/BDTeam/OnlineSupportPage.jsx";
+import BDOnSiteSupportPage from "./pages/JSX/BDTeam/OnsiteSupportPage.jsx";
+
+// TECHNICAL TEAM
+import TechiDashboard from "./pages/JSX/Technical/Dashboard";
 import AssignedDroneList from "./pages/JSX/Technical/AssignedDroneList";
 import OrderStatusPage from "./pages/JSX/Technical/OrderStatusPage";
 import TechnicalProfile from "./pages/JSX/Technical/TechnicalProfile.jsx";
 import CompletedDroneList from "./pages/JSX/Technical/CompletedDroneList.jsx";
+import RCAReportPage from "./pages/JSX/Technical/RCAReportPage.jsx";
+import SupportPageTech from "./pages/JSX/Technical/SupportPage.jsx";
+import OnSiteSupportTickets from "./pages/JSX/Technical/OnsiteSupportTickets.jsx";
 
-//Pilot Team Imports
-import PilotLayout from "./pages/JSX/Layout";
+// PILOT TEAM
 import PilotDashboard from "./pages/JSX/Pilot/PilotDashboard";
 import PilotPendingDelivery from "./pages/JSX/Pilot/PilotPendingDelivery.jsx";
 import PilotProfile from "./pages/JSX/Pilot/PilotProfile.jsx";
 import PilotDelivered from "./pages/JSX/Pilot/PilotDelivered.jsx";
 
+import "./App.css";
+
 export default function App() {
-  const isLoggedIn = !!localStorage.getItem("access");
+  const isLoggedIn = !!localStorage.getItem("user");
 
   return (
     <Routes>
@@ -65,19 +71,19 @@ export default function App() {
             <Route path="view-drone/:droneId" element={<ViewDrone />} />
             <Route path="drone-registration" element={<DroneRegistration />} />
             <Route path="knowledge-base" element={<KnowledgeBase />} />
-            <Route
-              path="knowledge/:droneName"
-              element={<ViewKnowledge />}
-            />{" "}
+            <Route path="knowledge/:droneName" element={<ViewKnowledge />} />
             <Route path="profile-details" element={<ProfileDetails />} />
             <Route path="support" element={<SupportPage />} />
-            <Route path="online-support" element={<OnlineSupport />} />
+            <Route
+              path="online-support/:ticketId?"
+              element={<OnlineSupport />}
+            />
             <Route path="onsite-support" element={<OnsiteSupport />} />
             <Route path="return-to-base" element={<ReturnToBase />} />
           </Route>
 
           {/* BD TEAM ROUTES */}
-          <Route path="/bd" element={<BDLayout />}>
+          <Route path="/bd" element={<Layout />}>
             <Route path="dashboard" element={<BDDashboard />} />
             <Route path="client-list" element={<ClientList />} />
             <Route path="client-drone-list/:id" element={<ClientDetails />} />
@@ -85,37 +91,48 @@ export default function App() {
             <Route path="sold-drones" element={<SoldDroneList />} />
             <Route path="knowledge-base" element={<BDKnowledgeBase />} />
             <Route path="knowledge/:drone" element={<BDViewKnowledge />} />
-
             <Route path="pending-tasks" element={<PendingTasks />} />
             <Route path="profile-details" element={<Profile />} />
             <Route path="unsold-drones" element={<UnsoldDroneList />} />
-            {/* FIXED: REMOVE leading slash */}
             <Route path="drone-approve" element={<DroneApprove />} />
             <Route path="orderform" element={<OrderFormPage />} />
+
+            {/* SUPPORT FLOW */}
             <Route path="support" element={<BDSupportPage />} />
-            <Route path="support/:ticketId" element={<BDOnlineSupport />} />
+            <Route path="online-support" element={<BDOnlineSupportList />} />
+            <Route
+              path="online-support/:ticketId"
+              element={<BDOnlineSupportPage />}
+            />
+            <Route
+              path="onsite-support/:ticketId"
+              element={<BDOnSiteSupportPage />}
+            />
+              <Route path="onsite-support" element={<BDOnSiteSupportPage />} />
+            {/* <Route path="assign-onsite-ticket/:id" element={<AssignOnsiteTicket />}/> */}
           </Route>
 
-          {/* TECHNICAL TEAM ROUTES */}
-          <Route path="/technical" element={<TechnicalLayout />}>
+          {/* TECHNICAL */}
+          <Route path="/technical" element={<Layout />}>
             <Route path="dashboard" element={<TechiDashboard />} />
             <Route path="assigned-drones" element={<AssignedDroneList />} />
             <Route path="order-status/:orderId" element={<OrderStatusPage />} />
+            <Route path="completed-work" element={<CompletedDroneList />} />
+            <Route path="support-tech" element={<SupportPageTech />} />
             <Route
-              path="/technical/completed-work"
-              element={<CompletedDroneList />}
+              path="on-site-support-tickets"
+              element={<OnSiteSupportTickets />}
             />
-
+            <Route path="completed-work" element={<CompletedDroneList />} />
+            <Route path="rca-report" element={<RCAReportPage />} />
             <Route path="profile" element={<TechnicalProfile />} />
           </Route>
 
-          {/* PILOT TEAM ROUTES */}
-
-          <Route path="/pilot" element={<PilotLayout />}>
+          {/* PILOT */}
+          <Route path="/pilot" element={<Layout />}>
             <Route path="dashboard" element={<PilotDashboard />} />
             <Route path="pending-delivery" element={<PilotPendingDelivery />} />
             <Route path="pilot-delivered" element={<PilotDelivered />} />
-
             <Route path="profile-details" element={<PilotProfile />} />
           </Route>
         </>

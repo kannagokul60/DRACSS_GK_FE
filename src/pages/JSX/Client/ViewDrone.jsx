@@ -16,7 +16,7 @@ const ViewDrone = () => {
       try {
         // 1️⃣ Fetch drone registration details
         const resDrone = await fetch(
-          `${config.baseURL}/drone_registration/${droneId}/`
+          `${config.baseURL}/drone_registration/${droneId}/`,
         );
         const droneData = await resDrone.json();
 
@@ -44,6 +44,8 @@ const ViewDrone = () => {
 
     fetchData();
   }, [droneId]);
+
+  
 
   if (!drone) return <p>Loading drone...</p>;
 
@@ -94,7 +96,7 @@ const ViewDrone = () => {
     if (field === "start_time" || field === "end_time") {
       updatedLogs[index].duration = calculateDuration(
         updatedLogs[index].start_time,
-        updatedLogs[index].end_time
+        updatedLogs[index].end_time,
       );
     }
 
@@ -113,6 +115,8 @@ const ViewDrone = () => {
   const handleCancelLogs = (index) => {
     setManualLogs((prevLogs) => prevLogs.filter((_, i) => i !== index));
   };
+
+  
 
   return (
     <div className="drone-details-page">
@@ -220,82 +224,83 @@ const ViewDrone = () => {
             + Add Log
           </button>
         </div>
-
-        <table className="flight-log-table">
-          <thead>
-            <tr>
-              <th>S.No</th>
-              <th>Date</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Total Duration</th>
-              <th>Remarks</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {manualLogs.length === 0 ? (
+        <div className="flight-log-table-wrapper">
+          <table className="flight-log-table">
+            <thead>
               <tr>
-                <td colSpan="7" style={{ textAlign: "center" }}>
-                  No flight logs added
-                </td>
+                <th>S.No</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Total Duration</th>
+                <th>Remarks</th>
+                <th>Actions</th>
               </tr>
-            ) : (
-              manualLogs.map((log, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{formatDate(log.date)}</td>
+            </thead>
 
-                  <td>
-                    <input
-                      type="time"
-                      value={log.start_time}
-                      onChange={(e) =>
-                        handleLogChange(index, "start_time", e.target.value)
-                      }
-                    />
-                  </td>
-
-                  <td>
-                    <input
-                      type="time"
-                      value={log.end_time}
-                      onChange={(e) =>
-                        handleLogChange(index, "end_time", e.target.value)
-                      }
-                    />
-                  </td>
-
-                  <td>{log.duration || "--"}</td>
-
-                  <td>
-                    <input
-                      type="text"
-                      placeholder="Remarks"
-                      value={log.remarks}
-                      onChange={(e) =>
-                        handleLogChange(index, "remarks", e.target.value)
-                      }
-                    />
-                  </td>
-
-                  <td>
-                    <button className="save-log-btn" onClick={handleSaveLogs}>
-                      Save
-                    </button>
-                    <button
-                      className="cancel-log-btn"
-                      onClick={() => handleCancelLogs(index)}
-                    >
-                      Cancel
-                    </button>
+            <tbody>
+              {manualLogs.length === 0 ? (
+                <tr>
+                  <td colSpan="7" style={{ textAlign: "center" }}>
+                    No flight logs added
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                manualLogs.map((log, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{formatDate(log.date)}</td>
+
+                    <td>
+                      <input
+                        type="time"
+                        value={log.start_time}
+                        onChange={(e) =>
+                          handleLogChange(index, "start_time", e.target.value)
+                        }
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        type="time"
+                        value={log.end_time}
+                        onChange={(e) =>
+                          handleLogChange(index, "end_time", e.target.value)
+                        }
+                      />
+                    </td>
+
+                    <td>{log.duration || "--"}</td>
+
+                    <td>
+                      <input
+                        type="text"
+                        placeholder="Remarks"
+                        value={log.remarks}
+                        onChange={(e) =>
+                          handleLogChange(index, "remarks", e.target.value)
+                        }
+                      />
+                    </td>
+
+                    <td>
+                      <button className="save-log-btn" onClick={handleSaveLogs}>
+                        Save
+                      </button>
+                      <button
+                        className="cancel-log-btn"
+                        onClick={() => handleCancelLogs(index)}
+                      >
+                        Cancel
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import "../../CSS/BDteam/bdOnlineSupport.css";
 import config from "../../../config";
 import { useParams, useNavigate } from "react-router-dom";
 
-export default function BDOnlineSupport() {
+export default function BDOnlineSupportPage() {
   const { ticketId } = useParams();
   const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ export default function BDOnlineSupport() {
         setMessages((prev) => {
           const existingIds = new Set(prev.map((m) => m.id));
           const fresh = (data.messages || []).filter(
-            (m) => !existingIds.has(m.id)
+            (m) => !existingIds.has(m.id),
           );
           return [...prev, ...fresh];
         });
@@ -103,7 +103,7 @@ export default function BDOnlineSupport() {
             Authorization: token ? `Bearer ${token}` : undefined,
           },
           body: JSON.stringify({ status: "CLOSED" }),
-        }
+        },
       );
 
       if (!res.ok) {
@@ -116,6 +116,88 @@ export default function BDOnlineSupport() {
     } catch (err) {
       console.error(err);
       setClosing(false);
+    }
+  };
+
+  const handleOnsite = async () => {
+    if (!ticket || ticket.status === "CLOSED") return;
+
+    try {
+      //  SEND AUTO MESSAGE
+      const res = await fetch(`${config.baseURL}/support/messages/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : undefined,
+        },
+        body: JSON.stringify({
+          thread: ticket.id,
+          message:
+            "Issue resolved by onsite. Please raise request in onsite support page.",
+          sender_type: "bdteam",
+        }),
+      });
+
+      const saved = await res.json();
+
+      if (res.ok) {
+        // ADD MESSAGE TO UI
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: saved.id,
+            sender_name: "BDTeam",
+            message: saved.message,
+            created_at: saved.created_at,
+          },
+        ]);
+      }
+
+      // SAVE ENABLE ONSITE FLAG
+      localStorage.setItem("enableOnSite", "true");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleReturnToService = async () => {
+    if (!ticket || ticket.status === "CLOSED") return;
+
+    try {
+      //  SEND AUTO MESSAGE
+      const res = await fetch(`${config.baseURL}/support/messages/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : undefined,
+        },
+        body: JSON.stringify({
+          thread: ticket.id,
+          message:
+            "Issue resolved by return to service. Please raise request in return to service support page.",
+          sender_type: "bdteam",
+        }),
+      });
+
+      const saved = await res.json();
+
+      if (res.ok) {
+        // ADD MESSAGE TO UI
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: saved.id,
+            sender_name: "BDTeam",
+            message: saved.message,
+            created_at: saved.created_at,
+          },
+        ]);
+      }
+
+      // ENABLE RETURN TO SERVICE FLAG (optional)
+      localStorage.setItem("enableReturnService", "true");
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -140,13 +222,26 @@ export default function BDOnlineSupport() {
           </span>
 
           {ticket?.status === "OPEN" && (
-            <button
-              className="bd-end-chat-btn"
-              onClick={handleEndChat}
-              disabled={closing}
-            >
-              {closing ? "Ending..." : "End Chat"}
-            </button>
+            <>
+              {/* ✅ ONSITE BUTTON */}
+              <button className="bd-onsite-btn" onClick={handleOnsite}>
+                Onsite
+              </button>
+
+              {/* ✅ RETURN TO SERVICE BUTTON */}
+              <button className="bd-return-btn" onClick={handleReturnToService}>
+                Return to Service
+              </button>
+
+              {/* EXISTING END CHAT */}
+              <button
+                className="bd-end-chat-btn"
+                onClick={handleEndChat}
+                disabled={closing}
+              >
+                {closing ? "Ending..." : "End Chat"}
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -157,9 +252,7 @@ export default function BDOnlineSupport() {
           <div
             key={msg.id}
             className={`bd-chat-msg ${
-              msg.sender_name?.toLowerCase() === "bdteam"
-                ? "bd"
-                : "client"
+              msg.sender_name?.toLowerCase() === "bdteam" ? "bd" : "client"
             }`}
           >
             <strong>{msg.sender_name}:</strong> {msg.message}

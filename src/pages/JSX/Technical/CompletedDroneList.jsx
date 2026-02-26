@@ -14,8 +14,10 @@ export default function CompletedDroneList() {
   useEffect(() => {
     fetch(`${config.baseURL}/orders/`)
       .then((res) => res.json())
-      .then((data) => setOrders(data))
-      .catch((err) => console.error("Failed to load orders:", err));
+.then((data) => {
+  const orderArray = Array.isArray(data) ? data : data.results || [];
+  setOrders(orderArray);
+})      .catch((err) => console.error("Failed to load orders:", err));
   }, []);
 
   // Fetch template items
@@ -23,9 +25,10 @@ export default function CompletedDroneList() {
     fetch(`${config.baseURL}/checklist-items/`)
       .then((res) => res.json())
       .then((data) => {
-        data.sort((a, b) => a.sort_order - b.sort_order);
-        setBackendItems(data);
-      })
+  const items = Array.isArray(data) ? data : data.results || [];
+  items.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+  setBackendItems(items);
+})
       .catch((err) => console.error("Failed to load template items:", err));
   }, []);
 
@@ -43,8 +46,9 @@ export default function CompletedDroneList() {
   };
 
   // Filter delivered orders only
-  const deliveredOrders = orders.filter((o) => o.status === "DELIVERED");
-
+const deliveredOrders = Array.isArray(orders)
+  ? orders.filter((o) => o.status === "DELIVERED")
+  : [];
   return (
     <div className="assigned-page">
       <h2 className="assigned-header">Completed Drone Dispatch</h2>

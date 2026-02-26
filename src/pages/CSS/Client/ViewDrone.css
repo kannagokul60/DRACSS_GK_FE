@@ -6,12 +6,14 @@
   color: #0d2a4b;
   padding: 2rem 3rem 2rem 3rem; /* top padding increased for breadcrumb space */
   border-radius: 10px;
-  height: 100%;
+  height: calc(100vh - 90px);
   width: 100%;
   box-sizing: border-box;
   position: relative; /* ensures breadcrumb absolute position works */
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
 }
 
 /* Breadcrumb */
@@ -46,14 +48,15 @@
 
 .drone-title {
   font-size: 2rem;
-  font-weight: 600;
   display: flex;
   justify-content: center;
   width: 100%;
   color: #1565c0;
   text-align: center;
-  margin-bottom: 2rem;
   text-shadow: 0px 1px 3px rgba(25, 101, 163, 0.4);
+  font-weight: 700;
+  color: #1565c0;
+  margin-bottom: 30px;
 }
 
 .edit-icon {
@@ -67,9 +70,10 @@
 
 /* ==== MAIN INFO ==== */
 .drone-main-content {
-  z-index: 2;
-  position: relative;
-  margin-top: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .drone-info-grid {
@@ -139,9 +143,10 @@
 
 /* ==== FLIGHT LOG TABLE ==== */
 .flight-log-section {
-  margin-top: 2rem;
-  z-index: 2;
-  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .flight-log-section h3 {
@@ -154,7 +159,8 @@
 .flight-log-table {
   width: 100%;
   background: white;
-  border-collapse: collapse;
+  border-collapse: separate; /* ✅ IMPORTANT */
+  border-spacing: 0; /* keeps same look */
   border-radius: 8px;
   overflow: hidden;
 }
@@ -169,7 +175,7 @@
   background: #e9f3ff;
   color: #0d2a4b;
 }
-.flight-log-table td{
+.flight-log-table td {
   text-align: center;
 }
 
@@ -188,7 +194,6 @@
   margin-bottom: 12px;
 }
 
-
 .add-log-btn {
   background: #1e88e5;
   color: #fff;
@@ -200,6 +205,21 @@
 
 .add-log-btn:hover {
   background: #1565c0;
+}
+
+.flight-log-table-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  min-height: 0; /* VERY IMPORTANT for flex scroll */
+  position: relative;
+}
+
+.flight-log-table thead th {
+  position: sticky;
+  top: 0;
+  background: #e9f3ff;
+  z-index: 10;
 }
 
 .flight-log-table input {
@@ -227,8 +247,6 @@
   border-radius: 4px;
   cursor: pointer;
 }
-
-
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
